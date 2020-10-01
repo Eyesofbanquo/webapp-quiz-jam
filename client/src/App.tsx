@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+type Response = {
+  haha: string;
+};
+
+const App = () => {
+  const [data, setData] = useState<Response>();
+
+  const retrieveData = async () => {
+    const response = await fetch("/api/welcome");
+    const json = (await response.json()) as Response[];
+
+    console.log(json);
+    return json[0];
+  };
+
+  useEffect(() => {
+    retrieveData().then((res) => {
+      setData(res);
+    });
+  }, [data]);
+
+  return <div>{data?.haha}</div>;
+};
 
 export default App;
