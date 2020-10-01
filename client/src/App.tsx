@@ -18,10 +18,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    retrieveData().then((res) => {
-      setData(res);
-    });
-  }, [data]);
+    retrieveData()
+      .then((res) => {
+        setData(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return <div>{data?.haha}</div>;
 };
