@@ -19,8 +19,15 @@ app.get("/api/welcome", (req, res) => {
   ]);
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
+app.get(
+  "/.well-known/acme-challenge/lJ8GgOkdO0-XJYLBCdz5dVLVxObpUjV0L2jgREx5NZA",
+  (req, res) => {
+    res.sendFile(path.join(__dirname + "/cert/data.txt"));
+  }
+);
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+// });
 
 app.listen(port, () => console.log("Running..."));
