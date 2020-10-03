@@ -14,12 +14,12 @@ app.use(express.static(path.join(__dirname, "/client/build")));
 app.get("/api/welcome", (req, res) => {
   res.json([
     {
-      haha: "hehe",
+      haha: "hehes",
     },
   ]);
 });
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
