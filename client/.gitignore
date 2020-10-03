@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+qizzoapp_com.crt
+server.key
+
 # testing
 /coverage
 

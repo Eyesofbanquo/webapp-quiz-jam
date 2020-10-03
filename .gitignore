@@ -15,6 +15,9 @@ pids
 *.seed
 *.pid.lock
 
+qizzoapp_com.crt
+server.key
+
 # Realm
 default.realm
 default.realm.lock
