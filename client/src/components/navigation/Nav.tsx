@@ -5,14 +5,11 @@ import { Link } from "react-router-dom";
 export const Nav = () => (
   <AppBar position="static">
     <Toolbar>
-      <Typography variant="h3">Qizzo Builder</Typography>
-      {/* <ul>
-            <li> */}
       <Link
         style={{ textDecoration: "none", padding: 16, color: "white" }}
         to="/"
       >
-        <Typography variant="h6">Home</Typography>
+        <Typography variant="h3">Qizzo Builder</Typography>{" "}
       </Link>
       <Link
         style={{ textDecoration: "none", padding: 16, color: "white" }}
