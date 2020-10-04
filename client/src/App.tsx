@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import { QuizForm } from "./features/quiz-form/QuizForm";
+import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
 import { Nav } from "./components";
 import { HahaCall } from "./network/hahaCall";
 
