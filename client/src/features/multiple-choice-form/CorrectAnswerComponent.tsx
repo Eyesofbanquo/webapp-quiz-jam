@@ -17,6 +17,7 @@ export const CorrectAnswerComponent: React.FC<{
         required
         label="Required"
         value={choiceText}
+        error={choiceText.length === 0}
         onChange={(event) => {
           setChoiceText(event.target.value);
         }}
