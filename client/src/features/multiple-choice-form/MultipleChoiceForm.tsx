@@ -9,7 +9,7 @@ import {
   Collapse,
   IconButton,
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Alert, AlertProps } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
@@ -132,9 +132,11 @@ const Difficulty: React.FC<{
 };
 
 const CollapsibleAlert: React.FC<{
+  type: AlertProps["severity"];
+  text: string;
   showAlert: boolean;
   setShowAlert: (isVisible: boolean) => void;
-}> = ({ showAlert, setShowAlert }) => (
+}> = ({ type, text, showAlert, setShowAlert }) => (
   <Collapse in={showAlert} style={{ margin: "auto" }}>
     <Alert
       action={
@@ -150,9 +152,9 @@ const CollapsibleAlert: React.FC<{
         </IconButton>
       }
       style={{ padding: 8, marginTop: 8 }}
-      severity="info"
+      severity={type}
     >
-      You must fill out all fields to move on.
+      {text}
     </Alert>
   </Collapse>
 );
@@ -166,6 +168,7 @@ export const QuizForm: React.FC<{}> = () => {
   const [categoryIndex, setCategoryIndex] = useState<number>(0);
   const [difficultyIndex, setDifficultyIndex] = useState<number>(0);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
 
   const options: AxiosRequestConfig = {
     url: "/api/multiple",
@@ -194,6 +197,14 @@ export const QuizForm: React.FC<{}> = () => {
       spacing={2}
     >
       <Grid item xs={8}>
+        <Grid container>
+          <CollapsibleAlert
+            type="success"
+            text="Success!"
+            showAlert={showSuccessAlert}
+            setShowAlert={setShowSuccessAlert}
+          />
+        </Grid>
         <Grid container>
           <h1>Create a question</h1>
           <Grid container direction="row" justify="center">
@@ -251,7 +262,12 @@ export const QuizForm: React.FC<{}> = () => {
                 )
               ) {
                 axios(options).then((response) => {
-                  console.log(response.status);
+                  setShowSuccessAlert(true);
+                  setQuestionText("");
+                  setFirstChoice("");
+                  setSecondChoice("");
+                  setThirdChoice("");
+                  setFourthChoice("");
                 });
               } else {
                 setShowAlert(true);
@@ -262,7 +278,12 @@ export const QuizForm: React.FC<{}> = () => {
           </Button>
         </Grid>
         <Grid container>
-          <CollapsibleAlert showAlert={showAlert} setShowAlert={setShowAlert} />
+          <CollapsibleAlert
+            type="info"
+            text="You must fill out all fields to move on."
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+          />
         </Grid>
       </Grid>
     </Grid>
