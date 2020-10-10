@@ -4,6 +4,7 @@ import "./App.css";
 import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
 import { Nav } from "./components";
 import { HahaCall } from "./network/hahaCall";
+import { QuestionList } from "./features/questions/QuestionsList";
 
 const App = () => {
   const data = HahaCall();
@@ -20,6 +21,9 @@ const App = () => {
         </Route>
         <Route exact path="/lol">
           <h1>Morde is trash</h1>
+        </Route>
+        <Route exact path="/questions">
+          <QuestionList />
         </Route>
         <Route exact path="/form">
           <QuizForm />

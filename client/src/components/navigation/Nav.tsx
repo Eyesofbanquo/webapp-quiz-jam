@@ -23,6 +23,12 @@ export const Nav = () => (
       >
         <Typography variant="h6">Create a question</Typography>
       </Link>
+      <Link
+        style={{ textDecoration: "none", padding: 16, color: "white" }}
+        to="/questions"
+      >
+        <Typography variant="h6">All Questions</Typography>
+      </Link>
     </Toolbar>
   </AppBar>
 );
