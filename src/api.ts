@@ -99,3 +99,25 @@ API.get("/multiple", async (request, response) => {
     realm.close();
   });
 });
+
+API.delete("/multiple", (request, response) => {
+  console.log("da");
+  db.realm(MultipleChoiceSchema).then((realm) => {
+    const allObjects = realm.objects("MultipleChoice");
+    const foundObjectsMapped = allObjects.map(
+      (realmObject) =>
+        (realmObject as unknown) as AnsweredResponse & MultipleChoice
+    );
+
+    const foundObject = foundObjectsMapped.filter(
+      (question) => question.question === request.body.question
+    );
+
+    realm.write(() => {
+      realm.delete(foundObject);
+    });
+
+    response.send({ success: true });
+    realm.close();
+  });
+});

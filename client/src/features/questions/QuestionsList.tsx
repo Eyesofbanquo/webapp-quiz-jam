@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { MultipleChoiceQuestion, QuestionCard } from "./QuestionCard";
 
 export const QuestionList = () => {
@@ -32,7 +32,40 @@ export const QuestionList = () => {
   }
 
   if (selectedQuestion) {
-    return <h1>Preview Questions</h1>;
+    return (
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        style={{ padding: 16 }}
+      >
+        <h1>Delete</h1>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            axios("/api/multiple", {
+              method: "delete",
+              headers: { "Content-Type": "application/json" },
+              data: {
+                question: selectedQuestion.question,
+              },
+            }).then((response) => {
+              if (response.data.success) {
+                const filteredQuestions = questions.filter(
+                  (question) => question.question !== selectedQuestion.question
+                );
+                setQuestions(filteredQuestions);
+                setSelectedQuestion(undefined);
+              }
+            });
+          }}
+        >
+          Deelte me
+        </Button>
+      </Grid>
+    );
   }
 
   return (
@@ -45,6 +78,7 @@ export const QuestionList = () => {
     >
       {questions.map((question) => (
         <QuestionCard
+          key={question.question}
           question={question}
           onPress={(question) => {
             console.log("You selected", question.question);
