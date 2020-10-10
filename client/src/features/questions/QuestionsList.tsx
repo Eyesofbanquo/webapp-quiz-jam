@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, Button } from "@material-ui/core";
 import { MultipleChoiceQuestion, QuestionCard } from "./QuestionCard";
+import { makeRequest } from "../../networking/network";
 
 export const QuestionList = () => {
   const [questions, setQuestions] = useState<MultipleChoiceQuestion[]>([]);
@@ -45,13 +46,13 @@ export const QuestionList = () => {
           variant="contained"
           color="primary"
           onClick={() => {
-            axios("/api/multiple", {
+            makeRequest({
+              endpoint: "multiple",
               method: "delete",
-              headers: { "Content-Type": "application/json" },
               data: {
                 question: selectedQuestion.question,
               },
-            }).then((response) => {
+            }).onReceive.then((response) => {
               if (response.data.success) {
                 const filteredQuestions = questions.filter(
                   (question) => question.question !== selectedQuestion.question

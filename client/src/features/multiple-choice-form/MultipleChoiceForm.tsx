@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { CorrectAnswerComponent } from "./CorrectAnswerComponent";
 import { QuestionComponent } from "./QuestionComponent";
+import { makeRequest } from "../../networking/network";
 
 const categories = ["Entertainment: Video Games", "Books", "Music", "Film"];
 const difficulty = ["easy", "normal", "hard"];
@@ -170,24 +171,6 @@ export const QuizForm: React.FC<{}> = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
 
-  const options: AxiosRequestConfig = {
-    url: "/api/multiple",
-    method: "post",
-    data: {
-      id: 0,
-      category: `${categories[categoryIndex]}`,
-      type: "multiple",
-      difficulty: `${difficulty[difficultyIndex]}`,
-      question: `${questionText}`,
-      correct_answer: `${firstChoice}`,
-      incorrect_answers: [
-        `${secondChoice}`,
-        `${thirdChoice}`,
-        `${fourthChoice}`,
-      ],
-    },
-  };
-
   return (
     <Grid
       container
@@ -261,7 +244,23 @@ export const QuizForm: React.FC<{}> = () => {
                   fourthChoice
                 )
               ) {
-                axios(options).then((response) => {
+                makeRequest({
+                  endpoint: "multiple",
+                  method: "post",
+                  data: {
+                    id: 0,
+                    category: `${categories[categoryIndex]}`,
+                    type: "multiple",
+                    difficulty: `${difficulty[difficultyIndex]}`,
+                    question: `${questionText}`,
+                    correct_answer: `${firstChoice}`,
+                    incorrect_answers: [
+                      `${secondChoice}`,
+                      `${thirdChoice}`,
+                      `${fourthChoice}`,
+                    ],
+                  },
+                }).onReceive.then((response) => {
                   setShowSuccessAlert(true);
                   setQuestionText("");
                   setFirstChoice("");
