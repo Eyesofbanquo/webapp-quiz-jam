@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
 
 export interface MultipleChoiceQuestion {
@@ -34,11 +35,6 @@ const LeftGrid: React.FC<QuestionComponent> = ({ question }) => (
       </Typography>
       <Typography variant="body2" color="textSecondary">
         Author
-      </Typography>
-    </Grid>
-    <Grid item>
-      <Typography variant="body2" style={{ cursor: "pointer", color: "red" }}>
-        Remove
       </Typography>
     </Grid>
   </Grid>
