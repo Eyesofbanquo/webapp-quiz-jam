@@ -59,6 +59,7 @@ export const QuestionCard: React.FC<{
   return (
     <Paper
       className={theme.paper}
+      style={{ cursor: "pointer", margin: 8 }}
       onClick={() => {
         onPress(question);
       }}
