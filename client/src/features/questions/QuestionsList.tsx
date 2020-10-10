@@ -17,6 +17,20 @@ export const QuestionList = () => {
     });
   }, []);
 
+  if (questions.length === 0) {
+    return (
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        style={{ padding: 16 }}
+      >
+        <h1>No questions exist yet :(</h1>
+      </Grid>
+    );
+  }
+
   if (selectedQuestion) {
     return <h1>Preview Questions</h1>;
   }
