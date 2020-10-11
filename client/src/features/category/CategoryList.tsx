@@ -22,6 +22,7 @@ export const CategoryList: React.FC = () => {
       container
       direction="column"
       justify="space-evenly"
+      alignItems="center"
       style={{ padding: 8 }}
     >
       <Grid item>
