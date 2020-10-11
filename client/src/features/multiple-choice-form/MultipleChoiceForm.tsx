@@ -6,16 +6,12 @@ import {
   List,
   ListItem,
   ListItemText,
-  Collapse,
-  IconButton,
 } from "@material-ui/core";
-import { Alert, AlertProps } from "@material-ui/lab";
-import CloseIcon from "@material-ui/icons/Close";
 import React, { useState } from "react";
-import axios, { AxiosRequestConfig } from "axios";
 import { CorrectAnswerComponent } from "./CorrectAnswerComponent";
 import { QuestionComponent } from "./QuestionComponent";
 import { makeRequest } from "../../networking/network";
+import { CollapsibleAlert } from "../../components/CollapsibleAlert";
 
 const categories = ["Entertainment: Video Games", "Books", "Music", "Film"];
 const difficulty = ["easy", "normal", "hard"];
@@ -131,34 +127,6 @@ const Difficulty: React.FC<{
     </>
   );
 };
-
-const CollapsibleAlert: React.FC<{
-  type: AlertProps["severity"];
-  text: string;
-  showAlert: boolean;
-  setShowAlert: (isVisible: boolean) => void;
-}> = ({ type, text, showAlert, setShowAlert }) => (
-  <Collapse in={showAlert} style={{ margin: "auto" }}>
-    <Alert
-      action={
-        <IconButton
-          aria-label="close"
-          color="inherit"
-          size="small"
-          onClick={() => {
-            setShowAlert(false);
-          }}
-        >
-          <CloseIcon fontSize="inherit" />
-        </IconButton>
-      }
-      style={{ padding: 8, marginTop: 8 }}
-      severity={type}
-    >
-      {text}
-    </Alert>
-  </Collapse>
-);
 
 export const QuizForm: React.FC<{}> = () => {
   const [questionText, setQuestionText] = useState<string>("");

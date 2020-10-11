@@ -16,7 +16,7 @@ export const QuestionList = () => {
       const decodable: MultipleChoiceQuestion[] = response.data;
       setQuestions(decodable);
     });
-  }, []);
+  });
 
   if (questions.length === 0) {
     return (

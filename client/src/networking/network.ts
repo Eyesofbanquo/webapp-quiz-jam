@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 interface RequestOptions {
   endpoint: "multiple" | "categories";

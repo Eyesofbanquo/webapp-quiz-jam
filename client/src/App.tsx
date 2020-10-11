@@ -5,6 +5,7 @@ import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
 import { Nav } from "./components";
 import { QuestionList } from "./features/questions/QuestionsList";
 import { CategoryList } from "./features/category/CategoryList";
+import { CategoryForm } from "./features/category/CategoryForm";
 
 const App = () => {
   return (
@@ -27,6 +28,9 @@ const App = () => {
           <QuizForm />
         </Route>
         <Route exact path="/category">
+          <CategoryForm />
+        </Route>
+        <Route exact path="/categories">
           <CategoryList />
         </Route>
         <Route
