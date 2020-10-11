@@ -2,6 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as Realm from "realm";
 import { Database } from "./database";
+import { v4 as uuidv4 } from "uuid";
 
 interface AnswerResponse {
   category: string;
@@ -31,6 +32,15 @@ const MultipleChoiceSchema = {
     question: "string",
     correct_answer: "string",
     incorrect_answers: "string[]",
+  },
+};
+
+const CategorySchema = {
+  name: "Category",
+  primaryKey: "id",
+  properties: {
+    id: "string",
+    name: { type: "string", indexed: true },
   },
 };
 
@@ -101,7 +111,6 @@ API.get("/multiple", async (request, response) => {
 });
 
 API.delete("/multiple", (request, response) => {
-  console.log("da");
   db.realm(MultipleChoiceSchema).then((realm) => {
     const allObjects = realm.objects("MultipleChoice");
     const foundObjectsMapped = allObjects.map(
@@ -119,5 +128,41 @@ API.delete("/multiple", (request, response) => {
 
     response.send({ success: true });
     realm.close();
+  });
+});
+
+API.get("/categories", async (request, response) => {
+  await db.realm(CategorySchema).then((realm) => {
+    const allObjects: any = realm.objects("Category");
+    response.send(allObjects);
+    realm.close();
+  });
+});
+
+API.post("/categories", (request, response) => {
+  const receivedBody = request.body as { name: string };
+
+  /* Check that the item doesn't already exist first */
+
+  db.realm(CategorySchema).then((realm) => {
+    const allObjects = realm
+      .objects("Category")
+      .filtered(`name CONTAINS[c] "${receivedBody.name}"`);
+
+    if (allObjects.length > 0) {
+      response.send({ success: false, savedObject: null });
+      realm.close();
+      return;
+    }
+
+    if (allObjects.length === 0) {
+      const realmSavableCategory = { ...receivedBody, id: uuidv4() };
+
+      realm.write(() => {
+        realm.create("Category", realmSavableCategory);
+      });
+      response.send({ success: true, savedObject: realmSavableCategory });
+      realm.close();
+    }
   });
 });

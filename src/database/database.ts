@@ -1,7 +1,7 @@
 import * as Realm from "realm";
 
 export class Database {
-  public static readonly SCHEMA_VERSION = 1;
+  public static readonly SCHEMA_VERSION = 3;
 
   realm(schema): Promise<Realm> {
     return Realm.open({
