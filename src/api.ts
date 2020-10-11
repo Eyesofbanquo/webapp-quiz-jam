@@ -32,6 +32,7 @@ const MultipleChoiceSchema = {
     question: "string",
     correct_answer: "string",
     incorrect_answers: "string[]",
+    inReview: { type: "bool", indexed: true },
   },
 };
 
@@ -41,6 +42,7 @@ const CategorySchema = {
   properties: {
     id: "string",
     name: { type: "string", indexed: true },
+    inReview: { type: "bool", indexed: true },
   },
 };
 
