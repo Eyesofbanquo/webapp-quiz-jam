@@ -3,18 +3,17 @@ import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
 import { Nav } from "./components";
-import { HahaCall } from "./network/hahaCall";
 import { QuestionList } from "./features/questions/QuestionsList";
+import { CategoryList } from "./features/category/CategoryList";
+import { CategoryForm } from "./features/category/CategoryForm";
 
 const App = () => {
-  const data = HahaCall();
-
   return (
     <div>
       <Nav />
       <Switch>
         <Route exact path="/">
-          <div>{data?.hahaData?.haha}</div>
+          <div>Qizzo</div>
         </Route>
         <Route exact path="/about">
           <h1>About page</h1>
@@ -27,6 +26,12 @@ const App = () => {
         </Route>
         <Route exact path="/form">
           <QuizForm />
+        </Route>
+        <Route exact path="/category">
+          <CategoryForm />
+        </Route>
+        <Route exact path="/categories">
+          <CategoryList />
         </Route>
         <Route
           component={() => <h3 style={{ padding: 8 }}>404 - Not Found</h3>}

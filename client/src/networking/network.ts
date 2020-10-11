@@ -1,18 +1,23 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 interface RequestOptions {
-  endpoint: "multiple";
+  endpoint: "multiple" | "categories";
   method: "get" | "post" | "delete" | "put";
-  data: any;
+  data?: any;
 }
 
 export const makeRequest = (props: RequestOptions) => {
   const { endpoint, method, data } = props;
   const uri = `/api/${endpoint}`;
-  const request = axios(uri, {
+  var options = {
     method: method,
-    data: data,
-  });
+  };
+  if (data) {
+    var optionsWithData = { ...options, data: data };
+    options = optionsWithData;
+  }
+
+  var request = axios(uri, options);
 
   return {
     onReceive: request,
