@@ -4,6 +4,7 @@ import "./App.css";
 import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
 import { Nav } from "./components";
 import { QuestionList } from "./features/questions/QuestionsList";
+import { CategoryList } from "./features/category/CategoryList";
 
 const App = () => {
   return (
@@ -25,7 +26,9 @@ const App = () => {
         <Route exact path="/form">
           <QuizForm />
         </Route>
-        <Route exact path="category"></Route>
+        <Route exact path="/category">
+          <CategoryList />
+        </Route>
         <Route
           component={() => <h3 style={{ padding: 8 }}>404 - Not Found</h3>}
         />
