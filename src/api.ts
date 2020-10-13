@@ -93,6 +93,7 @@ API.post("/multiple", (request, response) => {
           question: receivedBody.question,
           correct_answer: receivedBody.correct_answer,
           incorrect_answers: receivedBody.incorrect_answers,
+          inReview: true,
         });
       });
 
@@ -161,7 +162,7 @@ API.post("/categories", (request, response) => {
       const realmSavableCategory = { ...receivedBody, id: uuidv4() };
 
       realm.write(() => {
-        realm.create("Category", realmSavableCategory);
+        realm.create("Category", { ...realmSavableCategory, inReview: true });
       });
       response.send({ success: true, savedObject: realmSavableCategory });
       realm.close();
