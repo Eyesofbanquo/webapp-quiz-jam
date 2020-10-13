@@ -12,80 +12,11 @@ import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
 import { QuestionComponent } from "./components/QuestionComponent";
 import { makeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../components/CollapsibleAlert";
+import { initialFormState, validateFields } from "./helper";
+import { reducer } from "./helper";
+import { Category } from "../category/category";
 
 const difficulty = ["easy", "normal", "hard"];
-
-type InitialFormStateType = {
-  questionText: string;
-  firstChoice: string;
-  secondChoice: string;
-  thirdChoice: string;
-  fourthChoice: string;
-  categoryIndex: number;
-  difficultyIndex: number;
-  showAlert: boolean;
-  showSuccessAlert: boolean;
-};
-const initialFormState: InitialFormStateType = {
-  questionText: "",
-  firstChoice: "",
-  secondChoice: "",
-  thirdChoice: "",
-  fourthChoice: "",
-  categoryIndex: 0,
-  difficultyIndex: 0,
-  showAlert: false,
-  showSuccessAlert: false,
-};
-const reducer = (
-  state: InitialFormStateType,
-  action: { type: keyof InitialFormStateType; payload: any }
-) => {
-  switch (action.type) {
-    case "questionText":
-      return { ...state, questionText: action.payload };
-    case "firstChoice":
-      return { ...state, firstChoice: action.payload };
-    case "secondChoice":
-      return { ...state, secondChoice: action.payload };
-    case "thirdChoice":
-      return { ...state, thirdChoice: action.payload };
-    case "fourthChoice":
-      return { ...state, fourthChoice: action.payload };
-    case "categoryIndex":
-      return { ...state, categoryIndex: action.payload };
-    case "difficultyIndex":
-      return { ...state, categoryIndex: action.payload };
-    case "showAlert":
-      return { ...state, showAlert: action.payload };
-    case "showSuccessAlert":
-      return { ...state, showSuccessAlert: action.payload };
-    default:
-      throw new Error();
-  }
-};
-
-const validateFields = (
-  questionText: string,
-  firstChoice: string,
-  secondChoice: string,
-  thirdChoice: string,
-  fourthChoice: string
-) => {
-  return (
-    questionText.length > 0 &&
-    firstChoice.length > 0 &&
-    secondChoice.length > 0 &&
-    thirdChoice.length > 0 &&
-    fourthChoice.length > 0
-  );
-};
-
-interface Category {
-  id: string;
-  name: string;
-  inReview: boolean;
-}
 
 const CategoryMenu: React.FC<{
   categories: Category[];
