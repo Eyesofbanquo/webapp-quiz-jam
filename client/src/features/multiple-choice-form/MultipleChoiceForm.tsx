@@ -7,13 +7,12 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import { CorrectAnswerComponent } from "./CorrectAnswerComponent";
-import { QuestionComponent } from "./QuestionComponent";
+import React, { useEffect, useState } from "react";
+import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
+import { QuestionComponent } from "./components/QuestionComponent";
 import { makeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../components/CollapsibleAlert";
 
-const categories = ["Entertainment: Video Games", "Books", "Music", "Film"];
 const difficulty = ["easy", "normal", "hard"];
 
 const validateFields = (
@@ -32,11 +31,19 @@ const validateFields = (
   );
 };
 
-const Category: React.FC<{
+interface Category {
+  id: string;
+  name: string;
+  inReview: boolean;
+}
+
+const CategoryMenu: React.FC<{
+  categories: Category[];
   categoryIndex: number;
   setCategoryIndex: (index: number) => void;
-}> = ({ categoryIndex, setCategoryIndex }) => {
+}> = ({ categories, categoryIndex, setCategoryIndex }) => {
   const [anchorElement, setAnchorElement] = useState(null);
+
   return (
     <>
       <List component="nav">
@@ -48,7 +55,7 @@ const Category: React.FC<{
         >
           <ListItemText
             primary="Chose your category"
-            secondary={categories[categoryIndex]}
+            secondary={categories[categoryIndex]?.name}
           />
         </ListItem>
       </List>
@@ -63,14 +70,14 @@ const Category: React.FC<{
         {categories.map((category, index) => {
           return (
             <MenuItem
-              key={category}
+              key={category?.id}
               selected={index === categoryIndex}
               onClick={(event) => {
                 setCategoryIndex(index);
                 setAnchorElement(null);
               }}
             >
-              {category}
+              {category?.name}
             </MenuItem>
           );
         })}
@@ -79,10 +86,11 @@ const Category: React.FC<{
   );
 };
 
-const Difficulty: React.FC<{
+const DifficultyMenu: React.FC<{
+  difficulty: string[];
   difficultyIndex: number;
   setDifficultyIndex: (difficulty: number) => void;
-}> = ({ difficultyIndex, setDifficultyIndex }) => {
+}> = ({ difficulty, difficultyIndex, setDifficultyIndex }) => {
   const [anchorElement, setAnchorElement] = useState(null);
 
   return (
@@ -138,6 +146,23 @@ export const QuizForm: React.FC<{}> = () => {
   const [difficultyIndex, setDifficultyIndex] = useState<number>(0);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const receiveCategories = makeRequest({
+      endpoint: "categories",
+      method: "get",
+    }).onReceive;
+
+    receiveCategories
+      .then((results) => {
+        console.log(results.data);
+        setCategories(results.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <Grid
@@ -159,11 +184,13 @@ export const QuizForm: React.FC<{}> = () => {
         <Grid container>
           <h1>Create a question</h1>
           <Grid container direction="row" justify="center">
-            <Category
+            <CategoryMenu
+              categories={categories}
               categoryIndex={categoryIndex}
               setCategoryIndex={setCategoryIndex}
             />
-            <Difficulty
+            <DifficultyMenu
+              difficulty={difficulty}
               difficultyIndex={difficultyIndex}
               setDifficultyIndex={setDifficultyIndex}
             />
