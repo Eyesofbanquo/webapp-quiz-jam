@@ -1,7 +1,8 @@
 import * as Realm from "realm";
 
 export class Database {
-  public static readonly SCHEMA_VERSION = 4;
+  /* 5. Adds inReview prop */
+  public static readonly SCHEMA_VERSION = 5;
 
   realm(schema): Promise<Realm> {
     return Realm.open({

@@ -7,35 +7,16 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
 import { QuestionComponent } from "./components/QuestionComponent";
 import { makeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../components/CollapsibleAlert";
+import { initialFormState, validateFields } from "./helper";
+import { reducer } from "./helper";
+import { Category } from "../category/category";
 
 const difficulty = ["easy", "normal", "hard"];
-
-const validateFields = (
-  questionText: string,
-  firstChoice: string,
-  secondChoice: string,
-  thirdChoice: string,
-  fourthChoice: string
-) => {
-  return (
-    questionText.length > 0 &&
-    firstChoice.length > 0 &&
-    secondChoice.length > 0 &&
-    thirdChoice.length > 0 &&
-    fourthChoice.length > 0
-  );
-};
-
-interface Category {
-  id: string;
-  name: string;
-  inReview: boolean;
-}
 
 const CategoryMenu: React.FC<{
   categories: Category[];
@@ -137,16 +118,8 @@ const DifficultyMenu: React.FC<{
 };
 
 export const QuizForm: React.FC<{}> = () => {
-  const [questionText, setQuestionText] = useState<string>("");
-  const [firstChoice, setFirstChoice] = useState<string>("");
-  const [secondChoice, setSecondChoice] = useState<string>("");
-  const [thirdChoice, setThirdChoice] = useState<string>("");
-  const [fourthChoice, setFourthChoice] = useState<string>("");
-  const [categoryIndex, setCategoryIndex] = useState<number>(0);
-  const [difficultyIndex, setDifficultyIndex] = useState<number>(0);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
-  const [categories, setCategories] = useState([]);
+  const [state, dispatch] = useReducer(reducer, initialFormState);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const receiveCategories = makeRequest({
@@ -177,8 +150,13 @@ export const QuizForm: React.FC<{}> = () => {
           <CollapsibleAlert
             type="success"
             text="Success!"
-            showAlert={showSuccessAlert}
-            setShowAlert={setShowSuccessAlert}
+            showAlert={state.showSuccessAlert}
+            setShowAlert={(val) => {
+              dispatch({
+                type: "showSuccessAlert",
+                payload: val,
+              });
+            }}
           />
         </Grid>
         <Grid container>
@@ -186,13 +164,23 @@ export const QuizForm: React.FC<{}> = () => {
           <Grid container direction="row" justify="center">
             <CategoryMenu
               categories={categories}
-              categoryIndex={categoryIndex}
-              setCategoryIndex={setCategoryIndex}
+              categoryIndex={state.categoryIndex}
+              setCategoryIndex={(index) => {
+                dispatch({
+                  type: "categoryIndex",
+                  payload: index,
+                });
+              }}
             />
             <DifficultyMenu
               difficulty={difficulty}
-              difficultyIndex={difficultyIndex}
-              setDifficultyIndex={setDifficultyIndex}
+              difficultyIndex={state.difficultyIndex}
+              setDifficultyIndex={(index) => {
+                dispatch({
+                  type: "difficultyIndex",
+                  payload: index,
+                });
+              }}
             />
           </Grid>
         </Grid>
@@ -200,28 +188,53 @@ export const QuizForm: React.FC<{}> = () => {
 
       <Grid item xs={8}>
         <QuestionComponent
-          questionText={questionText}
-          setQuestionText={setQuestionText}
+          questionText={state.questionText}
+          setQuestionText={(text) => {
+            dispatch({
+              type: "questionText",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice
-          choiceText={firstChoice}
-          setChoiceText={setFirstChoice}
+          choiceText={state.firstChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "firstChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={secondChoice}
-          setChoiceText={setSecondChoice}
+          choiceText={state.secondChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "secondChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={thirdChoice}
-          setChoiceText={setThirdChoice}
+          choiceText={state.thirdChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "thirdChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={fourthChoice}
-          setChoiceText={setFourthChoice}
+          choiceText={state.fourthChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "fourthChoice",
+              payload: text,
+            });
+          }}
         />
       </Grid>
       <Grid item xs={8}>
@@ -232,11 +245,11 @@ export const QuizForm: React.FC<{}> = () => {
             onClick={(event) => {
               if (
                 validateFields(
-                  questionText,
-                  firstChoice,
-                  secondChoice,
-                  thirdChoice,
-                  fourthChoice
+                  state.questionText,
+                  state.firstChoice,
+                  state.secondChoice,
+                  state.thirdChoice,
+                  state.fourthChoice
                 )
               ) {
                 makeRequest({
@@ -244,27 +257,48 @@ export const QuizForm: React.FC<{}> = () => {
                   method: "post",
                   data: {
                     id: 0,
-                    category: `${categories[categoryIndex]}`,
+                    category: `${categories[state.categoryIndex].name}`,
                     type: "multiple",
-                    difficulty: `${difficulty[difficultyIndex]}`,
-                    question: `${questionText}`,
-                    correct_answer: `${firstChoice}`,
+                    difficulty: `${difficulty[state.difficultyIndex]}`,
+                    question: `${state.questionText}`,
+                    correct_answer: `${state.firstChoice}`,
                     incorrect_answers: [
-                      `${secondChoice}`,
-                      `${thirdChoice}`,
-                      `${fourthChoice}`,
+                      `${state.secondChoice}`,
+                      `${state.thirdChoice}`,
+                      `${state.fourthChoice}`,
                     ],
                   },
                 }).onReceive.then((response) => {
-                  setShowSuccessAlert(true);
-                  setQuestionText("");
-                  setFirstChoice("");
-                  setSecondChoice("");
-                  setThirdChoice("");
-                  setFourthChoice("");
+                  dispatch({
+                    type: "showSuccessAlert",
+                    payload: true,
+                  });
+                  dispatch({
+                    type: "questionText",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "firstChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "secondChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "thirdChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "fourthChoice",
+                    payload: "",
+                  });
                 });
               } else {
-                setShowAlert(true);
+                dispatch({
+                  type: "showAlert",
+                  payload: true,
+                });
               }
             }}
           >
@@ -275,8 +309,13 @@ export const QuizForm: React.FC<{}> = () => {
           <CollapsibleAlert
             type="info"
             text="You must fill out all fields to move on."
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
+            showAlert={state.showAlert}
+            setShowAlert={(val) => {
+              dispatch({
+                type: "showAlert",
+                payload: val,
+              });
+            }}
           />
         </Grid>
       </Grid>
