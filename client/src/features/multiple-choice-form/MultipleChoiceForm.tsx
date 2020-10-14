@@ -15,107 +15,10 @@ import { CollapsibleAlert } from "../../components/CollapsibleAlert";
 import { initialFormState, validateFields } from "./helper";
 import { reducer } from "./helper";
 import { Category } from "../category/category";
+import { CategoryMenu } from "./components/CategoryMenu";
+import { DifficultyMenu } from './components/DifficultyMenu';
 
 const difficulty = ["easy", "normal", "hard"];
-
-const CategoryMenu: React.FC<{
-  categories: Category[];
-  categoryIndex: number;
-  setCategoryIndex: (index: number) => void;
-}> = ({ categories, categoryIndex, setCategoryIndex }) => {
-  const [anchorElement, setAnchorElement] = useState(null);
-
-  return (
-    <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your category"
-            secondary={categories[categoryIndex]?.name}
-          />
-        </ListItem>
-      </List>
-      <Menu
-        open={Boolean(anchorElement)}
-        anchorEl={anchorElement}
-        keepMounted
-        onClose={() => {
-          setAnchorElement(null);
-        }}
-      >
-        {categories.map((category, index) => {
-          return (
-            <MenuItem
-              key={category?.id}
-              selected={index === categoryIndex}
-              onClick={(event) => {
-                setCategoryIndex(index);
-                setAnchorElement(null);
-              }}
-            >
-              {category?.name}
-            </MenuItem>
-          );
-        })}
-      </Menu>
-    </>
-  );
-};
-
-const DifficultyMenu: React.FC<{
-  difficulty: string[];
-  difficultyIndex: number;
-  setDifficultyIndex: (difficulty: number) => void;
-}> = ({ difficulty, difficultyIndex, setDifficultyIndex }) => {
-  const [anchorElement, setAnchorElement] = useState(null);
-
-  return (
-    <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your difficulty"
-            secondary={difficulty[difficultyIndex]}
-          />
-        </ListItem>
-      </List>
-
-      <Menu
-        open={Boolean(anchorElement)}
-        anchorEl={anchorElement}
-        keepMounted
-        onClose={() => {
-          setAnchorElement(null);
-        }}
-      >
-        {difficulty.map((difficulty, index) => {
-          return (
-            <MenuItem
-              key={difficulty}
-              selected={index === difficultyIndex}
-              onClick={(event) => {
-                setDifficultyIndex(index);
-                setAnchorElement(null);
-              }}
-            >
-              {difficulty}
-            </MenuItem>
-          );
-        })}
-      </Menu>
-    </>
-  );
-};
 
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
