@@ -1,6 +1,13 @@
-import { List, ListItem, ListItemText, Menu, MenuItem } from '@material-ui/core';
-import React, { useState } from 'react';
-import { Category } from '../../category/category';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
+import React, { useState } from "react";
+import { Category } from "../../category/category";
+import { GenericMenuList } from "./GenericMenuList";
 
 export const CategoryMenu: React.FC<{
   categories: Category[];
@@ -11,19 +18,13 @@ export const CategoryMenu: React.FC<{
 
   return (
     <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your category"
-            secondary={categories[categoryIndex]?.name}
-          />
-        </ListItem>
-      </List>
+      <GenericMenuList
+        title={"Choose your category"}
+        subtitle={categories[categoryIndex]?.name}
+        onClick={(event) => {
+          setAnchorElement(event.currentTarget as any);
+        }}
+      />
       <Menu
         open={Boolean(anchorElement)}
         anchorEl={anchorElement}

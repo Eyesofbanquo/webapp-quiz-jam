@@ -1,5 +1,41 @@
-import { List, ListItem, ListItemText, Menu, MenuItem } from '@material-ui/core';
-import React, { useState } from 'react';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
+import React, { useState } from "react";
+import { GenericMenuList } from "./GenericMenuList";
+
+const MenuContent: React.FC<{
+  difficulty: string[];
+  difficultyIndex: number;
+  setDifficultyIndex: (difficulty: number) => void;
+  setAnchorElement: React.Dispatch<React.SetStateAction<null>>;
+}> = ({
+  difficulty,
+  difficultyIndex,
+  setDifficultyIndex,
+  setAnchorElement,
+}) => (
+  <>
+    {difficulty.map((difficulty, index) => {
+      return (
+        <MenuItem
+          key={difficulty}
+          selected={index === difficultyIndex}
+          onClick={(event) => {
+            setDifficultyIndex(index);
+            setAnchorElement(null);
+          }}
+        >
+          {difficulty}
+        </MenuItem>
+      );
+    })}
+  </>
+);
 
 export const DifficultyMenu: React.FC<{
   difficulty: string[];
@@ -10,19 +46,13 @@ export const DifficultyMenu: React.FC<{
 
   return (
     <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your difficulty"
-            secondary={difficulty[difficultyIndex]}
-          />
-        </ListItem>
-      </List>
+      <GenericMenuList
+        title={"Choose your difficulty"}
+        subtitle={difficulty[difficultyIndex]}
+        onClick={(event) => {
+          setAnchorElement(event.currentTarget as any);
+        }}
+      />
 
       <Menu
         open={Boolean(anchorElement)}
@@ -32,20 +62,12 @@ export const DifficultyMenu: React.FC<{
           setAnchorElement(null);
         }}
       >
-        {difficulty.map((difficulty, index) => {
-          return (
-            <MenuItem
-              key={difficulty}
-              selected={index === difficultyIndex}
-              onClick={(event) => {
-                setDifficultyIndex(index);
-                setAnchorElement(null);
-              }}
-            >
-              {difficulty}
-            </MenuItem>
-          );
-        })}
+        <MenuContent
+          difficulty={difficulty}
+          difficultyIndex={difficultyIndex}
+          setDifficultyIndex={setDifficultyIndex}
+          setAnchorElement={setAnchorElement}
+        />
       </Menu>
     </>
   );
