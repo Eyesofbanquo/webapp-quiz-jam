@@ -182,3 +182,26 @@ API.post("/categories", (request, response) => {
     }
   });
 });
+
+API.delete("/categories", (request, response) => {
+  db.realm(CategorySchema).then((realm) => {
+    const allObjects = realm
+      .objects("Category")
+      .filtered(`id == "${request.body.id}"`);
+
+    if (allObjects.length === 0) {
+      response.send({ success: false });
+      realm.close();
+      return;
+    }
+
+    const foundObject = allObjects[0];
+
+    realm.write(() => {
+      realm.delete(foundObject);
+    });
+
+    response.send({ success: true });
+    realm.close();
+  });
+});
