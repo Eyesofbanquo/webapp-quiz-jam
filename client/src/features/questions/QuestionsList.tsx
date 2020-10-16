@@ -4,7 +4,7 @@ import { QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
 import { DeleteItem } from "../../components/DeleteItem";
 import { EmptyContent } from "../../components/EmptyContent";
-import { deleteRequest } from "../../components/DeleteItem.h";
+import { deleteRequest } from "../../components/deleteItem.helper";
 import { MultipleChoiceQuestion } from "./multiplechoice";
 
 export const QuestionList = () => {
