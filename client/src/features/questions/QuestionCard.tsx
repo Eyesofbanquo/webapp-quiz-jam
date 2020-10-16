@@ -1,15 +1,6 @@
 import React from "react";
 import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
-
-export interface MultipleChoiceQuestion {
-  category: string;
-  correct_answer: string;
-  difficulty: string;
-  id: number;
-  incorrect_answers: string[];
-  question: string;
-  type: string;
-}
+import { MultipleChoiceQuestion } from "./multiplechoice";
 
 type QuestionComponent = {
   question: MultipleChoiceQuestion;

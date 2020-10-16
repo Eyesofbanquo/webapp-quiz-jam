@@ -23,13 +23,13 @@ interface TFChoice {
 
 const MultipleChoiceSchema = {
   name: "MultipleChoice",
-  primaryKey: "question",
+  primaryKey: "id",
   properties: {
-    id: "int",
+    id: "string",
     category: "string",
     type: "string",
     difficulty: "string",
-    question: "string",
+    question: { type: "string", indexed: true },
     correct_answer: "string",
     incorrect_answers: "string[]",
     inReview: { type: "bool", indexed: true },
@@ -84,9 +84,20 @@ API.post("/multiple", (request, response) => {
     });
   } else {
     db.realm(MultipleChoiceSchema).then((realm) => {
+      const allObjects = realm
+        .objects("MultipleChoice")
+        .filtered(`question CONTAINS[c] "${receivedBody.question}"`);
+
+      if (allObjects.length > 0) {
+        response.statusCode = 500;
+        response.send({ error: true });
+        realm.close();
+        return;
+      }
+
       realm.write(() => {
         const newQuestion = realm.create("MultipleChoice", {
-          id: 0,
+          id: uuidv4(),
           category: receivedBody.category,
           type: receivedBody.type,
           difficulty: receivedBody.difficulty,
@@ -115,15 +126,17 @@ API.get("/multiple", async (request, response) => {
 
 API.delete("/multiple", (request, response) => {
   db.realm(MultipleChoiceSchema).then((realm) => {
-    const allObjects = realm.objects("MultipleChoice");
-    const foundObjectsMapped = allObjects.map(
-      (realmObject) =>
-        (realmObject as unknown) as AnsweredResponse & MultipleChoice
-    );
+    const allObjects = realm
+      .objects("MultipleChoice")
+      .filtered(`id == "${request.body.id}"`);
 
-    const foundObject = foundObjectsMapped.filter(
-      (question) => question.question === request.body.question
-    );
+    if (allObjects.length === 0) {
+      response.send({ success: false });
+      realm.close();
+      return;
+    }
+
+    const foundObject = allObjects[0];
 
     realm.write(() => {
       realm.delete(foundObject);
@@ -167,5 +180,28 @@ API.post("/categories", (request, response) => {
       response.send({ success: true, savedObject: realmSavableCategory });
       realm.close();
     }
+  });
+});
+
+API.delete("/categories", (request, response) => {
+  db.realm(CategorySchema).then((realm) => {
+    const allObjects = realm
+      .objects("Category")
+      .filtered(`id == "${request.body.id}"`);
+
+    if (allObjects.length === 0) {
+      response.send({ success: false });
+      realm.close();
+      return;
+    }
+
+    const foundObject = allObjects[0];
+
+    realm.write(() => {
+      realm.delete(foundObject);
+    });
+
+    response.send({ success: true });
+    realm.close();
   });
 });
