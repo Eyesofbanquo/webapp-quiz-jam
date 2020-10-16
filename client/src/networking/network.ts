@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface RequestOptions {
   endpoint: "multiple" | "categories";
@@ -23,3 +24,19 @@ export const makeRequest = (props: RequestOptions) => {
     onReceive: request,
   };
 };
+export function useMakeRequest<T>(props: RequestOptions) {
+  const [request, setRequest] = useState<T>();
+  console.log("YOOOO");
+
+  useEffect(() => {
+    makeRequest({
+      endpoint: props.endpoint,
+      method: props.method,
+      data: props.data,
+    }).onReceive.then((result) => {
+      setRequest(result.data);
+    });
+  }, []);
+
+  return { request, setRequest };
+}
