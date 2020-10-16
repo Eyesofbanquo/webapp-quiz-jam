@@ -26,8 +26,6 @@ export const makeRequest = (props: RequestOptions) => {
 };
 export function useMakeRequest<T>(props: RequestOptions) {
   const [request, setRequest] = useState<T>();
-  console.log("YOOOO");
-
   useEffect(() => {
     makeRequest({
       endpoint: props.endpoint,

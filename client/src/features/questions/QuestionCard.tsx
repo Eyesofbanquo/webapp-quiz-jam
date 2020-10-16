@@ -1,11 +1,12 @@
 import React from "react";
 import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
+import { Deletable } from "../../components/DeleteItem";
 
-export interface MultipleChoiceQuestion {
+export interface MultipleChoiceQuestion extends Deletable {
   category: string;
   correct_answer: string;
   difficulty: string;
-  id: number;
+  id: string;
   incorrect_answers: string[];
   question: string;
   type: string;

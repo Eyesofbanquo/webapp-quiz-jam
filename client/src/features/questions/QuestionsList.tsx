@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { MultipleChoiceQuestion, QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
-import { DeleteQuestion } from "./DeleteQuestion";
+import { DeleteItem } from "../../components/DeleteItem";
 import { EmptyContent } from "../../components/EmptyContent";
 
 const deleteQuestion = async (
@@ -21,8 +21,6 @@ const deleteQuestion = async (
       filteredQuestions = questions.filter(
         (question) => question.question !== selectedQuestion.question
       );
-      // setQuestions(filteredQuestions);
-      // setSelectedQuestion(undefined);
     }
   });
   return {
@@ -48,8 +46,8 @@ export const QuestionList = () => {
 
   if (selectedQuestion) {
     return (
-      <DeleteQuestion
-        question={selectedQuestion}
+      <DeleteItem
+        itemName={selectedQuestion.question}
         onDelete={() => {
           deleteQuestion(questions ?? [], selectedQuestion).then((result) => {
             setQuestions(result.filteredQuestions);
