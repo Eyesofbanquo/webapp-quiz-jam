@@ -31,7 +31,6 @@ export const CategoryList: React.FC = () => {
       />
     );
   }
-
   return (
     <Grid
       container
