@@ -2,70 +2,62 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, Button } from "@material-ui/core";
 import { MultipleChoiceQuestion, QuestionCard } from "./QuestionCard";
-import { makeRequest } from "../../networking/network";
+import { makeRequest, useMakeRequest } from "../../networking/network";
+import { DeleteQuestion } from "./DeleteQuestion";
+import { EmptyContent } from "../../components/EmptyContent";
+
+const deleteQuestion = async (
+  questions: MultipleChoiceQuestion[],
+  selectedQuestion: MultipleChoiceQuestion
+) => {
+  let filteredQuestions: MultipleChoiceQuestion[] = [];
+  await makeRequest({
+    endpoint: "multiple",
+    method: "delete",
+    data: {
+      question: selectedQuestion.question,
+    },
+  }).onReceive.then((response) => {
+    if (response.data.success) {
+      filteredQuestions = questions.filter(
+        (question) => question.question !== selectedQuestion.question
+      );
+      // setQuestions(filteredQuestions);
+      // setSelectedQuestion(undefined);
+    }
+  });
+  return {
+    filteredQuestions: filteredQuestions,
+  };
+};
 
 export const QuestionList = () => {
-  const [questions, setQuestions] = useState<MultipleChoiceQuestion[]>([]);
-  const allQuestions = axios.get("/api/multiple");
   const [selectedQuestion, setSelectedQuestion] = useState<
     MultipleChoiceQuestion
   >();
 
-  useEffect(() => {
-    allQuestions.then((response) => {
-      const decodable: MultipleChoiceQuestion[] = response.data;
-      setQuestions(decodable);
-    });
+  const { request: questions, setRequest: setQuestions } = useMakeRequest<
+    MultipleChoiceQuestion[]
+  >({
+    endpoint: "multiple",
+    method: "get",
   });
 
-  if (questions.length === 0) {
-    return (
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        style={{ padding: 16 }}
-      >
-        <h1>No questions exist yet :(</h1>
-      </Grid>
-    );
+  if (questions?.length === 0) {
+    return <EmptyContent itemType="questions" />;
   }
 
   if (selectedQuestion) {
     return (
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        style={{ padding: 16 }}
-      >
-        <h1>Delete</h1>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            makeRequest({
-              endpoint: "multiple",
-              method: "delete",
-              data: {
-                question: selectedQuestion.question,
-              },
-            }).onReceive.then((response) => {
-              if (response.data.success) {
-                const filteredQuestions = questions.filter(
-                  (question) => question.question !== selectedQuestion.question
-                );
-                setQuestions(filteredQuestions);
-                setSelectedQuestion(undefined);
-              }
-            });
-          }}
-        >
-          Deelte me
-        </Button>
-      </Grid>
+      <DeleteQuestion
+        question={selectedQuestion}
+        onDelete={() => {
+          deleteQuestion(questions ?? [], selectedQuestion).then((result) => {
+            setQuestions(result.filteredQuestions);
+            setSelectedQuestion(undefined);
+          });
+        }}
+      />
     );
   }
 
@@ -77,12 +69,11 @@ export const QuestionList = () => {
       alignItems="center"
       style={{ padding: 16 }}
     >
-      {questions.map((question) => (
+      {questions?.map((question) => (
         <QuestionCard
           key={question.question}
           question={question}
           onPress={(question) => {
-            console.log("You selected", question.question);
             setSelectedQuestion(question);
           }}
         />
