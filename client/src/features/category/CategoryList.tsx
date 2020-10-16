@@ -18,15 +18,11 @@ export const CategoryList: React.FC = () => {
       <DeleteItem
         itemName={selectedCategory.name}
         onDelete={() => {
-          deleteItem<Category>(
-            categories ?? [],
-            selectedCategory,
-            "categories",
-            {
-              key: "id",
-              value: selectedCategory.id,
-            }
-          ).then((result) => {
+          deleteItem<Category>({
+            items: categories ?? [],
+            selectedItem: selectedCategory,
+            endpoint: "categories",
+          }).then((result) => {
             setCategories(result.filteredItems);
             setSelectedCategory(undefined);
           });

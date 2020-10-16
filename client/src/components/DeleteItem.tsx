@@ -17,18 +17,19 @@ export interface Deletable {
   id: string;
 }
 
-export async function deleteItem<T extends Deletable>(
-  items: T[],
-  selectedItem: T,
-  endpoint: "multiple" | "categories",
-  payload: { key: string; value: string }
-) {
+export async function deleteItem<T extends Deletable>(props: {
+  items: T[];
+  selectedItem: T;
+  endpoint: "multiple" | "categories";
+}) {
+  const { items, selectedItem, endpoint } = props;
+
   let filteredItems: T[] = [];
   await makeRequest({
     endpoint: endpoint,
     method: "delete",
     data: {
-      [payload.key]: payload.value,
+      id: selectedItem.id,
     },
   }).onReceive.then((response) => {
     if (response.data.success) {
