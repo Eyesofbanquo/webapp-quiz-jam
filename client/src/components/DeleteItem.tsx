@@ -1,46 +1,10 @@
 import { Grid, Button } from "@material-ui/core";
 import React from "react";
-import { MultipleChoiceQuestion } from "../features/questions/QuestionCard";
 import { makeRequest } from "../networking/network";
 
 interface DeleteQuestionProps {
   itemName: string;
   onDelete: () => void;
-}
-
-interface PayloadType {
-  key: string;
-  value: string;
-}
-
-export interface Deletable {
-  id: string;
-}
-
-export async function deleteItem<T extends Deletable>(props: {
-  items: T[];
-  selectedItem: T;
-  endpoint: "multiple" | "categories";
-}) {
-  const { items, selectedItem, endpoint } = props;
-
-  let filteredItems: T[] = [];
-  await makeRequest({
-    endpoint: endpoint,
-    method: "delete",
-    data: {
-      id: selectedItem.id,
-    },
-  }).onReceive.then((response) => {
-    if (response.data.success) {
-      filteredItems = items.filter(
-        (savedItem) => savedItem.id !== selectedItem.id
-      );
-    }
-  });
-  return {
-    filteredItems: filteredItems,
-  };
 }
 export const DeleteItem: React.FC<DeleteQuestionProps> = ({
   itemName,

@@ -1,32 +1,11 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
-import { MultipleChoiceQuestion, QuestionCard } from "./QuestionCard";
+import { QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
-import { deleteItem, DeleteItem } from "../../components/DeleteItem";
+import { DeleteItem } from "../../components/DeleteItem";
 import { EmptyContent } from "../../components/EmptyContent";
-
-const deleteQuestion = async (
-  questions: MultipleChoiceQuestion[],
-  selectedQuestion: MultipleChoiceQuestion
-) => {
-  let filteredQuestions: MultipleChoiceQuestion[] = [];
-  await makeRequest({
-    endpoint: "multiple",
-    method: "delete",
-    data: {
-      question: selectedQuestion.question,
-    },
-  }).onReceive.then((response) => {
-    if (response.data.success) {
-      filteredQuestions = questions.filter(
-        (question) => question.question !== selectedQuestion.question
-      );
-    }
-  });
-  return {
-    filteredQuestions: filteredQuestions,
-  };
-};
+import { deleteRequest } from "../../components/DeleteItem.h";
+import { MultipleChoiceQuestion } from "./multiplechoice";
 
 export const QuestionList = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<
@@ -49,7 +28,7 @@ export const QuestionList = () => {
       <DeleteItem
         itemName={selectedQuestion.question}
         onDelete={() => {
-          deleteItem<MultipleChoiceQuestion>({
+          deleteRequest<MultipleChoiceQuestion>({
             items: questions ?? [],
             selectedItem: selectedQuestion,
             endpoint: "multiple",

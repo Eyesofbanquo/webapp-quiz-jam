@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useMakeRequest } from "../../networking/network";
 import { Category } from "./category";
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { deleteItem, DeleteItem } from "../../components/DeleteItem";
+import { DeleteItem } from "../../components/DeleteItem";
+import { deleteRequest } from "../../components/DeleteItem.h";
 
 export const CategoryList: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>();
@@ -18,7 +19,7 @@ export const CategoryList: React.FC = () => {
       <DeleteItem
         itemName={selectedCategory.name}
         onDelete={() => {
-          deleteItem<Category>({
+          deleteRequest<Category>({
             items: categories ?? [],
             selectedItem: selectedCategory,
             endpoint: "categories",
