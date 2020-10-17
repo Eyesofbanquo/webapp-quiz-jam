@@ -6,19 +6,26 @@ import { API } from "./src";
 const path = require("path");
 const cors = require("cors");
 
-export const app = express();
+export class AppController {
+  app: express.Express;
+  port: string;
 
-const port = process.env.PORT || 5000;
+  constructor() {
+    this.app = express();
+    this.port = process.env.PORT || "5000";
 
-app.use(sslRedirect());
-app.use("/api", API);
-app.use(cors());
-app.use(bodyParser.json());
+    this.app.use(sslRedirect());
+    this.app.use("/api", API);
+    this.app.use(cors());
+    this.app.use(bodyParser.json());
+    this.app.use(express.static(path.join(__dirname, "/client/build")));
+  }
+}
 
-app.use(express.static(path.join(__dirname, "/client/build")));
+const controller = new AppController();
 
-app.get("*", (req, res) => {
+controller.app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-export let server = app.listen(port, () => console.log("Running..."));
+controller.app.listen(controller.port, () => console.log("Running..."));

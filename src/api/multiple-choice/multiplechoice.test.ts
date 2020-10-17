@@ -2,7 +2,7 @@
 import "chai-http";
 import * as chai from "chai";
 import "mocha";
-import { app } from "../../../server";
+import { AppController } from "../../../server";
 import { expect } from "chai";
 // const sinon = require("sinon");
 import * as sinon from "ts-sinon";
@@ -29,8 +29,9 @@ describe("Multiple Choice", () => {
   });
   describe("/GET", () => {
     it("it should GET all the multiple choice", () => {
+      const controller = new AppController();
       chai
-        .request(app)
+        .request(controller.app)
         .get("/api/categories")
         .then((response) => {
           expect(response.status).to.eql(200);
