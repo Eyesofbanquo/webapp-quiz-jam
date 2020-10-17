@@ -22,6 +22,7 @@ server.key
 *.realm
 *.realm.lock
 *.realm.management/*
+*.realm.note
 
 # Test Realm
 
