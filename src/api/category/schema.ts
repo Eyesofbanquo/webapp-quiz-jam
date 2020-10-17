@@ -13,7 +13,7 @@
  *          type: string
  *          description: The name of the category
  *        inReview:
- *          type: bool
+ *          type: boolean
  *          description: Whether or not the category is currently in review. This defaults to true.
  *      example:
  *        id: 0

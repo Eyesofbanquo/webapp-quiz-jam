@@ -5,14 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import { CategorySchema } from "./schema";
 import { Storeable } from "database/database";
 
-// export const categoryRouter = express.Router();
-// const db = new Database();
-// categoryRouter.use(bodyParser.json());
 /**
  * @swagger
  * tags:
  *   name: Category
- *   description: User management
+ *   description: A category for a quiz question.
  */
 export class CategoryRouter {
   public static readonly SCHEMA = "Category";
@@ -52,6 +49,34 @@ export class CategoryRouter {
   }
 
   post() {
+    /**
+     * @swagger
+     * path:
+     *  /categories/:
+     *    post:
+     *      summary: Create a new category. This automatically sets inReview to true.
+     *      tags: [Category]
+     *      requestBody:
+     *        required: true
+     *        content:
+     *          application/json:
+     *            schema:
+     *              name:
+     *                type: string
+     *                description: The name of the category
+     *      responses:
+     *        "200":
+     *          description: Returns the object that was just saved
+     *          content:
+     *            application/json:
+     *              example:
+     *                success: true
+     *                savedObject:
+     *                  id: 0
+     *                  name: Nightmare
+     *                  inReview: false
+     *
+     */
     this.router.post("/categories", (request, response) => {
       const receivedBody = request.body as { name: string };
 
@@ -86,6 +111,34 @@ export class CategoryRouter {
   }
 
   delete() {
+    /**
+     * @swagger
+     * path:
+     *  /categories/:
+     *    delete:
+     *      summary: Deletes the category.
+     *      tags: [Category]
+     *      requestBody:
+     *        required: true
+     *        content:
+     *          application/json:
+     *            schema:
+     *              id:
+     *                type: string
+     *                description: The id of the category to delete.
+     *      responses:
+     *        "200":
+     *          description: Returns the object that was just deleted
+     *          content:
+     *            application/json:
+     *              example:
+     *                success: true
+     *                data:
+     *                  id: 0
+     *                  name: Nightmare
+     *                  inReview: false
+     *
+     */
     this.router.delete("/categories", (request, response) => {
       this.db.realm(CategorySchema).then((realm) => {
         const allObjects = realm
