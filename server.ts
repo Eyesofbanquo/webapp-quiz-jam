@@ -4,6 +4,31 @@ import sslRedirect from "heroku-ssl-redirect";
 import { APIController } from "./src";
 import { Database } from "./src/database";
 import { Storeable } from "database/database";
+import * as swaggerJsDoc from "swagger-jsdoc";
+import * as swaggerUi from "swagger-ui-express";
+
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Qizzo App API",
+      version: "1.0.0",
+      description: "This is an API for the iOS Qizzo quiz making app",
+      license: {
+        name: "MIT",
+        url: "https://choosealicense.com/licenses/mit/",
+      },
+      contact: {
+        name: "Markim Shaw",
+        url: "https://qizzoapp.com",
+        email: "markim@donderapps.com",
+      },
+    },
+    servers: [{ url: "/api" }],
+  },
+  apis: [],
+};
+const specs = swaggerJsDoc(options);
 
 const path = require("path");
 const cors = require("cors");
@@ -28,6 +53,13 @@ export class AppController {
     this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(express.static(path.join(__dirname, "/client/build")));
+    this.app.use("/docs", swaggerUi.serve);
+    this.app.get(
+      "/docs",
+      swaggerUi.setup(specs, {
+        explorer: true,
+      })
+    );
 
     this.setupAPI();
   }
