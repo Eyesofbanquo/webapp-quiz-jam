@@ -16,7 +16,7 @@ import { initialFormState, validateFields } from "./helper";
 import { reducer } from "./helper";
 import { Category } from "../category/category";
 import { CategoryMenu } from "./components/CategoryMenu";
-import { DifficultyMenu } from './components/DifficultyMenu';
+import { DifficultyMenu } from "./components/DifficultyMenu";
 
 const difficulty = ["easy", "normal", "hard"];
 
@@ -159,7 +159,6 @@ export const QuizForm: React.FC<{}> = () => {
                   endpoint: "multiple",
                   method: "post",
                   data: {
-                    id: 0,
                     category: `${categories[state.categoryIndex].name}`,
                     type: "multiple",
                     difficulty: `${difficulty[state.difficultyIndex]}`,

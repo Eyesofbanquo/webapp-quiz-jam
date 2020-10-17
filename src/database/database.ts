@@ -1,5 +1,9 @@
 import * as Realm from "realm";
 
+/**
+ * Database
+ * * This class is used to give central access to the underlying Realm object.
+ */
 export class Database {
   /* 7.  Add uuid to question objects */
   /* 6. Adds name prop */
