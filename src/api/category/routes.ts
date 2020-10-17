@@ -8,8 +8,8 @@ export const categoryRouter = express.Router();
 const db = new Database();
 categoryRouter.use(bodyParser.json());
 
-categoryRouter.get("/categories", async (request, response) => {
-  await db.realm(CategorySchema).then((realm) => {
+categoryRouter.get("/categories", (request, response) => {
+  db.realm(CategorySchema).then((realm) => {
     const allObjects: any = realm.objects("Category");
     response.send(allObjects);
     realm.close();
