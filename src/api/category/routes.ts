@@ -21,7 +21,7 @@ export class CategoryRouter {
     this.setupRoutes();
   }
 
-  setupRoutes() {
+  get() {
     this.router.get("/categories", (request, response) => {
       this.db.realm(CategorySchema).then((realm) => {
         const allObjects: any = realm.objects(CategoryRouter.SCHEMA);
@@ -30,7 +30,9 @@ export class CategoryRouter {
         realm.close();
       });
     });
+  }
 
+  post() {
     this.router.post("/categories", (request, response) => {
       const receivedBody = request.body as { name: string };
 
@@ -56,12 +58,15 @@ export class CategoryRouter {
               inReview: true,
             });
           });
+          response.statusCode = 200;
           response.send({ success: true, savedObject: realmSavableCategory });
           realm.close();
         }
       });
     });
+  }
 
+  delete() {
     this.router.delete("/categories", (request, response) => {
       this.db.realm(CategorySchema).then((realm) => {
         const allObjects = realm
@@ -76,13 +81,22 @@ export class CategoryRouter {
 
         const foundObject = allObjects[0];
 
+        response.send({ success: true, data: foundObject });
+
         realm.write(() => {
           realm.delete(foundObject);
         });
 
-        response.send({ success: true });
         realm.close();
       });
     });
+  }
+
+  setupRoutes() {
+    this.get();
+
+    this.post();
+
+    this.delete();
   }
 }

@@ -25,7 +25,7 @@ describe("Category", () => {
         })
         .catch((error) => console.log(error));
     });
-    it("it should GET all the categories", () => {
+    it("should GET all the categories", () => {
       /** ! Assume */
       testdb
         .realm(CategorySchema)
@@ -47,6 +47,74 @@ describe("Category", () => {
           // Assert
           expect(response.body[0].id).to.eql("1");
           expect(response.body[0].name).to.eql("Nightmare");
+          expect(response.status).to.eql(200);
+        });
+    });
+  });
+
+  describe("/POST categories", () => {
+    after(() => {
+      testdb
+        .realm(CategorySchema)
+        .then((realm) => {
+          realm.write(() => {
+            realm.deleteAll();
+          });
+          realm.close();
+        })
+        .catch((error) => console.log(error));
+    });
+
+    it(`should POST a new category named "Ha"`, () => {
+      const controller = new AppController(testdb);
+      // Act:
+      chai
+        .request(controller.app)
+        .post("/api/categories")
+        .send({ name: "Ha" })
+        .then((response) => {
+          // Assert
+          expect(response.body.success).to.eql(true);
+          expect(response.body.savedObject.name).to.eql("Ha");
+          expect(response.status).to.eql(200);
+        });
+    });
+  });
+
+  describe("/DELETE categories", () => {
+    after(() => {
+      testdb
+        .realm(CategorySchema)
+        .then((realm) => {
+          realm.write(() => {
+            realm.deleteAll();
+          });
+          realm.close();
+        })
+        .catch((error) => console.log(error));
+    });
+
+    it(`should DELETE an existing category named "Ha"`, () => {
+      testdb
+        .realm(CategorySchema)
+        .then((realm) => {
+          realm.write(() => {
+            realm.create("Category", categories[1]);
+          });
+          realm.close();
+        })
+        .catch((error) => console.log(error));
+
+      const controller = new AppController(testdb);
+      // Act:
+      chai
+        .request(controller.app)
+        .delete("/api/categories")
+        .send({ id: "2" })
+        .then((response) => {
+          // Assert
+          expect(response.body.success).to.eql(true);
+          expect(response.body.data.name).to.eql("Ha");
           expect(response.status).to.eql(200);
         });
     });
