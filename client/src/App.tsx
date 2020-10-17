@@ -35,6 +35,11 @@ const App = () => {
           <QuestionList />
         </Route>
         <Route
+          exact
+          path="/api/docs"
+          render={() => (window.location.href = "http://localhost:5000/docs/")}
+        />
+        <Route
           component={() => <h3 style={{ padding: 8 }}>404 - Not Found</h3>}
         />
       </Switch>

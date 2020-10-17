@@ -54,12 +54,6 @@ export class AppController {
     this.app.use(bodyParser.json());
     this.app.use(express.static(path.join(__dirname, "/client/build")));
     this.app.use("/docs", swaggerUi.serve);
-    this.app.get(
-      "/docs",
-      swaggerUi.setup(specs, {
-        explorer: true,
-      })
-    );
 
     this.setupAPI();
   }
@@ -70,6 +64,13 @@ export class AppController {
 }
 
 const controller = new AppController();
+
+controller.app.get(
+  "/docs",
+  swaggerUi.setup(specs, {
+    explorer: true,
+  })
+);
 
 controller.app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
