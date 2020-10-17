@@ -26,7 +26,7 @@ const options = {
     },
     servers: [{ url: "/api" }],
   },
-  apis: [],
+  apis: ["./src/api/category/schema.ts", "./src/api/category/routes.ts"],
 };
 const specs = swaggerJsDoc(options);
 

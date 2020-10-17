@@ -8,7 +8,12 @@ import { Storeable } from "database/database";
 // export const categoryRouter = express.Router();
 // const db = new Database();
 // categoryRouter.use(bodyParser.json());
-
+/**
+ * @swagger
+ * tags:
+ *   name: Category
+ *   description: User management
+ */
 export class CategoryRouter {
   public static readonly SCHEMA = "Category";
   db: Storeable;
@@ -20,8 +25,22 @@ export class CategoryRouter {
     this.router.use(bodyParser.json());
     this.setupRoutes();
   }
-
   get() {
+    /**
+     * @swagger
+     * path:
+     *  /categories/:
+     *    get:
+     *      summary: Retrieve all categories.
+     *      tags: [Category]
+     *      responses:
+     *        "200":
+     *          description: All category objects
+     *          content:
+     *            application/json:
+     *              schema:
+     *                $ref: '#/components/schemas/Category'
+     */
     this.router.get("/categories", (request, response) => {
       this.db.realm(CategorySchema).then((realm) => {
         const allObjects: any = realm.objects(CategoryRouter.SCHEMA);
