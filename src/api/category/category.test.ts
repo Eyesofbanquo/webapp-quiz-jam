@@ -4,51 +4,49 @@ import * as chai from "chai";
 import "mocha";
 import { AppController } from "../../../server";
 import { expect } from "chai";
-// const sinon = require("sinon");
-import * as sinon from "ts-sinon";
-// const Database = require("../../database/database");
-import * as Database from "../../database/database";
-import * as Realm from "realm";
+import { TestDatabase } from "../../api/testing/TestDatabase";
 import { CategorySchema } from "./schema";
 
 chai.use(require("chai-http"));
 
+const testdb = new TestDatabase();
+
+const categories = require("../../stubs/categories.json");
 describe("Category", () => {
-  beforeEach(async () => {
-    const db = new Database.Database();
-    const stub = sinon.stubObject<Database.Database>(db);
-
-    stub.realm.returns(
-      Promise.resolve(
-        Realm.open({
-          path: "test.realm",
-          inMemory: true,
-          schema: [CategorySchema],
+  describe("/GET categories", () => {
+    after(() => {
+      testdb
+        .realm(CategorySchema)
+        .then((realm) => {
+          realm.write(() => {
+            realm.deleteAll();
+          });
+          realm.close();
         })
-      )
-    );
-  });
-
-  describe("/GET", () => {
+        .catch((error) => console.log(error));
+    });
     it("it should GET all the categories", () => {
-      const db = new Database.Database();
-      const stub = sinon.stubObject<Database.Database>(db);
-      const controller = new AppController();
+      /** ! Assume */
+      testdb
+        .realm(CategorySchema)
+        .then((realm) => {
+          realm.write(() => {
+            realm.create("Category", categories[0]);
+          });
+          realm.close();
+        })
+        .catch((error) => console.log(error));
 
-      stub.realm.returns(
-        Promise.resolve(
-          Realm.open({
-            path: "test.realm",
-            inMemory: true,
-            schema: [CategorySchema],
-          })
-        )
-      );
+      const controller = new AppController(testdb);
+
+      // Act:
       chai
         .request(controller.app)
         .get("/api/categories")
         .then((response) => {
-          console.log(response.body);
+          // Assert
+          expect(response.body[0].id).to.eql("1");
+          expect(response.body[0].name).to.eql("Nightmare");
           expect(response.status).to.eql(200);
         });
     });
