@@ -9,11 +9,11 @@ import * as sinon from "ts-sinon";
 // const Database = require("../../database/database");
 import * as Database from "../../database/database";
 import * as Realm from "realm";
-import { CategorySchema } from "./schema";
+import { MultipleChoiceSchema } from "./schema";
 
 chai.use(require("chai-http"));
 
-describe("Category", () => {
+describe("Multiple Choice", () => {
   beforeEach(() => {
     const db = new Database.Database();
     const stub = sinon.stubObject<Database.Database>(db);
@@ -22,14 +22,13 @@ describe("Category", () => {
         Realm.open({
           path: "test.realm",
           inMemory: true,
-          schema: [CategorySchema],
+          schema: [MultipleChoiceSchema],
         })
       )
     );
   });
-
   describe("/GET", () => {
-    it("it should GET all the categories", () => {
+    it("it should GET all the multiple choice", () => {
       chai
         .request(app)
         .get("/api/categories")

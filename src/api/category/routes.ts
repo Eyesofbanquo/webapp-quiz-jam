@@ -11,6 +11,7 @@ categoryRouter.use(bodyParser.json());
 categoryRouter.get("/categories", (request, response) => {
   db.realm(CategorySchema).then((realm) => {
     const allObjects: any = realm.objects("Category");
+    response.statusCode = 200;
     response.send(allObjects);
     realm.close();
   });
