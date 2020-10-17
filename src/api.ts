@@ -2,25 +2,41 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Database } from "./database";
 import { v4 as uuidv4 } from "uuid";
-import { categoryRouter } from "./api/category/routes";
+import { CategoryRouter } from "./api/category/routes";
 import { multipleChoiceRouter } from "./api/multiple-choice/routes";
+import { Storeable } from "database/database";
 
 const db = new Database();
 
-export const API = express.Router();
-API.use(bodyParser.json());
-API.use("/", categoryRouter);
-API.use("/", multipleChoiceRouter);
+// export const API = express.Router();
 
-API.get("/open_reference_mult", (req, res) => {
-  const statusCode = res.statusCode;
-  const stub = require("./stubs/mult.json");
+export class APIController {
+  api: express.Router;
+  db: Storeable;
 
-  res.send(stub);
-});
+  constructor(db: Storeable = new Database()) {
+    this.db = db;
+    this.api = express.Router();
+    this.api.use(bodyParser.json());
 
-API.get("/open_reference_tf", (request, response) => {
-  const statusCode = response.statusCode;
-  const stub = require("./stubs/boolean.json");
-  response.send(stub);
-});
+    const categoryRouter = new CategoryRouter(db);
+    this.api.use("/", categoryRouter.router);
+
+    this.api.use("/", multipleChoiceRouter);
+  }
+}
+
+// const controller = new APIController();
+
+// controller.api.get("/open_reference_mult", (req, res) => {
+//   const statusCode = res.statusCode;
+//   const stub = require("./stubs/mult.json");
+
+//   res.send(stub);
+// });
+
+// controller.api.get("/open_reference_tf", (request, response) => {
+//   const statusCode = response.statusCode;
+//   const stub = require("./stubs/boolean.json");
+//   response.send(stub);
+// });

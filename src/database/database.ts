@@ -1,10 +1,14 @@
 import * as Realm from "realm";
 
+export interface Storeable {
+  realm: (any) => Promise<Realm>;
+}
+
 /**
  * Database
  * * This class is used to give central access to the underlying Realm object.
  */
-export class Database {
+export class Database implements Storeable {
   /* 7.  Add uuid to question objects */
   /* 6. Adds name prop */
   /* 5. Adds inReview prop */
