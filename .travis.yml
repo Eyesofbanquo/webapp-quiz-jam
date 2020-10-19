@@ -3,15 +3,22 @@ node_js:
   - stable
 install:
   - npm install newman
+stages:
+  - express
+  - newman
+  - staging
+  - deploy
 jobs:
   include:
-    - stage: Express tests
+    - stage: express
+      name: "Express Tests"
       script:
         - npm run test
       cache:
         directories:
           - node_modules
-    - stage: Deploy to Staging
+    - stage: staging
+      name: "Deploy to staging"
       script: skip
       deploy:
         provider: heroku
@@ -19,7 +26,8 @@ jobs:
         api_key:
           secure: ${HEROKU_KEY}
       if: branch = staging
-    - stage: Newman tests
+    - stage: newman
+      name: "Newman tests"
       script:
         - newman run https://api.getpostman.com/collections/${POSTMAN_UID}?apikey=${POSTMAN_KEY}
       cache:
@@ -37,3 +45,6 @@ jobs:
         app: serene-wave-13524
         api_key:
           secure: ${HEROKU_KEY}
+  exclude:
+    if: type = pull_request
+    stage: newman
