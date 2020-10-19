@@ -23,9 +23,9 @@ jobs:
       script: skip
       deploy:
         provider: heroku
-        app: serene-wave-13524-staging
-        on:
-          branch: staging
+        app:
+          staging: serene-wave-13524-staging
+        on: staging
         api_key:
           secure: ${HEROKU_KEY}
       if: branch = staging
