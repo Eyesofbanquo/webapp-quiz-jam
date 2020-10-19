@@ -25,7 +25,6 @@ jobs:
         provider: heroku
         app:
           staging: serene-wave-13524-staging
-        on: staging
         api_key:
           secure: ${HEROKU_KEY}
       if: branch = staging
