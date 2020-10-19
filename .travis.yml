@@ -6,16 +6,20 @@ install:
 jobs:
   include:
     - stage: newman tests
-      script: npm run test
+      script:
+        - npm run test
       cache:
-        directories: node_modules
+        directories:
+          - node_modules
     - stage: express tests
-      script: npm run test
+      script:
+        - npm run test
       cache:
-        directories: node_modules
+        directories:
+          - node_modules
     - stage: deploy to heroku
       deploy:
-      provider: heroku
-      app: serene-wave-13524
-      api_key:
-        secure: NllVX1vps4e2WNQqV/MJbO34aKjrwAM2W7K+t+Vnhb5Il0DyyLZWNn4alBTs+eo+5UZ9XMbgPrykdMEu4kBGVJwmTSRO++VtenSHdvxCnNOmxUBPf/b3yWoLsN5NTasMK3L3dhF71Ws81U2gF5A1aV2tiEBXF8Rc6Py+o54p/uzgGrneGOYUBGSDKtVLzvuqmDqMIVflX2xMc+QSUpl23GuCuz51ooOPUbjMj2ytAy/KJarIR5lGuejEQ8RTaa2Y/cG3/d5JMVdt5xAnNUrkU714wggXOzyz/vmenWNF+3gx9eyMNix4XqVxnpoaxcELCCSwijIWEZgySPBF/JKMOCjlsO+T8UZs/5H2j0oBB9izZ+BACO7GOxzm8SQifYH3n9zDp1hJtxbQG+g/ZIaDOOV6TBU8+PK+Istaj8ADr/AHIQEVTrv3f+nQUQX5mNYE6OI7mL9v5cW6Pv80E5adc+fsKnz37r+u6ywqryTeNhVqRkoOpI3kRV7sdKx4ZGWMUZcl2dntCI+rWvfPtJa7Vcr1OEN+UKbbW3Q8DnRAbsH2NKR2gyVNLZejp9Bn65tKvx3BZ5p65efvETP03NJ3HFqO3XuGehsuoNBH09bvxPL7uoLfQ81vYJgMbCqhx7UtvLm6rB3VO7JQlov50Av52OI3WzhBKchtlwERgzPsRjE=
+        provider: heroku
+        app: serene-wave-13524
+        api_key:
+          secure: ${HEROKU_KEY}
