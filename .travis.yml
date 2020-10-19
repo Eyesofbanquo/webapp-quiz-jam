@@ -11,6 +11,7 @@ jobs:
       cache:
         directories:
           - node_modules
+      if: branch = staging
     - stage: express tests
       script:
         - npm run test
