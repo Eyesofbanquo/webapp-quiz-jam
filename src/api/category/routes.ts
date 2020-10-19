@@ -44,7 +44,8 @@ export class CategoryRouter {
           .filtered(`name CONTAINS[c] "${receivedBody.name}"`);
 
         if (allObjects.length > 0) {
-          response.send({ success: false, savedObject: null });
+          response.statusCode = 204;
+          response.send({ success: false, data: null });
           realm.close();
           return;
         }
@@ -59,7 +60,7 @@ export class CategoryRouter {
             });
           });
           response.statusCode = 200;
-          response.send({ success: true, savedObject: realmSavableCategory });
+          response.send({ success: true, data: realmSavableCategory });
           realm.close();
         }
       });
