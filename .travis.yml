@@ -49,7 +49,8 @@ jobs:
         api_key:
           secure: ${HEROKU_KEY}
   exclude:
-    stage: newman
-    if: type = pull_request
-    stage: staging
-    if: type = pull_request
+    stage: 
+      - newman
+        if: type = pull_request
+      - staging
+        if: type = pull_request
