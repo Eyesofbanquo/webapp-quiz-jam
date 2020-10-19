@@ -5,8 +5,8 @@ install:
   - npm install newman
 stages:
   - express
-  - newman
   - staging
+  - newman
   - deploy
 
 jobs:
