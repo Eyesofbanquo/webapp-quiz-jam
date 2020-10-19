@@ -24,9 +24,10 @@ jobs:
       deploy:
         provider: heroku
         app: serene-wave-13524-staging
+        on:
+          branch: staging
         api_key:
           secure: ${HEROKU_KEY}
-      env: STAGING=true
       if: branch = staging
     - stage: newman
       name: "Newman tests"
@@ -35,7 +36,6 @@ jobs:
       cache:
         directories:
           - node_modules
-      env: STAGING=true
       if: branch = staging
     - stage: Deploy to Master
       script: skip
