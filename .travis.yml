@@ -8,9 +8,6 @@ stages:
   - newman
   - staging
   - deploy
-env:
-  - STAGING=true
-  - STAGING=false
 
 jobs:
   include:
@@ -51,5 +48,7 @@ jobs:
           secure: ${HEROKU_KEY}
       if: branch = master
   exclude:
-    env: STAGING=true
-    if: type = pull_request
+    - stage: newman
+      if: type = pull_request
+    - stage: staging
+      if: type = pull_request
