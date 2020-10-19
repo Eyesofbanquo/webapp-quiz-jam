@@ -25,8 +25,6 @@ jobs:
         app: serene-wave-13524-staging
         api_key:
           secure: ${HEROKU_KEY}
-      exclude:
-        if: type = pull_request
       branch:
         only: staging
     - stage: newman
@@ -36,8 +34,6 @@ jobs:
       cache:
         directories:
           - node_modules
-      exclude:
-        if: type = pull_request
       branch:
         only: staging
       if: branch = staging
