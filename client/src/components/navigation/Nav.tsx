@@ -19,9 +19,9 @@ export const Nav = () => (
       </Link>
       <Link
         style={{ textDecoration: "none", padding: 16, color: "white" }}
-        to="/form"
+        to="/creator"
       >
-        <Typography variant="h6">Create a question</Typography>
+        <Typography variant="h6">Creator Mode</Typography>
       </Link>
     </Toolbar>
   </AppBar>

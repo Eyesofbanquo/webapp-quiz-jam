@@ -1,22 +1,46 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as Realm from "realm";
-import { API } from "./src";
+import sslRedirect from "heroku-ssl-redirect";
+import { APIController } from "./src";
+import { Database } from "./src/database";
+import { Storeable } from "database/database";
+
 const path = require("path");
 const cors = require("cors");
 
-const app = express();
+export class AppController {
+  app: express.Express;
+  api: APIController;
+  port: string;
+  db: Storeable;
 
-const port = process.env.PORT || 5000;
+  constructor(db: Storeable = new Database()) {
+    this.db = db;
+    this.app = express();
+    this.api = new APIController(db);
+    this.port = process.env.PORT || "5000";
 
-app.use("/api", API);
-app.use(cors());
-app.use(bodyParser.json());
+    this.setupRoutes();
+  }
 
-app.use(express.static(path.join(__dirname, "/client/build")));
+  setupRoutes() {
+    this.app.use(sslRedirect());
+    this.app.use(cors());
+    this.app.use(bodyParser.json());
+    this.app.use(express.static(path.join(__dirname, "/client/build")));
 
-app.get("*", (req, res) => {
+    this.setupAPI();
+  }
+
+  setupAPI() {
+    this.app.use("/api", this.api.api);
+  }
+}
+
+const controller = new AppController();
+
+controller.app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-app.listen(port, () => console.log("Running..."));
+controller.app.listen(controller.port, () => console.log("Running..."));

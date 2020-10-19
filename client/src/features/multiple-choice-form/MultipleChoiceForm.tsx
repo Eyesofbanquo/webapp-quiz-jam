@@ -6,187 +6,39 @@ import {
   List,
   ListItem,
   ListItemText,
-  Collapse,
-  IconButton,
 } from "@material-ui/core";
-import { Alert, AlertProps } from "@material-ui/lab";
-import CloseIcon from "@material-ui/icons/Close";
-import React, { useState } from "react";
-import axios, { AxiosRequestConfig } from "axios";
-import { CorrectAnswerComponent } from "./CorrectAnswerComponent";
-import { QuestionComponent } from "./QuestionComponent";
+import React, { useEffect, useReducer, useState } from "react";
+import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
+import { QuestionComponent } from "./components/QuestionComponent";
+import { makeRequest } from "../../networking/network";
+import { CollapsibleAlert } from "../../components/CollapsibleAlert";
+import { initialFormState, validateFields } from "./helper";
+import { reducer } from "./helper";
+import { Category } from "../category/category";
+import { CategoryMenu } from "./components/CategoryMenu";
+import { DifficultyMenu } from "./components/DifficultyMenu";
 
-const categories = ["Entertainment: Video Games", "Books", "Music", "Film"];
 const difficulty = ["easy", "normal", "hard"];
 
-const validateFields = (
-  questionText: string,
-  firstChoice: string,
-  secondChoice: string,
-  thirdChoice: string,
-  fourthChoice: string
-) => {
-  return (
-    questionText.length > 0 &&
-    firstChoice.length > 0 &&
-    secondChoice.length > 0 &&
-    thirdChoice.length > 0 &&
-    fourthChoice.length > 0
-  );
-};
-
-const Category: React.FC<{
-  categoryIndex: number;
-  setCategoryIndex: (index: number) => void;
-}> = ({ categoryIndex, setCategoryIndex }) => {
-  const [anchorElement, setAnchorElement] = useState(null);
-  return (
-    <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your category"
-            secondary={categories[categoryIndex]}
-          />
-        </ListItem>
-      </List>
-      <Menu
-        open={Boolean(anchorElement)}
-        anchorEl={anchorElement}
-        keepMounted
-        onClose={() => {
-          setAnchorElement(null);
-        }}
-      >
-        {categories.map((category, index) => {
-          return (
-            <MenuItem
-              key={category}
-              selected={index === categoryIndex}
-              onClick={(event) => {
-                setCategoryIndex(index);
-                setAnchorElement(null);
-              }}
-            >
-              {category}
-            </MenuItem>
-          );
-        })}
-      </Menu>
-    </>
-  );
-};
-
-const Difficulty: React.FC<{
-  difficultyIndex: number;
-  setDifficultyIndex: (difficulty: number) => void;
-}> = ({ difficultyIndex, setDifficultyIndex }) => {
-  const [anchorElement, setAnchorElement] = useState(null);
-
-  return (
-    <>
-      <List component="nav">
-        <ListItem
-          button
-          onClick={(event) => {
-            setAnchorElement(event.currentTarget as any);
-          }}
-        >
-          <ListItemText
-            primary="Chose your difficulty"
-            secondary={difficulty[difficultyIndex]}
-          />
-        </ListItem>
-      </List>
-
-      <Menu
-        open={Boolean(anchorElement)}
-        anchorEl={anchorElement}
-        keepMounted
-        onClose={() => {
-          setAnchorElement(null);
-        }}
-      >
-        {difficulty.map((difficulty, index) => {
-          return (
-            <MenuItem
-              key={difficulty}
-              selected={index === difficultyIndex}
-              onClick={(event) => {
-                setDifficultyIndex(index);
-                setAnchorElement(null);
-              }}
-            >
-              {difficulty}
-            </MenuItem>
-          );
-        })}
-      </Menu>
-    </>
-  );
-};
-
-const CollapsibleAlert: React.FC<{
-  type: AlertProps["severity"];
-  text: string;
-  showAlert: boolean;
-  setShowAlert: (isVisible: boolean) => void;
-}> = ({ type, text, showAlert, setShowAlert }) => (
-  <Collapse in={showAlert} style={{ margin: "auto" }}>
-    <Alert
-      action={
-        <IconButton
-          aria-label="close"
-          color="inherit"
-          size="small"
-          onClick={() => {
-            setShowAlert(false);
-          }}
-        >
-          <CloseIcon fontSize="inherit" />
-        </IconButton>
-      }
-      style={{ padding: 8, marginTop: 8 }}
-      severity={type}
-    >
-      {text}
-    </Alert>
-  </Collapse>
-);
-
 export const QuizForm: React.FC<{}> = () => {
-  const [questionText, setQuestionText] = useState<string>("");
-  const [firstChoice, setFirstChoice] = useState<string>("");
-  const [secondChoice, setSecondChoice] = useState<string>("");
-  const [thirdChoice, setThirdChoice] = useState<string>("");
-  const [fourthChoice, setFourthChoice] = useState<string>("");
-  const [categoryIndex, setCategoryIndex] = useState<number>(0);
-  const [difficultyIndex, setDifficultyIndex] = useState<number>(0);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [state, dispatch] = useReducer(reducer, initialFormState);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const options: AxiosRequestConfig = {
-    url: "/api/multiple",
-    method: "post",
-    data: {
-      id: 0,
-      category: `${categories[categoryIndex]}`,
-      type: "multiple",
-      difficulty: `${difficulty[difficultyIndex]}`,
-      question: `${questionText}`,
-      correct_answer: `${firstChoice}`,
-      incorrect_answers: [
-        `${secondChoice}`,
-        `${thirdChoice}`,
-        `${fourthChoice}`,
-      ],
-    },
-  };
+  useEffect(() => {
+    const receiveCategories = makeRequest({
+      endpoint: "categories",
+      method: "get",
+    }).onReceive;
+
+    receiveCategories
+      .then((results) => {
+        console.log(results.data);
+        setCategories(results.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <Grid
@@ -201,20 +53,37 @@ export const QuizForm: React.FC<{}> = () => {
           <CollapsibleAlert
             type="success"
             text="Success!"
-            showAlert={showSuccessAlert}
-            setShowAlert={setShowSuccessAlert}
+            showAlert={state.showSuccessAlert}
+            setShowAlert={(val) => {
+              dispatch({
+                type: "showSuccessAlert",
+                payload: val,
+              });
+            }}
           />
         </Grid>
         <Grid container>
           <h1>Create a question</h1>
           <Grid container direction="row" justify="center">
-            <Category
-              categoryIndex={categoryIndex}
-              setCategoryIndex={setCategoryIndex}
+            <CategoryMenu
+              categories={categories}
+              categoryIndex={state.categoryIndex}
+              setCategoryIndex={(index) => {
+                dispatch({
+                  type: "categoryIndex",
+                  payload: index,
+                });
+              }}
             />
-            <Difficulty
-              difficultyIndex={difficultyIndex}
-              setDifficultyIndex={setDifficultyIndex}
+            <DifficultyMenu
+              difficulty={difficulty}
+              difficultyIndex={state.difficultyIndex}
+              setDifficultyIndex={(index) => {
+                dispatch({
+                  type: "difficultyIndex",
+                  payload: index,
+                });
+              }}
             />
           </Grid>
         </Grid>
@@ -222,28 +91,53 @@ export const QuizForm: React.FC<{}> = () => {
 
       <Grid item xs={8}>
         <QuestionComponent
-          questionText={questionText}
-          setQuestionText={setQuestionText}
+          questionText={state.questionText}
+          setQuestionText={(text) => {
+            dispatch({
+              type: "questionText",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice
-          choiceText={firstChoice}
-          setChoiceText={setFirstChoice}
+          choiceText={state.firstChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "firstChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={secondChoice}
-          setChoiceText={setSecondChoice}
+          choiceText={state.secondChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "secondChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={thirdChoice}
-          setChoiceText={setThirdChoice}
+          choiceText={state.thirdChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "thirdChoice",
+              payload: text,
+            });
+          }}
         />
         <CorrectAnswerComponent
           isCorrectChoice={false}
-          choiceText={fourthChoice}
-          setChoiceText={setFourthChoice}
+          choiceText={state.fourthChoice}
+          setChoiceText={(text) => {
+            dispatch({
+              type: "fourthChoice",
+              payload: text,
+            });
+          }}
         />
       </Grid>
       <Grid item xs={8}>
@@ -254,23 +148,59 @@ export const QuizForm: React.FC<{}> = () => {
             onClick={(event) => {
               if (
                 validateFields(
-                  questionText,
-                  firstChoice,
-                  secondChoice,
-                  thirdChoice,
-                  fourthChoice
+                  state.questionText,
+                  state.firstChoice,
+                  state.secondChoice,
+                  state.thirdChoice,
+                  state.fourthChoice
                 )
               ) {
-                axios(options).then((response) => {
-                  setShowSuccessAlert(true);
-                  setQuestionText("");
-                  setFirstChoice("");
-                  setSecondChoice("");
-                  setThirdChoice("");
-                  setFourthChoice("");
+                makeRequest({
+                  endpoint: "multiple",
+                  method: "post",
+                  data: {
+                    category: `${categories[state.categoryIndex].name}`,
+                    type: "multiple",
+                    difficulty: `${difficulty[state.difficultyIndex]}`,
+                    question: `${state.questionText}`,
+                    correct_answer: `${state.firstChoice}`,
+                    incorrect_answers: [
+                      `${state.secondChoice}`,
+                      `${state.thirdChoice}`,
+                      `${state.fourthChoice}`,
+                    ],
+                  },
+                }).onReceive.then((response) => {
+                  dispatch({
+                    type: "showSuccessAlert",
+                    payload: true,
+                  });
+                  dispatch({
+                    type: "questionText",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "firstChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "secondChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "thirdChoice",
+                    payload: "",
+                  });
+                  dispatch({
+                    type: "fourthChoice",
+                    payload: "",
+                  });
                 });
               } else {
-                setShowAlert(true);
+                dispatch({
+                  type: "showAlert",
+                  payload: true,
+                });
               }
             }}
           >
@@ -281,8 +211,13 @@ export const QuizForm: React.FC<{}> = () => {
           <CollapsibleAlert
             type="info"
             text="You must fill out all fields to move on."
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
+            showAlert={state.showAlert}
+            setShowAlert={(val) => {
+              dispatch({
+                type: "showAlert",
+                payload: val,
+              });
+            }}
           />
         </Grid>
       </Grid>
