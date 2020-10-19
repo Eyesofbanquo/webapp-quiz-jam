@@ -25,7 +25,10 @@ jobs:
         app: serene-wave-13524-staging
         api_key:
           secure: ${HEROKU_KEY}
-      if: branch = staging
+      exclude:
+        if: type = pull_request
+      branch:
+        only: staging
     - stage: newman
       name: "Newman tests"
       script:
@@ -46,5 +49,7 @@ jobs:
         api_key:
           secure: ${HEROKU_KEY}
   exclude:
+    stage: newman
     if: type = pull_request
-    stage: newman, staging
+    stage: staging
+    if: type = pull_request
