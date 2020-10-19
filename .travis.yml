@@ -8,6 +8,10 @@ stages:
   - newman
   - staging
   - deploy
+env:
+  - STAGING=true
+  - STAGING=false
+
 jobs:
   include:
     - stage: express
@@ -25,6 +29,7 @@ jobs:
         app: serene-wave-13524-staging
         api_key:
           secure: ${HEROKU_KEY}
+      env: STAGING=true
       branch:
         only: staging
     - stage: newman
@@ -34,9 +39,9 @@ jobs:
       cache:
         directories:
           - node_modules
+      env: STAGING=true
       branch:
         only: staging
-      if: branch = staging
     - stage: Deploy to Master
       script: skip
       deploy:
@@ -44,9 +49,7 @@ jobs:
         app: serene-wave-13524
         api_key:
           secure: ${HEROKU_KEY}
+      if: branch = master
   exclude:
-    stage: 
-      - newman
-        if: type = pull_request
-      - staging
-        if: type = pull_request
+    env: STAGING=true
+    if: type = pull_request
