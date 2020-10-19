@@ -21,10 +21,14 @@ jobs:
       if: branch = staging
     - stage: Newman tests
       script:
-        - newman run https://api.getpostman.com/collections/${POSTMAN_UID}2?apikey=${POSTMAN_KEY}
+        - newman run https://api.getpostman.com/collections/${POSTMAN_UID}?apikey=${POSTMAN_KEY}
       cache:
         directories:
           - node_modules
+      exclude:
+        if: type = pull_request
+      branch:
+        only: staging
       if: branch = staging
     - stage: Deploy to Master
       script: skip
