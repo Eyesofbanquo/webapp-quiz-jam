@@ -7,7 +7,7 @@ jobs:
   include:
     - stage: newman tests
       script:
-        - npm run test
+        - newman run https://api.getpostman.com/collections/1031465-fe8c6285-c513-478c-9226-f4c8c24a56d2?apikey=${POSTMAN_KEY}
       cache:
         directories:
           - node_modules
@@ -18,6 +18,7 @@ jobs:
         directories:
           - node_modules
     - stage: deploy to heroku
+      script: skip
       deploy:
         provider: heroku
         app: serene-wave-13524
