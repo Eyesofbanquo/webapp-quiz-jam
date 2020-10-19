@@ -55,7 +55,7 @@ export const CategoryForm: React.FC = () => {
                   name: categoryName,
                 },
               }).onReceive.then((results) => {
-                setUploaded(results.data.savedObject !== null);
+                setUploaded(results.data.data !== null);
                 setShowSuccessAlert(true);
               });
             }
