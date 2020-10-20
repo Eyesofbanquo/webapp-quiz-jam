@@ -25,18 +25,3 @@ export class APIController {
     this.api.use("/", multipleChoiceRouter);
   }
 }
-
-// const controller = new APIController();
-
-// controller.api.get("/open_reference_mult", (req, res) => {
-//   const statusCode = res.statusCode;
-//   const stub = require("./stubs/mult.json");
-
-//   res.send(stub);
-// });
-
-// controller.api.get("/open_reference_tf", (request, response) => {
-//   const statusCode = response.statusCode;
-//   const stub = require("./stubs/boolean.json");
-//   response.send(stub);
-// });

@@ -8,6 +8,7 @@ import { TestDatabase } from "../../api/testing/TestDatabase";
 import { CategorySchema } from "./schema";
 
 chai.use(require("chai-http"));
+var should = chai.should();
 
 const testdb = new TestDatabase();
 
@@ -65,7 +66,7 @@ describe("Category", () => {
         .catch((error) => console.log(error));
     });
 
-    it(`should POST a new category named "Ha"`, () => {
+    it(`should POST a new category named "Ha"`, (done) => {
       const controller = new AppController(testdb);
       // Act:
       chai
@@ -74,9 +75,14 @@ describe("Category", () => {
         .send({ name: "Ha" })
         .then((response) => {
           // Assert
+
           expect(response.body.success).to.eql(true);
-          expect(response.body.savedObject.name).to.eql("Ha");
+          expect(response.body.data.name).to.eql("Ha");
           expect(response.status).to.eql(200);
+          done();
+        })
+        .catch((error) => {
+          done(error);
         });
     });
   });
