@@ -5,14 +5,22 @@ import { Grid, Paper, Typography } from "@material-ui/core";
 import { DeleteItem } from "../../components/DeleteItem";
 import { deleteRequest } from "../../components/deleteItem.helper";
 
+interface CategoryRequest {
+  success: boolean;
+  data: Category[];
+}
+
 export const CategoryList: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>();
-  const { request: categories, setRequest: setCategories } = useMakeRequest<
-    Category[]
-  >({
+  const { request, setRequest } = useMakeRequest<CategoryRequest>({
     endpoint: "categories",
     method: "get",
   });
+  const [categories, setCategories] = useState<Category[]>(request?.data ?? []);
+
+  useEffect(() => {
+    setCategories(request?.data ?? []);
+  }, [request]);
 
   if (selectedCategory) {
     return (

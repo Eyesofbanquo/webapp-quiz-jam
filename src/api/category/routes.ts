@@ -9,7 +9,7 @@ const cors = require("cors");
 
 export class CategoryRouter {
   public static readonly SCHEMA = "Category";
-  public static readonly TABLE = "category";
+  public static readonly TABLE = "categories";
   private static readonly TEST_TABLE = `category_test`;
   router: express.Router;
 
