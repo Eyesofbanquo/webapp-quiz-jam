@@ -10,7 +10,7 @@ const createProductionDatabase = async () => {
 const createTables = async () => {
   await pool
     .query(
-      `CREATE TABLE IF NOT EXISTS category
+      `CREATE TABLE IF NOT EXISTS categories
   (id UUID PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   inReview BOOLEAN NOT NULL,
