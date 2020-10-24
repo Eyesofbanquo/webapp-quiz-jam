@@ -58,7 +58,7 @@ describe("Category", () => {
         .get("/api/categories")
         .then((response) => {
           // Assert
-          expect(response.body.data[0].name).to.eql("Nightmares");
+          expect(response.body.data[0].name).to.eql("Nightmare");
           expect(response.status).to.eql(200);
           done();
         })
