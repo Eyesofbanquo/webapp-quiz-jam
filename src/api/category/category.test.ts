@@ -4,41 +4,53 @@ import * as chai from "chai";
 import "mocha";
 import { AppController } from "../../../server";
 import { expect } from "chai";
-import { TestDatabase } from "../../api/testing/TestDatabase";
 import { CategorySchema } from "./schema";
+import pool from "../../database/pool";
+import { v4 as uuidv4 } from "uuid";
+import { expectation } from "sinon";
 
 chai.use(require("chai-http"));
 var should = chai.should();
 
-const testdb = new TestDatabase();
-
 const categories = require("../../stubs/categories.json");
+const TABLE = "category_test";
 describe("Category", () => {
-  describe("/GET categories", () => {
-    after(() => {
-      testdb
-        .realm(CategorySchema)
-        .then((realm) => {
-          realm.write(() => {
-            realm.deleteAll();
-          });
-          realm.close();
-        })
-        .catch((error) => console.log(error));
-    });
-    it("should GET all the categories", () => {
-      /** ! Assume */
-      testdb
-        .realm(CategorySchema)
-        .then((realm) => {
-          realm.write(() => {
-            realm.create("Category", categories[0]);
-          });
-          realm.close();
-        })
-        .catch((error) => console.log(error));
+  beforeEach(async () => {
+    await pool
+      .query(
+        `CREATE TABLE IF NOT EXISTS ${TABLE}
+    (id UUID PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    inReview BOOLEAN NOT NULL,
+    UNIQUE(name)
+    )`
+      )
+      .then((res) => console.log(""))
+      .catch((err) => console.log(err));
+  });
 
-      const controller = new AppController(testdb);
+  afterEach(async () => {
+    await pool
+      .query("DROP TABLE IF EXISTS category_test")
+      .catch((err) => console.log(err));
+  });
+  describe("/GET categories", () => {
+    beforeEach(async () => {
+      await pool
+        .query(
+          `INSERT INTO ${TABLE}
+      (id, name, inReview)
+      VALUES ('${uuidv4()}', 'Nightmare', false) ON CONFLICT (name) DO NOTHING RETURNING *`
+        )
+        .catch((err) => {
+          console.log("called");
+          console.log(err);
+        });
+    });
+    it("should GET all the categories", (done) => {
+      /** ! Assume */
+
+      const controller = new AppController();
 
       // Act:
       chai
@@ -46,28 +58,20 @@ describe("Category", () => {
         .get("/api/categories")
         .then((response) => {
           // Assert
-          expect(response.body[0].id).to.eql("1");
-          expect(response.body[0].name).to.eql("Nightmare");
+          expect(response.body.data[0].name).to.eql("Nightmare");
           expect(response.status).to.eql(200);
+          done();
+        })
+        .catch((err) => {
+          console.log(err);
+          done(err);
         });
     });
   });
 
   describe("/POST categories", () => {
-    after(() => {
-      testdb
-        .realm(CategorySchema)
-        .then((realm) => {
-          realm.write(() => {
-            realm.deleteAll();
-          });
-          realm.close();
-        })
-        .catch((error) => console.log(error));
-    });
-
     it(`should POST a new category named "Ha"`, (done) => {
-      const controller = new AppController(testdb);
+      const controller = new AppController();
       // Act:
       chai
         .request(controller.app)
@@ -75,7 +79,6 @@ describe("Category", () => {
         .send({ name: "Ha" })
         .then((response) => {
           // Assert
-
           expect(response.body.success).to.eql(true);
           expect(response.body.data.name).to.eql("Ha");
           expect(response.status).to.eql(200);
@@ -85,43 +88,56 @@ describe("Category", () => {
           done(error);
         });
     });
+    it(`should not POST a category named "Ha" if it already exists`, (done) => {
+      pool
+        .query(
+          `INSERT INTO ${TABLE} (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
+          [uuidv4(), "Ha", true]
+        )
+        .catch((err) => console.log(err));
+      const controller = new AppController();
+      // Act:
+      chai
+        .request(controller.app)
+        .post("/api/categories")
+        .send({ name: "Ha" })
+        .then((response) => {
+          // Assert
+          expect(response.body.success).to.eql(false);
+          done();
+        })
+        .catch((error) => {
+          done(error);
+        });
+    });
   });
 
   describe("/DELETE categories", () => {
-    after(() => {
-      testdb
-        .realm(CategorySchema)
-        .then((realm) => {
-          realm.write(() => {
-            realm.deleteAll();
-          });
-          realm.close();
-        })
-        .catch((error) => console.log(error));
-    });
+    it(`should DELETE an existing category named "Him"`, (done) => {
+      const uuid = uuidv4();
+      pool
+        .query(
+          `INSERT INTO ${TABLE} (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
+          [uuid, "Him", true]
+        )
+        .catch((err) => console.log(err));
 
-    it(`should DELETE an existing category named "Ha"`, () => {
-      testdb
-        .realm(CategorySchema)
-        .then((realm) => {
-          realm.write(() => {
-            realm.create("Category", categories[1]);
-          });
-          realm.close();
-        })
-        .catch((error) => console.log(error));
-
-      const controller = new AppController(testdb);
+      const controller = new AppController();
       // Act:
       chai
         .request(controller.app)
         .delete("/api/categories")
-        .send({ id: "2" })
+        .send({ id: uuid })
         .then((response) => {
           // Assert
           expect(response.body.success).to.eql(true);
-          expect(response.body.data.name).to.eql("Ha");
+          expect(response.body.data.name).to.eql("Him");
           expect(response.status).to.eql(200);
+          done();
+        })
+        .catch((error) => {
+          console.log(error);
+          done(error);
         });
     });
   });

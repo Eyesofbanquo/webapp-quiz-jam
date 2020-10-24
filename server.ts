@@ -12,12 +12,10 @@ export class AppController {
   app: express.Express;
   api: APIController;
   port: string;
-  db: Storeable;
 
-  constructor(db: Storeable = new Database()) {
-    this.db = db;
+  constructor() {
     this.app = express();
-    this.api = new APIController(db);
+    this.api = new APIController();
     this.port = process.env.PORT || "5000";
 
     this.setupRoutes();
@@ -43,4 +41,6 @@ controller.app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-controller.app.listen(controller.port, () => console.log("Running..."));
+controller.app.listen(controller.port, () =>
+  console.log("Running on port", controller.port)
+);

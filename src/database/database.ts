@@ -1,4 +1,5 @@
 import * as Realm from "realm";
+import pool from "./pool";
 
 export interface Storeable {
   realm: (any) => Promise<Realm>;
