@@ -9,6 +9,16 @@ stages:
   - newman
   - deploy
 
+services:
+  - postgresql
+
+env:
+  - TRAVIS_DATABASE=$TRAVIS_DATABASE
+
+before_script:
+  - npm install
+  - psql -c 'create database testing;' -U postgres
+
 jobs:
   include:
     - stage: express

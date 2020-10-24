@@ -14,12 +14,11 @@ export class APIController {
   api: express.Router;
   db: Storeable;
 
-  constructor(db: Storeable = new Database()) {
-    this.db = db;
+  constructor() {
     this.api = express.Router();
     this.api.use(bodyParser.json());
 
-    const categoryRouter = new CategoryRouter(db);
+    const categoryRouter = new CategoryRouter();
     this.api.use("/", categoryRouter.router);
 
     this.api.use("/", multipleChoiceRouter);
