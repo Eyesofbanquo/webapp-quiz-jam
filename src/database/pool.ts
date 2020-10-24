@@ -22,7 +22,7 @@ let databaseConfig;
 if (process.env.TRAVIS_DATABASE) {
   databaseConfig = { connectionString: process.env.TRAVIS_DATABASE };
 } else if (process.env.DATABASE_URL) {
-  databaseConfig = { connectionString: process.env.DATABASE_URL) };
+  databaseConfig = { connectionString: process.env.DATABASE_URL };
 } else {
   databaseConfig = { connectionString: process.env.LOCAL_DATABASE };
 }
