@@ -1,15 +1,12 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import { Database } from "../../database";
 import { v4 as uuidv4 } from "uuid";
-import { CategorySchema } from "./schema";
-import { Storeable } from "database/database";
 import pool from "../../database/pool";
 const cors = require("cors");
 
+export const CATEGORY_TABLE = "categories";
 export class CategoryRouter {
-  public static readonly SCHEMA = "Category";
-  public static readonly TABLE = "categories";
+  public static readonly TABLE = CATEGORY_TABLE;
   private static readonly TEST_TABLE = `category_test`;
   router: express.Router;
 
@@ -59,6 +56,7 @@ export class CategoryRouter {
         .query(query, [uuidv4(), receivedBody.name, true])
         .then((res) => {
           if (res.rows.length === 0) {
+            response.statusCode = 304;
             response.send({ success: false, data: null });
             return;
           }

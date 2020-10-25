@@ -2,8 +2,6 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import sslRedirect from "heroku-ssl-redirect";
 import { APIController } from "./src";
-import { Database } from "./src/database";
-import { Storeable } from "database/database";
 
 const path = require("path");
 const cors = require("cors");

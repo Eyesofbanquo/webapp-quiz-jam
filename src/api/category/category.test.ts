@@ -4,7 +4,6 @@ import * as chai from "chai";
 import "mocha";
 import { AppController } from "../../../server";
 import { expect } from "chai";
-import { CategorySchema } from "./schema";
 import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 import { expectation } from "sinon";
@@ -103,7 +102,7 @@ describe("Category", () => {
         .send({ name: "Ha" })
         .then((response) => {
           // Assert
-          expect(response.body.success).to.eql(false);
+          expect(response.status).to.eql(304);
           done();
         })
         .catch((error) => {
