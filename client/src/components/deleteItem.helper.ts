@@ -7,7 +7,7 @@ export interface Deletable {
 export async function deleteRequest<T extends Deletable>(props: {
   items: T[];
   selectedItem: T;
-  endpoint: "multiple" | "categories";
+  endpoint: "multiple" | "categories" | "questions";
 }) {
   const { items, selectedItem, endpoint } = props;
 
@@ -19,7 +19,9 @@ export async function deleteRequest<T extends Deletable>(props: {
       id: selectedItem.id,
     },
   }).onReceive.then((response) => {
+    console.log(response.data);
     if (response.data.success) {
+      console.log(items, selectedItem.id);
       filteredItems = items.filter(
         (savedItem) => savedItem.id !== selectedItem.id
       );
