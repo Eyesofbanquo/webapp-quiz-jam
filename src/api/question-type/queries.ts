@@ -21,4 +21,4 @@ export const createQuestionType = (props: QuestionTypeProps) =>
   `INSERT INTO ${props.table} (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
 export const deleteQuestionType = (props: QuestionTypeProps) =>
-  `DELETE FROM ${props.table} WHERE id = $1`;
+  `DELETE FROM ${props.table} WHERE id = $1 RETURNING *`;
