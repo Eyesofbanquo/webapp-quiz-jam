@@ -16,11 +16,11 @@ export const questionsRouter = express.Router();
 questionsRouter.use(bodyParser.json());
 
 questionsRouter.get("/questions", (request, response) => {
-  const database =
+  const table =
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(getQuestions({ database: database }))
+    .query(getQuestions({ table: table }))
     .then((result) => {
       response.statusCode = 200;
       response.send({ success: true, data: result.rows });
@@ -32,11 +32,11 @@ questionsRouter.get("/questions", (request, response) => {
 });
 
 questionsRouter.post("/questions", async (request, response) => {
-  const database =
+  const table =
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(createQuestion({ database: database }), [
+    .query(createQuestion({ table: table }), [
       uuidv4(),
       request.body.name,
       true,
@@ -62,11 +62,11 @@ questionsRouter.post("/questions", async (request, response) => {
 });
 
 questionsRouter.delete("/questions", async (request, response) => {
-  const database =
+  const table =
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(deleteQuestion({ database: database }), [request.body.id])
+    .query(deleteQuestion({ table: table }), [request.body.id])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 404;

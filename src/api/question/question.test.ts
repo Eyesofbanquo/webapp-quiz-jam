@@ -90,7 +90,7 @@ describe("Question Tests", () => {
       /** ! Assume */
       const uuid = uuidv4();
       pool
-        .query(createQuestion({ database: TABLE }), [
+        .query(createQuestion({ table: TABLE }), [
           uuid,
           "Nightmare",
           true,
