@@ -1,8 +1,15 @@
-import { Pool, Client } from "pg";
+import { Pool } from "pg";
+import { CATEGORY_TABLE } from "../api/category/routes";
+import { QUESTION_TABLE } from "../api/question/queries";
+import { QUESTION_TYPE_TABLE } from "../api/question-type/routes";
 import * as dotenv from "dotenv";
 
+const DATABASE = "qizzo";
+
 const createProductionDatabase = async () => {
-  await pool.query(`CREATE DATABASE qizzo`).catch((err) => console.log(err));
+  await pool
+    .query(`CREATE DATABASE ${DATABASE}`)
+    .catch((err) => console.log(err));
 
   createTables();
 };
@@ -10,7 +17,7 @@ const createProductionDatabase = async () => {
 const createTables = async () => {
   await pool
     .query(
-      `CREATE TABLE IF NOT EXISTS categories
+      `CREATE TABLE IF NOT EXISTS ${CATEGORY_TABLE}
   (id UUID PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   inReview BOOLEAN NOT NULL,
@@ -18,6 +25,33 @@ const createTables = async () => {
   )`
     )
     .then((res) => console.log(""))
+    .catch((err) => console.log(err));
+
+  await pool
+    .query(
+      `
+  CREATE TABLE IF NOT EXISTS ${QUESTION_TYPE_TABLE}
+  (id UUID PRIMARY KEY,
+    name TEXT NOT NULL,
+    UNIQUE(name)
+    )`
+    )
+    .catch((err) => console.log(err));
+
+  await pool
+    .query(
+      `
+    CREATE TABLE IF NOT EXISTS ${QUESTION_TABLE}
+    (id UUID PRIMARY KEY,
+      name TEXT NOT NULL,
+      inReview BOOLEAN NOT NULL,
+      correctAnswers TEXT ARRAY NOT NULL,
+      incorrectAnswers TEXT ARRAY NOT NULL,
+      category_uid UUID REFERENCES categories(id),
+      question_type_uid UUID REFERENCES question_types(id),
+      UNIQUE(name)
+      )`
+    )
     .catch((err) => console.log(err));
 };
 

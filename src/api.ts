@@ -1,18 +1,12 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import { Database } from "./database";
 import { v4 as uuidv4 } from "uuid";
 import { CategoryRouter } from "./api/category/routes";
 import { multipleChoiceRouter } from "./api/multiple-choice/routes";
-import { Storeable } from "database/database";
-
-const db = new Database();
-
-// export const API = express.Router();
+import { questionsRouter } from "./api/question/routes";
 
 export class APIController {
   api: express.Router;
-  db: Storeable;
 
   constructor() {
     this.api = express.Router();
@@ -22,5 +16,7 @@ export class APIController {
     this.api.use("/", categoryRouter.router);
 
     this.api.use("/", multipleChoiceRouter);
+
+    this.api.use("/", questionsRouter);
   }
 }
