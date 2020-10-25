@@ -19,5 +19,7 @@ export class APIController {
     this.api.use("/", multipleChoiceRouter);
 
     this.api.use("/", questionsRouter);
+
+    this.api.use("/", questionTypesRouter);
   }
 }

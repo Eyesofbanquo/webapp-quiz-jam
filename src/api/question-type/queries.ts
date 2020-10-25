@@ -14,6 +14,9 @@ export const createQuestionTypeTable = (props: QuestionTypeProps) =>
     UNIQUE(name)
     )`;
 
+export const dropQuestionTypeTable = (props: QuestionTypeProps) =>
+  `DROP TABLE ${props.table}`;
+
 export const createQuestionType = (props: QuestionTypeProps) =>
   `INSERT INTO ${props.table} (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
