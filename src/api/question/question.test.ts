@@ -221,6 +221,7 @@ describe("Question Tests", () => {
         .send({ id: uuid })
         .then((response) => {
           expect(response.status).to.eql(200);
+          expect(response.body.success).to.eql(true);
           expect(response.body.data.name).to.eql(question.name);
           done();
         })

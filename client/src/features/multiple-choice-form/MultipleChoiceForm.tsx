@@ -26,6 +26,10 @@ interface CategoryRequest {
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [questionTypes, setQuestionTypes] = useState<
+    { id: string; name: string }[]
+  >([]);
+
   const {
     request: categoryRequest,
     setRequest: setCategoryRequest,
@@ -34,9 +38,18 @@ export const QuizForm: React.FC<{}> = () => {
     method: "get",
   });
 
+  const { request: questionTypesRequest } = useMakeRequest<{
+    success: Boolean;
+    data: [{ id: string; name: string }];
+  }>({ endpoint: "question-types", method: "get" });
+
   useEffect(() => {
     setCategories(categoryRequest?.data ?? []);
   }, [categoryRequest]);
+
+  useEffect(() => {
+    setQuestionTypes(questionTypesRequest?.data ?? []);
+  }, [questionTypesRequest]);
 
   return (
     <Grid
@@ -154,15 +167,15 @@ export const QuizForm: React.FC<{}> = () => {
                 )
               ) {
                 makeRequest({
-                  endpoint: "multiple",
+                  endpoint: "questions",
                   method: "post",
                   data: {
-                    category: `${categories[state.categoryIndex].name}`,
-                    type: "multiple",
+                    categoryId: `${categories[state.categoryIndex].id}`,
+                    questionTypeId: `${questionTypes[0].id}`,
                     difficulty: `${difficulty[state.difficultyIndex]}`,
-                    question: `${state.questionText}`,
-                    correct_answer: `${state.firstChoice}`,
-                    incorrect_answers: [
+                    name: `${state.questionText}`,
+                    correctAnswers: [`${state.firstChoice}`],
+                    incorrectAnswers: [
                       `${state.secondChoice}`,
                       `${state.thirdChoice}`,
                       `${state.fourthChoice}`,

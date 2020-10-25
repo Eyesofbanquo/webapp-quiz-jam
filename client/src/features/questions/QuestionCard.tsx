@@ -2,8 +2,18 @@ import React from "react";
 import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
 import { MultipleChoiceQuestion } from "./multiplechoice";
 
+interface Question {
+  id: string;
+  name: string;
+  incorrectAnswers: string[];
+  correctAnswers: string[];
+  inReview: boolean;
+  categoryId: string;
+  questionTypeId: string;
+}
+
 type QuestionComponent = {
-  question: MultipleChoiceQuestion;
+  question: Question;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -18,10 +28,10 @@ const LeftGrid: React.FC<QuestionComponent> = ({ question }) => (
   <Grid item xs container direction="column" spacing={2}>
     <Grid item xs>
       <Typography gutterBottom variant="subtitle1">
-        {question.question}
+        {question.name}
       </Typography>
       <Typography variant="body2" gutterBottom>
-        {question.category}
+        {question.id}
       </Typography>
       <Typography variant="body2" color="textSecondary">
         Author
@@ -32,13 +42,13 @@ const LeftGrid: React.FC<QuestionComponent> = ({ question }) => (
 
 const RightGrid: React.FC<QuestionComponent> = ({ question }) => (
   <Grid item>
-    <Typography variant="subtitle1">{question.type}</Typography>
+    <Typography variant="subtitle1">{question.inReview}</Typography>
   </Grid>
 );
 
 export const QuestionCard: React.FC<{
-  question: MultipleChoiceQuestion;
-  onPress: (question: MultipleChoiceQuestion) => void;
+  question: Question;
+  onPress: (question: Question) => void;
 }> = ({ question, onPress }) => {
   const theme = useStyles();
 

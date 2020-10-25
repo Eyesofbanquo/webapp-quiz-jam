@@ -56,6 +56,7 @@ questionsRouter.post("/questions", async (request, response) => {
       response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
+      console.log(request.body);
       response.statusCode = 403;
       response.send({ success: false, data: null });
     });
@@ -70,11 +71,11 @@ questionsRouter.delete("/questions", async (request, response) => {
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 404;
-        response.send({ sucess: false, data: null });
+        response.send({ success: false, data: null });
         return;
       }
       response.statusCode = 200;
-      response.send({ sucess: false, data: result.rows[0] });
+      response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
       response.statusCode = 404;
