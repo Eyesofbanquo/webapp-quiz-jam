@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useReducer, useState } from "react";
 import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
 import { QuestionComponent } from "./components/QuestionComponent";
-import { makeRequest } from "../../networking/network";
+import { makeRequest, useMakeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../components/CollapsibleAlert";
 import { initialFormState, validateFields } from "./helper";
 import { reducer } from "./helper";
@@ -19,26 +19,24 @@ import { CategoryMenu } from "./components/CategoryMenu";
 import { DifficultyMenu } from "./components/DifficultyMenu";
 
 const difficulty = ["easy", "normal", "hard"];
-
+interface CategoryRequest {
+  success: boolean;
+  data: Category[];
+}
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    request: categoryRequest,
+    setRequest: setCategoryRequest,
+  } = useMakeRequest<CategoryRequest>({
+    endpoint: "categories",
+    method: "get",
+  });
 
   useEffect(() => {
-    const receiveCategories = makeRequest({
-      endpoint: "categories",
-      method: "get",
-    }).onReceive;
-
-    receiveCategories
-      .then((results) => {
-        console.log(results.data);
-        setCategories(results.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    setCategories(categoryRequest?.data ?? []);
+  }, [categoryRequest]);
 
   return (
     <Grid
