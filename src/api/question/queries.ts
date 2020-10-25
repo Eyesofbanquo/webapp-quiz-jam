@@ -1,5 +1,4 @@
 import { uuid_generate_v4 } from "uuid";
-import pool from "../../database/pool";
 
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";

@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { CATEGORY_TABLE } from "../api/category/routes";
 import { QUESTION_TABLE } from "../api/question/queries";
-import { QUESTION_TYPE_TABLE } from "../api/question-type/routes";
+import { QUESTION_TYPE_TABLE } from "../api/question-type/queries";
 import * as dotenv from "dotenv";
 
 const DATABASE = "qizzo";
