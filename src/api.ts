@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CategoryRouter } from "./api/category/routes";
 import { multipleChoiceRouter } from "./api/multiple-choice/routes";
 import { questionsRouter } from "./api/question/routes";
+import { questionTypesRouter } from "./api/question-type/routes";
 
 export class APIController {
   api: express.Router;
