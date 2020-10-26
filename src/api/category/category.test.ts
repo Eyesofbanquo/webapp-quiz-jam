@@ -71,6 +71,7 @@ describe("Category", () => {
   describe("/POST categories", () => {
     it(`should POST a new category named "Ha"`, (done) => {
       const controller = new AppController();
+
       // Act:
       chai
         .request(controller.app)
@@ -78,6 +79,7 @@ describe("Category", () => {
         .send({ name: "Ha" })
         .then((response) => {
           // Assert
+
           expect(response.body.success).to.eql(true);
           expect(response.body.data.name).to.eql("Ha");
           expect(response.status).to.eql(200);

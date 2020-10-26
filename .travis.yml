@@ -9,6 +9,7 @@ stages:
   - newman
   - deploy
 
+
 services:
   - postgresql
 
