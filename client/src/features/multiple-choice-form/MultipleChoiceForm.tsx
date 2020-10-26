@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useReducer, useState } from "react";
 import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
 import { QuestionComponent } from "./components/QuestionComponent";
-import { makeRequest } from "../../networking/network";
+import { makeRequest, useMakeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../components/CollapsibleAlert";
 import { initialFormState, validateFields } from "./helper";
 import { reducer } from "./helper";
@@ -19,26 +19,37 @@ import { CategoryMenu } from "./components/CategoryMenu";
 import { DifficultyMenu } from "./components/DifficultyMenu";
 
 const difficulty = ["easy", "normal", "hard"];
-
+interface CategoryRequest {
+  success: boolean;
+  data: Category[];
+}
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [questionTypes, setQuestionTypes] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  const {
+    request: categoryRequest,
+    setRequest: setCategoryRequest,
+  } = useMakeRequest<CategoryRequest>({
+    endpoint: "categories",
+    method: "get",
+  });
+
+  const { request: questionTypesRequest } = useMakeRequest<{
+    success: Boolean;
+    data: [{ id: string; name: string }];
+  }>({ endpoint: "question-types", method: "get" });
 
   useEffect(() => {
-    const receiveCategories = makeRequest({
-      endpoint: "categories",
-      method: "get",
-    }).onReceive;
+    setCategories(categoryRequest?.data ?? []);
+  }, [categoryRequest]);
 
-    receiveCategories
-      .then((results) => {
-        console.log(results.data);
-        setCategories(results.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  useEffect(() => {
+    setQuestionTypes(questionTypesRequest?.data ?? []);
+  }, [questionTypesRequest]);
 
   return (
     <Grid
@@ -156,15 +167,15 @@ export const QuizForm: React.FC<{}> = () => {
                 )
               ) {
                 makeRequest({
-                  endpoint: "multiple",
+                  endpoint: "questions",
                   method: "post",
                   data: {
-                    category: `${categories[state.categoryIndex].name}`,
-                    type: "multiple",
+                    categoryId: `${categories[state.categoryIndex].id}`,
+                    questionTypeId: `${questionTypes[0].id}`,
                     difficulty: `${difficulty[state.difficultyIndex]}`,
-                    question: `${state.questionText}`,
-                    correct_answer: `${state.firstChoice}`,
-                    incorrect_answers: [
+                    name: `${state.questionText}`,
+                    correctAnswers: [`${state.firstChoice}`],
+                    incorrectAnswers: [
                       `${state.secondChoice}`,
                       `${state.thirdChoice}`,
                       `${state.fourthChoice}`,

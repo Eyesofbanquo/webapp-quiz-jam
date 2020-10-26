@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
@@ -7,17 +7,32 @@ import { EmptyContent } from "../../components/EmptyContent";
 import { deleteRequest } from "../../components/deleteItem.helper";
 import { MultipleChoiceQuestion } from "./multiplechoice";
 
-export const QuestionList = () => {
-  const [selectedQuestion, setSelectedQuestion] = useState<
-    MultipleChoiceQuestion
-  >();
+interface QuestionRequest {
+  success: boolean;
+  data: Question[];
+}
+interface Question {
+  id: string;
+  name: string;
+  incorrectAnswers: string[];
+  correctAnswers: string[];
+  inReview: boolean;
+  categoryId: string;
+  questionTypeId: string;
+}
 
-  const { request: questions, setRequest: setQuestions } = useMakeRequest<
-    MultipleChoiceQuestion[]
-  >({
-    endpoint: "multiple",
+export const QuestionList = () => {
+  const [selectedQuestion, setSelectedQuestion] = useState<Question>();
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const { request: questionsRequest } = useMakeRequest<QuestionRequest>({
+    endpoint: "questions",
     method: "get",
   });
+
+  useEffect(() => {
+    setQuestions(questionsRequest?.data ?? []);
+  }, [questionsRequest]);
 
   if (questions?.length === 0) {
     return <EmptyContent itemType="questions" />;
@@ -26,12 +41,12 @@ export const QuestionList = () => {
   if (selectedQuestion) {
     return (
       <DeleteItem
-        itemName={selectedQuestion.question}
+        itemName={selectedQuestion.name}
         onDelete={() => {
-          deleteRequest<MultipleChoiceQuestion>({
+          deleteRequest<Question>({
             items: questions ?? [],
             selectedItem: selectedQuestion,
-            endpoint: "multiple",
+            endpoint: "questions",
           }).then((result) => {
             setQuestions(result.filteredItems);
             setSelectedQuestion(undefined);
@@ -51,7 +66,7 @@ export const QuestionList = () => {
     >
       {questions?.map((question) => (
         <QuestionCard
-          key={question.question}
+          key={question.id}
           question={question}
           onPress={(question) => {
             setSelectedQuestion(question);

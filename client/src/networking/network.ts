@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface RequestOptions {
-  endpoint: "multiple" | "categories";
+  endpoint: "multiple" | "categories" | "question-types" | "questions";
   method: "get" | "post" | "delete" | "put";
   data?: any;
 }
