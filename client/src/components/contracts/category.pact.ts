@@ -38,7 +38,7 @@ describe("Pact with Qizzo API", () => {
             inReview: false,
           }),
         },
-        status: 200,
+        status: 201,
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
@@ -47,6 +47,20 @@ describe("Pact with Qizzo API", () => {
   });
 
   it("will receive the list of category objects", async () => {
+    const response = await makeRequest({
+      base: "127.0.0.1",
+      port: "4000",
+      endpoint: "categories",
+      method: "get",
+    })
+      .onReceive.then((response) => {
+        const name = response.data.data[0].name;
+        expect(name).toEqual("Night");
+      })
+      .catch((err) => console.log(err));
+  });
+
+  it("will receive the list of category objects - again", async () => {
     const response = await makeRequest({
       base: "127.0.0.1",
       port: "4000",

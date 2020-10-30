@@ -9,6 +9,8 @@ stages:
   - newman
   - deploy
 
+git:
+  submodules: true
 
 services:
   - postgresql
