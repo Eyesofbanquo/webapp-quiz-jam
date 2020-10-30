@@ -1,6 +1,6 @@
 import { Done } from "@material-ui/icons";
-import { Pact } from "@pact-foundation/pact";
-const { eachLike } = require("@pact-foundation/pact").Matchers;
+import { Pact, Matchers } from "@pact-foundation/pact";
+const { eachLike, like } = require("@pact-foundation/pact").Matchers;
 
 import * as path from "path";
 import { makeRequest } from "../../networking/network";
@@ -31,11 +31,11 @@ describe("Pact with Qizzo API", () => {
       },
       willRespondWith: {
         body: {
-          success: true,
-          data: eachLike({
+          success: Matchers.like(true),
+          data: Matchers.eachLike({
             id: "1",
             name: "Night",
-            inreview: false,
+            inreview: Matchers.like(false),
           }),
         },
         status: 200,
