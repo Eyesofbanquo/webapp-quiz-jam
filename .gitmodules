@@ -1,0 +1,3 @@
+[submodule "webappjam-pacts"]
+	path = webappjam-pacts
+	url = git@github.com:Eyesofbanquo/webappjam-pacts.git
