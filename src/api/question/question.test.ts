@@ -38,14 +38,14 @@ describe("Question Tests", () => {
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
-    pool
+    await pool
       .query(
         `INSERT INTO category_test (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
         [categoryUUID, "Ha", true]
       )
       .catch((err) => console.log(err));
 
-    pool
+    await pool
       .query(
         `INSERT INTO question_type_test (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`,
         [questionTypeUUID, "Multiple Choice"]
