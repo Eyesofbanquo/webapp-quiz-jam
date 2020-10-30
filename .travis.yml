@@ -28,6 +28,7 @@ jobs:
       name: "Express Tests"
       script:
         - npm run test
+        - npm run test:pact
       cache:
         directories:
           - node_modules
