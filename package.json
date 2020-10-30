@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pact-foundation/pact": "^9.13.0",
     "@types/axios": "^0.14.0",
     "@types/chai": "^4.2.14",
     "@types/chai-http": "^4.2.0",
