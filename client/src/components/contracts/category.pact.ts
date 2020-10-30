@@ -31,14 +31,14 @@ describe("Pact with Qizzo API", () => {
       },
       willRespondWith: {
         body: {
-          status: true,
+          success: true,
           data: eachLike({
             id: "1",
             name: "Night",
-            inReview: false,
+            inreview: false,
           }),
         },
-        status: 201,
+        status: 200,
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
