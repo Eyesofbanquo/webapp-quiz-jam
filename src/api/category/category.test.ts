@@ -104,7 +104,8 @@ describe("Category", () => {
         .send({ name: "Ha" })
         .then((response) => {
           // Assert
-          expect(response.status).to.eql(304);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.equal(null);
           done();
         })
         .catch((error) => {

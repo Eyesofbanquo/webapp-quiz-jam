@@ -107,7 +107,8 @@ describe("Question Type Tests", () => {
         .post(QUESTION_TYPE_GENERIC_ENDPOINT)
         .send({ name: "same" })
         .then((response) => {
-          expect(response.status).to.eql(304);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
         .catch((err) => done(err));
@@ -129,6 +130,22 @@ describe("Question Type Tests", () => {
         .then((response) => {
           expect(response.status).to.eql(200);
           expect(response.body.data.name).to.eql("delete-me");
+          done();
+        })
+        .catch((err) => done(err));
+    });
+
+    it(`should return null for question type that does not exist`, (done) => {
+      const uuid = uuidv4();
+      const controller = new AppController();
+
+      chai
+        .request(controller.app)
+        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
+        .send({ id: uuid })
+        .then((response) => {
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
         .catch((err) => done(err));

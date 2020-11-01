@@ -179,7 +179,8 @@ describe("Question Tests", () => {
         .post("/api/questions")
         .send(question)
         .then((response) => {
-          expect(response.status).to.eql(304);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
         .catch((err) => done(err));
@@ -236,7 +237,8 @@ describe("Question Tests", () => {
         .delete("/api/questions")
         .send({ id: uuidv4() })
         .then((response) => {
-          expect(response.status).to.eql(404);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
         .catch((err) => done(err));
