@@ -43,6 +43,10 @@ export class CategoryRouter {
       const receivedBody = request.body as { name: string };
       /* Check that the item doesn't already exist first */
       let query = `INSERT INTO`;
+      let table =
+        process.env.NODE_ENV === "test"
+          ? CategoryRouter.TEST_TABLE
+          : CategoryRouter.TABLE;
       if (process.env.NODE_ENV === "test") {
         query = query + ` ${CategoryRouter.TEST_TABLE}`;
       } else {
@@ -56,7 +60,7 @@ export class CategoryRouter {
         .query(query, [uuidv4(), receivedBody.name, true])
         .then((res) => {
           if (res.rows.length === 0) {
-            response.statusCode = 304;
+            response.statusCode = 200;
             response.send({ success: false, data: null });
             return;
           }

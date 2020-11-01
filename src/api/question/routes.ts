@@ -47,7 +47,7 @@ questionsRouter.post("/questions", async (request, response) => {
     ])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 304;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
@@ -70,7 +70,7 @@ questionsRouter.delete("/questions", async (request, response) => {
     .query(deleteQuestion({ table: table }), [request.body.id])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 404;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
