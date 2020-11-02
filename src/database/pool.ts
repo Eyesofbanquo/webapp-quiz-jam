@@ -7,7 +7,11 @@ import {
   createQuestionType,
 } from "../api/question-type/queries";
 import * as dotenv from "dotenv";
-import { createCategory, CATEGORIES_TABLE } from "../api/category/queries";
+import {
+  createCategory,
+  CATEGORIES_TABLE,
+  createCategoriesTable,
+} from "../api/category/queries";
 
 const DATABASE = "qizzo";
 
@@ -19,14 +23,7 @@ const createProductionDatabase = async () => {
 
 const createTables = async () => {
   await pool
-    .query(
-      `CREATE TABLE IF NOT EXISTS ${CATEGORIES_TABLE}
-  (id UUID PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  inReview BOOLEAN NOT NULL,
-  UNIQUE(name)
-  )`
-    )
+    .query(createCategoriesTable())
     .then((res) => console.log(""))
     .catch((err) => console.log(err));
 
@@ -41,11 +38,7 @@ const createTables = async () => {
 
 const createDefaultValues = async () => {
   await pool
-    .query(createCategory({ table: CATEGORIES_TABLE }), [
-      uuidv4(),
-      "League of Legends",
-      true,
-    ])
+    .query(createCategory(), [uuidv4(), "League of Legends", true])
     .catch((err) => console.log(err));
   await pool
     .query(createQuestionType({ table: QUESTION_TYPE_TABLE }), [
