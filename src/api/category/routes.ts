@@ -64,7 +64,7 @@ export class CategoryRouter {
             response.send({ success: false, data: null });
             return;
           }
-          response.statusCode = 200;
+          response.statusCode = 201;
           response.send({ success: true, data: res.rows[0] });
         })
         .catch((err) => {
@@ -85,6 +85,25 @@ export class CategoryRouter {
 
       pool
         .query(query, [request.body.id])
+        .then((result) => {
+          response.send({ success: true, data: result.rows[0] });
+        })
+        .catch((error) => {
+          response.send({ success: false, data: null });
+        });
+    });
+
+    this.router.delete("/categories/:id", (request, response) => {
+      let query = `DELETE FROM`;
+      if (process.env.NODE_ENV === "test") {
+        query = query + ` ${CategoryRouter.TEST_TABLE}`;
+      } else {
+        query = query + ` ${CategoryRouter.TABLE}`;
+      }
+      query = query + ` WHERE id = $1 RETURNING *`;
+
+      pool
+        .query(query, [request.params.id])
         .then((result) => {
           response.send({ success: true, data: result.rows[0] });
         })

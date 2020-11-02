@@ -82,7 +82,7 @@ describe("Category", () => {
 
           expect(response.body.success).to.eql(true);
           expect(response.body.data.name).to.eql("Ha");
-          expect(response.status).to.eql(200);
+          expect(response.status).to.eql(201);
           done();
         })
         .catch((error) => {

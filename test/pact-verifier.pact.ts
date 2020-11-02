@@ -33,33 +33,53 @@ describe("Pact Verification", () => {
   it("should validate the expectaions of the consumer", async () => {
     const opts: VerifierOptions = {
       provider: "QizzoProvider",
-      providerBaseUrl: `http://localhost:${port}`,
+      providerBaseUrl: `http://localhost:5000`,
       pactUrls: pacts,
+      logLevel: "debug",
+      enablePending: true,
       stateHandlers: {
         "there are categories": async () => {
           await pool
             .query(createCategoriesTable({ table: CATEGORIES_TABLE }))
             .catch();
-          await pool.query(createCategory({ table: CATEGORIES_TABLE }), [
-            uuidv4(),
-            "Random name",
-            true,
-          ]);
+          await pool
+            .query(createCategory({ table: CATEGORIES_TABLE }), [
+              uuidv4(),
+              "Random name",
+              true,
+            ])
+            .catch();
           return Promise.resolve("Categories added to database");
+        },
+        "The category Night already exists": async () => {
+          await pool
+            .query(createCategoriesTable({ table: CATEGORIES_TABLE }))
+            .catch();
+          await pool
+            .query(createCategory({ table: CATEGORIES_TABLE }), [
+              uuidv4(),
+              "Night",
+              true,
+            ])
+            .catch();
+          return Promise.resolve("Categories added to database");
+        },
+        "Category id d2f97165-54ca-4bd1-b173-ae994059c64a exists": async () => {
+          await pool
+            .query(createCategory({ table: CATEGORIES_TABLE }), [
+              "d2f97165-54ca-4bd1-b173-ae994059c64a",
+              "Random new category",
+              true,
+            ])
+            .catch();
+          return Promise.resolve(
+            "Category id d2f97165-54ca-4bd1-b173-ae994059c64a has been created"
+          );
         },
       },
     };
 
-    await new Verifier(opts)
-      .verifyProvider()
-      .then((result) => {
-        // result.then(() => console.log("yes")).catch();
-        console.log("Passed");
-      })
-      .catch((err) => {
-        // expect(err).to.eql(undefined);
-        expect.fail(err);
-      });
+    return await new Verifier(opts).verifyProvider().finally(() => {});
     console.log("Pact Verification Complete!");
   });
 });
