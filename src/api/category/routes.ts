@@ -2,6 +2,8 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { v4 as uuidv4 } from "uuid";
 import pool from "../../database/pool";
+import { createCategory, getCategories, getCategoryTable } from "./queries";
+import { create } from "ts-node";
 const cors = require("cors");
 
 export const CATEGORY_TABLE = "categories";
@@ -21,13 +23,13 @@ export class CategoryRouter {
     this.router.get("/categories", (request, response) => {
       let query = `SELECT * FROM`;
       if (process.env.NODE_ENV === "test") {
-        query = query + ` ${CategoryRouter.TEST_TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       } else {
-        query = query + ` ${CategoryRouter.TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       }
 
       pool
-        .query(query)
+        .query(getCategories())
         .then((res) => {
           response.statusCode = 200;
           response.send({ success: true, data: res.rows });
@@ -42,22 +44,9 @@ export class CategoryRouter {
     this.router.post("/categories", (request, response) => {
       const receivedBody = request.body as { name: string };
       /* Check that the item doesn't already exist first */
-      let query = `INSERT INTO`;
-      let table =
-        process.env.NODE_ENV === "test"
-          ? CategoryRouter.TEST_TABLE
-          : CategoryRouter.TABLE;
-      if (process.env.NODE_ENV === "test") {
-        query = query + ` ${CategoryRouter.TEST_TABLE}`;
-      } else {
-        query = query + ` ${CategoryRouter.TABLE}`;
-      }
-      query =
-        query +
-        ` (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
       pool
-        .query(query, [uuidv4(), receivedBody.name, true])
+        .query(createCategory(), [uuidv4(), receivedBody.name, true])
         .then((res) => {
           if (res.rows.length === 0) {
             response.statusCode = 200;
@@ -77,9 +66,9 @@ export class CategoryRouter {
     this.router.delete("/categories", (request, response) => {
       let query = `DELETE FROM`;
       if (process.env.NODE_ENV === "test") {
-        query = query + ` ${CategoryRouter.TEST_TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       } else {
-        query = query + ` ${CategoryRouter.TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       }
       query = query + ` WHERE id = $1 RETURNING *`;
 
@@ -96,9 +85,9 @@ export class CategoryRouter {
     this.router.delete("/categories/:id", (request, response) => {
       let query = `DELETE FROM`;
       if (process.env.NODE_ENV === "test") {
-        query = query + ` ${CategoryRouter.TEST_TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       } else {
-        query = query + ` ${CategoryRouter.TABLE}`;
+        query = query + ` ${getCategoryTable()}`;
       }
       query = query + ` WHERE id = $1 RETURNING *`;
 

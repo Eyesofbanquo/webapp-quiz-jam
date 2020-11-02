@@ -22,7 +22,7 @@ questionTypesRouter.use(bodyParser.json());
 
 questionTypesRouter.get("/question-types", (request, response) => {
   pool
-    .query(getQuestionTypes({ table: table }))
+    .query(getQuestionTypes())
     .then((result) => {
       response.statusCode = 200;
       response.send({ success: true, data: result.rows });
@@ -35,7 +35,7 @@ questionTypesRouter.get("/question-types", (request, response) => {
 
 questionTypesRouter.post("/question-types", (request, response) => {
   pool
-    .query(createQuestionType({ table: table }), [uuidv4(), request.body.name])
+    .query(createQuestionType(), [uuidv4(), request.body.name])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;
@@ -54,7 +54,7 @@ questionTypesRouter.post("/question-types", (request, response) => {
 
 questionTypesRouter.delete("/question-types", (request, response) => {
   pool
-    .query(deleteQuestionType({ table: table }), [request.body.id])
+    .query(deleteQuestionType(), [request.body.id])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;

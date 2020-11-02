@@ -20,7 +20,7 @@ questionsRouter.get("/questions", (request, response) => {
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(getQuestions({ table: table }))
+    .query(getQuestions())
     .then((result) => {
       response.statusCode = 200;
       response.send({ success: true, data: result.rows });
@@ -36,7 +36,7 @@ questionsRouter.post("/questions", async (request, response) => {
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(createQuestion({ table: table }), [
+    .query(createQuestion(), [
       uuidv4(),
       request.body.name,
       true,
@@ -56,7 +56,6 @@ questionsRouter.post("/questions", async (request, response) => {
       response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
-      console.log(request.body);
       response.statusCode = 403;
       response.send({ success: false, data: null });
     });
@@ -67,7 +66,7 @@ questionsRouter.delete("/questions", async (request, response) => {
     process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
 
   pool
-    .query(deleteQuestion({ table: table }), [request.body.id])
+    .query(deleteQuestion(), [request.body.id])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;

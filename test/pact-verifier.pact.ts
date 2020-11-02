@@ -11,6 +11,7 @@ import {
   createCategoriesTable,
   createCategory,
   CATEGORIES_TABLE,
+  getCategoryTable,
 } from "../src/api/category/queries";
 import { create } from "ts-node";
 import { CATEGORY_TABLE } from "../src/api/category/routes";
@@ -30,6 +31,11 @@ describe("Pact Verification", () => {
     });
   });
 
+  after(async () => {
+    console.log(getCategoryTable());
+    await pool.query(`DROP TABLE IF EXISTS ${getCategoryTable()}`).catch();
+  });
+
   it("should validate the expectaions of the consumer", async () => {
     const opts: VerifierOptions = {
       provider: "QizzoProvider",
@@ -39,34 +45,21 @@ describe("Pact Verification", () => {
       enablePending: true,
       stateHandlers: {
         "there are categories": async () => {
+          await pool.query(createCategoriesTable()).catch();
           await pool
-            .query(createCategoriesTable({ table: CATEGORIES_TABLE }))
-            .catch();
-          await pool
-            .query(createCategory({ table: CATEGORIES_TABLE }), [
-              uuidv4(),
-              "Random name",
-              true,
-            ])
+            .query(createCategory(), [uuidv4(), "Random name", true])
             .catch();
           return Promise.resolve("Categories added to database");
         },
         "The category Night already exists": async () => {
-          await pool
-            .query(createCategoriesTable({ table: CATEGORIES_TABLE }))
-            .catch();
-          await pool
-            .query(createCategory({ table: CATEGORIES_TABLE }), [
-              uuidv4(),
-              "Night",
-              true,
-            ])
-            .catch();
+          await pool.query(createCategoriesTable()).catch();
+          await pool.query(createCategory(), [uuidv4(), "Night", true]).catch();
           return Promise.resolve("Categories added to database");
         },
         "Category id d2f97165-54ca-4bd1-b173-ae994059c64a exists": async () => {
+          await pool.query(createCategoriesTable()).catch();
           await pool
-            .query(createCategory({ table: CATEGORIES_TABLE }), [
+            .query(createCategory(), [
               "d2f97165-54ca-4bd1-b173-ae994059c64a",
               "Random new category",
               true,
@@ -79,7 +72,7 @@ describe("Pact Verification", () => {
       },
     };
 
-    return await new Verifier(opts).verifyProvider().finally(() => {});
+    await new Verifier(opts).verifyProvider().finally(async () => {});
     console.log("Pact Verification Complete!");
   });
 });

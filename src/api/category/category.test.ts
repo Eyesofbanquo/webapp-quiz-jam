@@ -7,23 +7,16 @@ import { expect } from "chai";
 import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 import { expectation } from "sinon";
+import { createCategoriesTable, createCategory } from "./queries";
 
 chai.use(require("chai-http"));
 var should = chai.should();
 
 const categories = require("../../stubs/categories.json");
-const TABLE = "category_test";
 describe("Category", () => {
   beforeEach(async () => {
     await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS ${TABLE}
-    (id UUID PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    inReview BOOLEAN NOT NULL,
-    UNIQUE(name)
-    )`
-      )
+      .query(createCategoriesTable())
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
   });
@@ -36,11 +29,7 @@ describe("Category", () => {
   describe("/GET categories", () => {
     beforeEach(async () => {
       await pool
-        .query(
-          `INSERT INTO ${TABLE}
-      (id, name, inReview)
-      VALUES ('${uuidv4()}', 'Nightmare', false) ON CONFLICT (name) DO NOTHING RETURNING *`
-        )
+        .query(createCategory(), [uuidv4(), "Nightmare", false])
         .catch((err) => {
           console.log("called");
           console.log(err);
@@ -91,10 +80,7 @@ describe("Category", () => {
     });
     it(`should not POST a category named "Ha" if it already exists`, (done) => {
       pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
-          [uuidv4(), "Ha", true]
-        )
+        .query(createCategory(), [uuidv4(), "Ha", true])
         .catch((err) => console.log(err));
       const controller = new AppController();
       // Act:
@@ -118,10 +104,7 @@ describe("Category", () => {
     it(`should DELETE an existing category named "Him"`, (done) => {
       const uuid = uuidv4();
       pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
-          [uuid, "Him", true]
-        )
+        .query(createCategory(), [uuid, "Him", true])
         .catch((err) => console.log(err));
 
       const controller = new AppController();
