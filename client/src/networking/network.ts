@@ -28,6 +28,17 @@ export const makeRequest = (props: RequestOptions) => {
     options = optionsWithBaseAndPort;
   }
 
+  if (method === "post" || method == "delete") {
+    var optionsWithHeaders = {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+    options = optionsWithHeaders;
+  }
+
   console.log(options);
 
   var request = axios(uri, options);

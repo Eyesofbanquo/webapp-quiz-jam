@@ -38,7 +38,7 @@ questionTypesRouter.post("/question-types", (request, response) => {
     .query(createQuestionType({ table: table }), [uuidv4(), request.body.name])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 304;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
@@ -57,7 +57,7 @@ questionTypesRouter.delete("/question-types", (request, response) => {
     .query(deleteQuestionType({ table: table }), [request.body.id])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 404;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
