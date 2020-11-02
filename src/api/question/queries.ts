@@ -1,4 +1,6 @@
+import { getCategoryTable } from "../../api/category/queries";
 import { uuid_generate_v4 } from "uuid";
+import { getQuestionTypeTable } from "../../api/question-type/queries";
 
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";
@@ -22,8 +24,8 @@ export const createQuestionTable = () =>
   inReview BOOLEAN NOT NULL,
   correctAnswers TEXT ARRAY NOT NULL,
   incorrectAnswers TEXT ARRAY NOT NULL,
-  category_uid UUID REFERENCES categories(id),
-  question_type_uid UUID REFERENCES question_types(id),
+  category_uid UUID REFERENCES ${getCategoryTable()}(id),
+  question_type_uid UUID REFERENCES ${getQuestionTypeTable()}(id),
   UNIQUE(name)
   )`;
 

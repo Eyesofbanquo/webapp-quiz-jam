@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { v4 as uuidv4 } from "uuid";
 import pool from "../../database/pool";
-import { createCategory, getCategoryTable } from "./queries";
+import { createCategory, getCategories, getCategoryTable } from "./queries";
 import { create } from "ts-node";
 const cors = require("cors");
 
@@ -29,7 +29,7 @@ export class CategoryRouter {
       }
 
       pool
-        .query(query)
+        .query(getCategories())
         .then((res) => {
           response.statusCode = 200;
           response.send({ success: true, data: res.rows });

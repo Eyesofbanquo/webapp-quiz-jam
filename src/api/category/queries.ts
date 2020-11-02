@@ -15,13 +15,6 @@ export const getCategoryTable = () => {
   }
 };
 
-interface CategoryProps {
-  table:
-    | typeof CATEGORIES_TABLE
-    | typeof CATEGORIES_TABLE_TEST
-    | typeof CATEGORIES_TABLE_PACT;
-}
-
 export const createCategoriesTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getCategoryTable()}
 (id UUID PRIMARY KEY,

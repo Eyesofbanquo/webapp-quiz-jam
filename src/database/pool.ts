@@ -47,13 +47,21 @@ if (process.env.TRAVIS_DATABASE) {
 const pool = new Pool(databaseConfig);
 
 if (process.env.DATABASE_URL) {
-  // create-tables
+  console.log("prod");
   createProductionDatabase().catch();
   createTables().catch();
   createDefaultValues().catch();
 }
 
-if (process.env.LOCAL_DATABASE) {
+/* Only need to make sure the database exists while the unit tests control the tables */
+if (process.env.TRAVIS_DATABASE) {
+  createProductionDatabase().catch();
+}
+
+/* This is to prevent the unit tests from creating unnecessary tables on launch */
+if (process.env.LOCAL_DATABASE && process.env.NODE_ENV !== "test") {
+  console.log("local");
+
   createTables().catch();
   createDefaultValues().catch();
 }

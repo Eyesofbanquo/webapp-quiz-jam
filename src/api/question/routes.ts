@@ -56,7 +56,6 @@ questionsRouter.post("/questions", async (request, response) => {
       response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
-      console.log(request.body);
       response.statusCode = 403;
       response.send({ success: false, data: null });
     });
