@@ -96,123 +96,123 @@ describe("Question Tests", () => {
     });
   });
 
-  // describe("/POST", () => {
-  //   it("should post a new question if it doesn't exist already", (done) => {
-  //     const controller = new AppController();
+  describe("/POST", () => {
+    it("should post a new question if it doesn't exist already", (done) => {
+      const controller = new AppController();
 
-  //     const question = {
-  //       name: "NightmareQuestion",
-  //       correctAnswers: ["1"],
-  //       incorrectAnswers: ["2", "3", "4"],
-  //       categoryId: categoryUUID,
-  //       questionTypeId: questionTypeUUID,
-  //     };
+      const question = {
+        name: "NightmareQuestion",
+        correctAnswers: ["1"],
+        incorrectAnswers: ["2", "3", "4"],
+        categoryId: categoryUUID,
+        questionTypeId: questionTypeUUID,
+      };
 
-  //     chai
-  //       .request(controller.app)
-  //       .post("/api/questions")
-  //       .send(question)
-  //       .then((response) => {
-  //         expect(response.status).to.eql(201);
-  //         expect(response.body.data.name).to.eql("NightmareQuestion");
-  //         done();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         done(err);
-  //       });
-  //   });
+      chai
+        .request(controller.app)
+        .post("/api/questions")
+        .send(question)
+        .then((response) => {
+          expect(response.status).to.eql(201);
+          expect(response.body.data.name).to.eql("NightmareQuestion");
+          done();
+        })
+        .catch((err) => {
+          console.log(err);
+          done(err);
+        });
+    });
 
-  //   it("should NOT post a new question if it already exists", (done) => {
-  //     const controller = new AppController();
+    it("should NOT post a new question if it already exists", (done) => {
+      const controller = new AppController();
 
-  //     const uuid = uuidv4();
+      const uuid = uuidv4();
 
-  //     const question = {
-  //       name: "NightmareQuestion",
-  //       correctAnswers: ["1"],
-  //       incorrectAnswers: ["2", "3", "4"],
-  //       categoryId: categoryUUID,
-  //       questionTypeId: questionTypeUUID,
-  //     };
+      const question = {
+        name: "NightmareQuestion",
+        correctAnswers: ["1"],
+        incorrectAnswers: ["2", "3", "4"],
+        categoryId: categoryUUID,
+        questionTypeId: questionTypeUUID,
+      };
 
-  //     pool
-  //       .query(createQuestion(), [
-  //         uuid,
-  //         question.name,
-  //         true,
-  //         question.correctAnswers,
-  //         question.incorrectAnswers,
-  //         categoryUUID,
-  //         questionTypeUUID,
-  //       ])
-  //       .catch();
+      pool
+        .query(createQuestion(), [
+          uuid,
+          question.name,
+          true,
+          question.correctAnswers,
+          question.incorrectAnswers,
+          categoryUUID,
+          questionTypeUUID,
+        ])
+        .catch();
 
-  //     chai
-  //       .request(controller.app)
-  //       .post("/api/questions")
-  //       .send(question)
-  //       .then((response) => {
-  //         expect(response.status).to.eql(200);
-  //         expect(response.body.data).to.eql(null);
-  //         done();
-  //       })
-  //       .catch((err) => done(err));
-  //   });
-  // });
+      chai
+        .request(controller.app)
+        .post("/api/questions")
+        .send(question)
+        .then((response) => {
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
+          done();
+        })
+        .catch((err) => done(err));
+    });
+  });
 
-  // describe("/DELETE", () => {
-  //   it(`should delete an entry from the database if it exists`, (done) => {
-  //     const controller = new AppController();
+  describe("/DELETE", () => {
+    it(`should delete an entry from the database if it exists`, (done) => {
+      const controller = new AppController();
 
-  //     const uuid = uuidv4();
+      const uuid = uuidv4();
 
-  //     const question = {
-  //       name: "NightmareQuestion",
-  //       correctAnswers: ["1"],
-  //       incorrectAnswers: ["2", "3", "4"],
-  //       categoryId: categoryUUID,
-  //       questionTypeId: questionTypeUUID,
-  //     };
+      const question = {
+        name: "NightmareQuestion",
+        correctAnswers: ["1"],
+        incorrectAnswers: ["2", "3", "4"],
+        categoryId: categoryUUID,
+        questionTypeId: questionTypeUUID,
+      };
 
-  //     pool
-  //       .query(createQuestion(), [
-  //         uuid,
-  //         question.name,
-  //         true,
-  //         question.correctAnswers,
-  //         question.incorrectAnswers,
-  //         categoryUUID,
-  //         questionTypeUUID,
-  //       ])
-  //       .catch();
+      pool
+        .query(createQuestion(), [
+          uuid,
+          question.name,
+          true,
+          question.correctAnswers,
+          question.incorrectAnswers,
+          categoryUUID,
+          questionTypeUUID,
+        ])
+        .catch();
 
-  //     chai
-  //       .request(controller.app)
-  //       .delete("/api/questions")
-  //       .send({ id: uuid })
-  //       .then((response) => {
-  //         expect(response.status).to.eql(200);
-  //         expect(response.body.success).to.eql(true);
-  //         expect(response.body.data.name).to.eql(question.name);
-  //         done();
-  //       })
-  //       .catch((err) => done(err));
-  //   });
+      chai
+        .request(controller.app)
+        .delete("/api/questions")
+        .send({ id: uuid })
+        .then((response) => {
+          expect(response.status).to.eql(200);
+          expect(response.body.success).to.eql(true);
+          expect(response.body.data.name).to.eql(question.name);
+          done();
+        })
+        .catch((err) => done(err));
+    });
 
-  //   it(`should return a NOT FOUND if the entry doesn't exist`, (done) => {
-  //     const controller = new AppController();
+    it(`should return a NOT FOUND if the entry doesn't exist`, (done) => {
+      const controller = new AppController();
 
-  //     chai
-  //       .request(controller.app)
-  //       .delete("/api/questions")
-  //       .send({ id: uuidv4() })
-  //       .then((response) => {
-  //         expect(response.status).to.eql(200);
-  //         expect(response.body.data).to.eql(null);
-  //         done();
-  //       })
-  //       .catch((err) => done(err));
-  //   });
-  // });
+      chai
+        .request(controller.app)
+        .delete("/api/questions")
+        .send({ id: uuidv4() })
+        .then((response) => {
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
+          done();
+        })
+        .catch((err) => done(err));
+    });
+  });
 });
