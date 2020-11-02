@@ -23,14 +23,12 @@ describe("Question Type Tests", () => {
   const name = "matching";
 
   before(async () => {
-    await pool.query(createQuestionTypeTable({ table: TABLE })).catch();
-    await pool
-      .query(createQuestionType({ table: TABLE }), [uuid, name])
-      .catch();
+    await pool.query(createQuestionTypeTable()).catch();
+    await pool.query(createQuestionType(), [uuid, name]).catch();
   });
 
   after(async () => {
-    await pool.query(dropQuestionTypeTable({ table: TABLE })).catch();
+    await pool.query(dropQuestionTypeTable()).catch();
   });
 
   describe("/GET", () => {
@@ -83,7 +81,7 @@ describe("Question Type Tests", () => {
         .then((response) => {
           const check = response.body as QuestionTypeResponse;
           pool
-            .query(getQuestionTypes({ table: TABLE }))
+            .query(getQuestionTypes())
             .then((result) => {
               const allNames = result.rows.map((data) => data.name);
               expect(allNames).to.contain(typeName);
@@ -98,9 +96,7 @@ describe("Question Type Tests", () => {
 
     it(`should NOT post the same question type`, (done) => {
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuidv4(), "same"])
-        .catch();
+      pool.query(createQuestionType(), [uuidv4(), "same"]).catch();
 
       chai
         .request(controller.app)
@@ -119,9 +115,7 @@ describe("Question Type Tests", () => {
     it(`should delete question type`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuid, "delete-me"])
-        .catch();
+      pool.query(createQuestionType(), [uuid, "delete-me"]).catch();
 
       chai
         .request(controller.app)
@@ -154,16 +148,14 @@ describe("Question Type Tests", () => {
     it(`should delete question and remove from db`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuid, "delete-mes"])
-        .catch();
+      pool.query(createQuestionType(), [uuid, "delete-mes"]).catch();
 
       chai
         .request(controller.app)
         .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
         .send({ id: uuid })
         .then((response) => {
-          pool.query(getQuestionTypes({ table: TABLE })).then((result) => {
+          pool.query(getQuestionTypes()).then((result) => {
             const allNames = result.rows.map((row) => row.name);
             expect(allNames).to.not.contain("delete-mes");
             done();

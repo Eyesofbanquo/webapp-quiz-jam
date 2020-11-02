@@ -6,7 +6,15 @@ import { expect } from "chai";
 import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 import { expectation } from "sinon";
-import { createQuestion } from "./queries";
+import { createQuestion, createQuestionTable } from "./queries";
+import {
+  createQuestionType,
+  createQuestionTypeTable,
+} from "../../api/question-type/queries";
+import {
+  createCategoriesTable,
+  createCategory,
+} from "../../api/category/queries";
 
 const TABLE = "questions_test";
 describe("Question Tests", () => {
@@ -16,40 +24,21 @@ describe("Question Tests", () => {
     categoryUUID = uuidv4();
     questionTypeUUID = uuidv4();
     await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS category_test
-    (id UUID PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    inReview BOOLEAN NOT NULL,
-    UNIQUE(name)
-    )`
-      )
+      .query(createCategoriesTable())
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
     await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS question_type_test
-    (id UUID PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    UNIQUE(name)
-    )`
-      )
+      .query(createQuestionTypeTable())
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
     await pool
-      .query(
-        `INSERT INTO category_test (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
-        [categoryUUID, "Ha", true]
-      )
+      .query(createCategory(), [categoryUUID, "Ha", true])
       .catch((err) => console.log(err));
 
     await pool
-      .query(
-        `INSERT INTO question_type_test (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`,
-        [questionTypeUUID, "Multiple Choice"]
-      )
+      .query(createQuestionType(), [questionTypeUUID, "Multiple Choice"])
       .catch((err) => console.log(err));
   });
 
@@ -63,20 +52,7 @@ describe("Question Tests", () => {
   });
 
   beforeEach(async () => {
-    await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS ${TABLE}
-        (id UUID PRIMARY KEY,
-          name TEXT NOT NULL,
-          inReview BOOLEAN NOT NULL,
-          correctAnswers TEXT ARRAY NOT NULL,
-          incorrectAnswers TEXT ARRAY NOT NULL,
-          category_uid UUID REFERENCES category_test(id),
-          question_type_uid UUID REFERENCES question_type_test(id),
-          UNIQUE(name)
-          )`
-      )
-      .catch((err) => console.log(err));
+    await pool.query(createQuestionTable()).catch((err) => console.log(err));
   });
 
   afterEach(async () => {
@@ -90,7 +66,7 @@ describe("Question Tests", () => {
       /** ! Assume */
       const uuid = uuidv4();
       pool
-        .query(createQuestion({ table: TABLE }), [
+        .query(createQuestion(), [
           uuid,
           "Nightmare",
           true,
@@ -160,18 +136,15 @@ describe("Question Tests", () => {
       };
 
       pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-          ]
-        )
+        .query(createQuestion(), [
+          uuid,
+          question.name,
+          true,
+          question.correctAnswers,
+          question.incorrectAnswers,
+          categoryUUID,
+          questionTypeUUID,
+        ])
         .catch();
 
       chai
@@ -202,18 +175,15 @@ describe("Question Tests", () => {
       };
 
       pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-          ]
-        )
+        .query(createQuestion(), [
+          uuid,
+          question.name,
+          true,
+          question.correctAnswers,
+          question.incorrectAnswers,
+          categoryUUID,
+          questionTypeUUID,
+        ])
         .catch();
 
       chai

@@ -2,13 +2,21 @@ import { uuid_generate_v4 } from "uuid";
 
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";
+export const QUESTION_TABLE_PACT = "questions_pact";
 
-interface QuestionProps {
-  table: typeof QUESTION_TABLE | typeof QUESTION_TABLE_TEST;
-}
+export const getQuestionTable = () => {
+  switch (process.env.NODE_ENV) {
+    case "test":
+      return QUESTION_TABLE_TEST;
+    case "pact":
+      return QUESTION_TABLE_PACT;
+    default:
+      return QUESTION_TABLE;
+  }
+};
 
-export const createQuestionTable = (props: QuestionProps) =>
-  `CREATE TABLE IF NOT EXISTS ${props.table}
+export const createQuestionTable = () =>
+  `CREATE TABLE IF NOT EXISTS ${getQuestionTable()}
 (id UUID PRIMARY KEY,
   name TEXT NOT NULL,
   inReview BOOLEAN NOT NULL,
@@ -19,18 +27,18 @@ export const createQuestionTable = (props: QuestionProps) =>
   UNIQUE(name)
   )`;
 
-export const createQuestion = (props: QuestionProps) => {
-  return `INSERT INTO ${props.table} 
+export const createQuestion = () => {
+  return `INSERT INTO ${getQuestionTable()} 
   (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid)
    VALUES ($1, $2, $3, $4, $5, $6, $7)
     ON CONFLICT (name) DO NOTHING
      RETURNING *`;
 };
 
-export const getQuestions = (props: QuestionProps) => {
-  return `SELECT * FROM ${props.table}`;
+export const getQuestions = () => {
+  return `SELECT * FROM ${getQuestionTable()}`;
 };
 
-export const deleteQuestion = (props: QuestionProps) => {
-  return `DELETE FROM ${props.table} WHERE id = $1 RETURNING *`;
+export const deleteQuestion = () => {
+  return `DELETE FROM ${getQuestionTable()} WHERE id = $1 RETURNING *`;
 };
