@@ -4,12 +4,14 @@ const { eachLike, like } = require("@pact-foundation/pact").Matchers;
 
 import * as path from "path";
 import { makeRequest } from "../../networking/network";
-import { provider } from "./setup";
+import { provider as Provider } from "./setup";
 
 const baseport = {
   base: "127.0.0.1",
   port: "4000",
 };
+
+const provider = Provider("category");
 describe("Pact with Qizzo API", () => {
   beforeAll((done) => {
     console.log("a");

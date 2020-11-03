@@ -16,9 +16,6 @@ export const questionsRouter = express.Router();
 questionsRouter.use(bodyParser.json());
 
 questionsRouter.get("/questions", (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
-
   pool
     .query(getQuestions())
     .then((result) => {
@@ -32,8 +29,17 @@ questionsRouter.get("/questions", (request, response) => {
 });
 
 questionsRouter.post("/questions", async (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
+  if (request.body.categoryId.length === 0) {
+    response.statusCode = 200;
+    response.send({ success: false, error: "Please provide a category" });
+    return;
+  }
+
+  if (request.body.questionTypeId.length === 0) {
+    response.statusCode = 200;
+    response.send({ success: false, error: "Please provide a question type" });
+    return;
+  }
 
   pool
     .query(createQuestion(), [
@@ -56,6 +62,7 @@ questionsRouter.post("/questions", async (request, response) => {
       response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
+      console.log(error, "bruhman");
       response.statusCode = 403;
       response.send({ success: false, data: null });
     });
