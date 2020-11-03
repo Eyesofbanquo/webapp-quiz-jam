@@ -61,51 +61,14 @@ describe("Pact with Qizzo API", () => {
       })
         .onReceive.then((response) => {
           const name = response.data.data[0].name;
-          expect(name).toEqual("Night");
-        })
-        .catch((err) => console.log(err));
-    });
-  });
-  describe("Creating a category that already exists", () => {
-    beforeEach(async () => {
-      await provider.addInteraction({
-        state: "The category Night already exists",
-        uponReceiving: "a request to create a category named Night",
-        withRequest: {
-          path: "/api/categories",
-          method: "POST",
-          body: {
-            name: "Night",
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        },
-        willRespondWith: {
-          status: 200,
-        },
-      });
-    });
-    it("will return a 200", async () => {
-      const response = await makeRequest({
-        base: "127.0.0.1",
-        port: "4000",
-        endpoint: "categories",
-        method: "post",
-        data: {
-          name: "Night",
-        },
-      })
-        .onReceive.then((response) => {
-          const name = response.data.data[0].name;
+          expect(response.status).toEqual(200);
           expect(name).toEqual("Night");
         })
         .catch((err) => console.log(err));
     });
   });
 
-  describe("Creating a new category", () => {
+  describe("POST: On Success", () => {
     beforeEach(async () => {
       await provider.addInteraction({
         state: "there are categories",
@@ -144,48 +107,51 @@ describe("Pact with Qizzo API", () => {
         data: { name: "New Nightmare" },
       }).onReceive.then((response) => {
         const success = response.status;
-        console.log(response.data);
         expect(success).toEqual(201);
+        expect(response.data.data.name).toBe("New Nightmare");
       });
     });
   });
-  // describe("Deleting a categoroy", () => {
-  //   beforeEach(async () => {
-  //     await provider.addInteraction({
-  //       state: "Category id d2f97165-54ca-4bd1-b173-ae994059c64a exists",
-  //       uponReceiving: "A request to delete a certain category",
-  //       withRequest: {
-  //         path: "/api/categories",
-  //         method: "DELETE",
-  //         body: {
-  //           id: "d2f97165-54ca-4bd1-b173-ae994059c64a",
-  //         },
-  //       },
-  //       willRespondWith: {
-  //         status: 200,
-  //         body: {
-  //           success: true,
-  //           data: {
-  //             id: "d2f97165-54ca-4bd1-b173-ae994059c64a",
-  //             name: "Random new category",
-  //             inreview: true,
-  //           },
-  //         },
-  //       },
-  //     });
-  //   });
 
-  //   it("should delete a category", async () => {
-  //     const response = await makeRequest({
-  //       base: "127.0.0.1",
-  //       port: "4000",
-  //       endpoint: "categories",
-  //       method: "delete",
-  //       data: { id: "d2f97165-54ca-4bd1-b173-ae994059c64a" },
-  //     }).onReceive.then((response) => {
-  //       const id = response.data.data.id;
-  //       expect(id).toEqual("d2f97165-54ca-4bd1-b173-ae994059c64a");
-  //     });
-  //   });
-  // });
+  describe("POST: On Failure: Category Exists", () => {
+    beforeEach(async () => {
+      await provider.addInteraction({
+        state: "there are categories",
+        uponReceiving: "a request to create a category that already exists",
+        withRequest: {
+          path: "/api/categories",
+          method: "POST",
+          body: {
+            name: "Random",
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        },
+        willRespondWith: {
+          status: 200,
+          body: {
+            success: false,
+            data: null,
+          },
+        },
+      });
+    });
+
+    it("Should not create a new category", async () => {
+      const response = await makeRequest({
+        base: "127.0.0.1",
+        port: "4000",
+        endpoint: "categories",
+        method: "post",
+        data: { name: "Random" },
+      }).onReceive.then((response) => {
+        const success = response.status;
+        expect(success).toEqual(200);
+        expect(response.data.success).toEqual(false);
+        expect(response.data.data).toEqual(null);
+      });
+    });
+  });
 });

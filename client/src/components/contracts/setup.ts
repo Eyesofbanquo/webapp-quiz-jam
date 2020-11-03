@@ -8,7 +8,7 @@ export const provider = new Pact({
   logLevel: "debug",
   dir: path.resolve(process.cwd(), "../webappjam-pacts"),
   spec: 2,
-  pactfileWriteMode: "update",
+  pactfileWriteMode: "overwrite",
   consumer: "QizzoConsumer",
   provider: "QizzoProvider",
   host: "127.0.0.1",

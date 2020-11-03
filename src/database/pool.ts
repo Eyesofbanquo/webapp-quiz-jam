@@ -59,7 +59,11 @@ if (process.env.TRAVIS_DATABASE) {
 }
 
 /* This is to prevent the unit tests from creating unnecessary tables on launch */
-if (process.env.LOCAL_DATABASE && process.env.NODE_ENV !== "test") {
+if (
+  process.env.LOCAL_DATABASE &&
+  process.env.NODE_ENV !== "test" &&
+  process.env.NODE_ENV !== "pact"
+) {
   console.log("local");
 
   createTables().catch();
