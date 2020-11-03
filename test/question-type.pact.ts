@@ -39,7 +39,7 @@ describe("Question Type Pact Verification", () => {
       logLevel: "debug",
       enablePending: true,
       stateHandlers: {
-        "there are question-types": async () => {
+        "there are question types": async () => {
           await pool.query(createQuestionTypeTable()).catch();
           await pool.query(createQuestionType(), [uuidv4(), "Random"]).catch();
           return Promise.resolve("Question Type added to database");
