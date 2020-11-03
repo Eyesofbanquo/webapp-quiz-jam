@@ -75,6 +75,10 @@ export class CategoryRouter {
       pool
         .query(query, [request.body.id])
         .then((result) => {
+          if (result.rows.length === 0) {
+            response.send({ success: false, data: null });
+            return;
+          }
           response.send({ success: true, data: result.rows[0] });
         })
         .catch((error) => {

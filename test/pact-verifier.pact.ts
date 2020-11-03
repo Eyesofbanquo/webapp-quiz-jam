@@ -47,7 +47,7 @@ describe("Pact Verification", () => {
         "there are categories": async () => {
           await pool.query(createCategoriesTable()).catch();
           await pool
-            .query(createCategory(), [uuidv4(), "Random name", true])
+            .query(createCategory(), [uuidv4(), "Random", true])
             .catch();
           return Promise.resolve("Categories added to database");
         },
