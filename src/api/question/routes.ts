@@ -62,9 +62,6 @@ questionsRouter.post("/questions", async (request, response) => {
 });
 
 questionsRouter.delete("/questions", async (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
-
   pool
     .query(deleteQuestion(), [request.body.id])
     .then((result) => {
