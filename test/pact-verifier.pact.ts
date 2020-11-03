@@ -1,21 +1,28 @@
 import "chai-http";
 import * as chai from "chai";
 import { expect } from "chai";
-import "mocha";
 import { AppController } from "../server";
-import { Pact, Verifier, VerifierOptions } from "@pact-foundation/pact";
+import "mocha";
+import { Verifier, VerifierOptions } from "@pact-foundation/pact";
 const path = require("path");
 const glob = require("glob");
 import pool from "../src/database/pool";
 import {
   createCategoriesTable,
   createCategory,
-  CATEGORIES_TABLE,
   getCategoryTable,
 } from "../src/api/category/queries";
-import { create } from "ts-node";
-import { CATEGORY_TABLE } from "../src/api/category/routes";
 import { v4 as uuidv4 } from "uuid";
+import {
+  createQuestionType,
+  createQuestionTypeTable,
+  getQuestionTypeTable,
+} from "../src/api/question-type/queries";
+import {
+  categoriesExist,
+  categoryNightExist,
+} from "./handlers/category-handler";
+import { questionTypesExist } from "./handlers/question-type-handler";
 
 const controller = new AppController();
 
@@ -34,6 +41,7 @@ describe("Pact Verification", () => {
   after(async () => {
     console.log(getCategoryTable());
     await pool.query(`DROP TABLE IF EXISTS ${getCategoryTable()}`).catch();
+    await pool.query(`DROP TABLE IF EXISTS ${getQuestionTypeTable()}`).catch();
   });
 
   it("should validate the expectaions of the consumer", async () => {
@@ -44,18 +52,9 @@ describe("Pact Verification", () => {
       logLevel: "debug",
       enablePending: true,
       stateHandlers: {
-        "there are categories": async () => {
-          await pool.query(createCategoriesTable()).catch();
-          await pool
-            .query(createCategory(), [uuidv4(), "Random", true])
-            .catch();
-          return Promise.resolve("Categories added to database");
-        },
-        "The category Night already exists": async () => {
-          await pool.query(createCategoriesTable()).catch();
-          await pool.query(createCategory(), [uuidv4(), "Night", true]).catch();
-          return Promise.resolve("Categories added to database");
-        },
+        "there are categories": categoriesExist,
+        "The category Night already exists": categoryNightExist,
+        "there are question types": questionTypesExist,
         "Category id d2f97165-54ca-4bd1-b173-ae994059c64a exists": async () => {
           await pool.query(createCategoriesTable()).catch();
           await pool
