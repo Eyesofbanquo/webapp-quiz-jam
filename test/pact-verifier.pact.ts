@@ -1,6 +1,7 @@
 import "chai-http";
 import * as chai from "chai";
 import { expect } from "chai";
+import { AppController } from "../server";
 import "mocha";
 import { Verifier, VerifierOptions } from "@pact-foundation/pact";
 const path = require("path");
@@ -12,6 +13,17 @@ import {
   getCategoryTable,
 } from "../src/api/category/queries";
 import { v4 as uuidv4 } from "uuid";
+import {
+  createQuestionType,
+  createQuestionTypeTable,
+} from "../src/api/question-type/queries";
+import {
+  categoriesExist,
+  categoryNightExist,
+} from "./handlers/category-handler";
+import { questionTypesExist } from "./handlers/question-type-handler";
+
+const controller = new AppController();
 
 describe("Pact Verification", () => {
   let pacts;
@@ -38,18 +50,9 @@ describe("Pact Verification", () => {
       logLevel: "debug",
       enablePending: true,
       stateHandlers: {
-        "there are categories": async () => {
-          await pool.query(createCategoriesTable()).catch();
-          await pool
-            .query(createCategory(), [uuidv4(), "Random", true])
-            .catch();
-          return Promise.resolve("Categories added to database");
-        },
-        "The category Night already exists": async () => {
-          await pool.query(createCategoriesTable()).catch();
-          await pool.query(createCategory(), [uuidv4(), "Night", true]).catch();
-          return Promise.resolve("Categories added to database");
-        },
+        "there are categories": categoriesExist,
+        "The category Night already exists": categoryNightExist,
+        "there are question types": questionTypesExist,
         "Category id d2f97165-54ca-4bd1-b173-ae994059c64a exists": async () => {
           await pool.query(createCategoriesTable()).catch();
           await pool
