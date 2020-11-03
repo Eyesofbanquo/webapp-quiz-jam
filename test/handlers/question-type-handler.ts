@@ -13,6 +13,6 @@ export const questionTypesExist = async () => {
 
 export const questionTypeAlreadyExists = async () => {
   await pool.query(createQuestionTypeTable()).catch();
-  await pool.query(createQuestionType(), [uuidv4(), "Random2"]).catch();
+  await pool.query(createQuestionType(), [uuidv4(), "Newer"]).catch();
   return Promise.resolve("Question Type already exists");
 };

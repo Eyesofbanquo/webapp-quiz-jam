@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   createQuestionType,
   createQuestionTypeTable,
+  getQuestionTypeTable,
 } from "../src/api/question-type/queries";
 import {
   categoriesExist,
@@ -40,6 +41,7 @@ describe("Pact Verification", () => {
   after(async () => {
     console.log(getCategoryTable());
     await pool.query(`DROP TABLE IF EXISTS ${getCategoryTable()}`).catch();
+    await pool.query(`DROP TABLE IF EXISTS ${getQuestionTypeTable()}`).catch();
   });
 
   it("should validate the expectaions of the consumer", async () => {

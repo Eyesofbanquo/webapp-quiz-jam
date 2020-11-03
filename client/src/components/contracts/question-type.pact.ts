@@ -13,7 +13,6 @@ const baseport = {
 
 describe("Question Type pacts", () => {
   beforeAll((done) => {
-    console.log("a");
     provider.setup().then(() => {
       done();
     });
@@ -26,7 +25,6 @@ describe("Question Type pacts", () => {
   afterEach(async () => {
     await provider.verify();
   });
-
   describe("GET: On Success: Return all question types", () => {
     beforeEach(async () => {
       await provider.addInteraction({
@@ -59,6 +57,56 @@ describe("Question Type pacts", () => {
         expect(result.status).toEqual(200);
         expect(result.data.data.length).toBeGreaterThanOrEqual(1);
       });
+    });
+  });
+
+  describe("POST: On Success: Create new Question Type", () => {
+    beforeEach(async () => {
+      await provider
+        .addInteraction({
+          state: "there are question types",
+          uponReceiving: "a request to create a new question type",
+          withRequest: {
+            path: "/api/question-types",
+            method: "POST",
+            body: {
+              name: "Newer",
+            },
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          },
+          willRespondWith: {
+            status: 201,
+            body: {
+              success: true,
+              data: {
+                id: Matchers.somethingLike("0"),
+                name: "Newer",
+              },
+            },
+          },
+        })
+        .catch();
+    });
+
+    it("should create a new question type", async () => {
+      await makeRequest({
+        base: "127.0.0.1",
+        port: "4000",
+        endpoint: "question-types",
+        method: "post",
+        data: {
+          name: "Newer",
+        },
+      })
+        .onReceive.then((result) => {
+          expect(result.status).toEqual(201);
+          expect(result.data.data.name).toEqual("Newer");
+          expect(result.data.success).toEqual(true);
+        })
+        .catch();
     });
   });
 });
