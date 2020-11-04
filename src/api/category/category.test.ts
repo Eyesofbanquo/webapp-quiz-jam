@@ -29,7 +29,7 @@ describe("Category", () => {
   describe("/GET categories", () => {
     beforeEach(async () => {
       await pool
-        .query(createCategory(), [uuidv4(), "Nightmare", false])
+        .query(createCategory(), [uuidv4(), "Nightmare", false, false])
         .catch((err) => {
           console.log("called");
           console.log(err);
@@ -86,7 +86,7 @@ describe("Category", () => {
     describe("On Failure: STATUS 200", () => {
       it(`should not POST a category named "Ha" if it already exists`, (done) => {
         pool
-          .query(createCategory(), [uuidv4(), "Ha", true])
+          .query(createCategory(), [uuidv4(), "Ha", true, false])
           .catch((err) => console.log(err));
         const controller = new AppController();
         // Act:
@@ -113,7 +113,7 @@ describe("Category", () => {
       it(`should DELETE an existing category named "Him"`, (done) => {
         const uuid = uuidv4();
         pool
-          .query(createCategory(), [uuid, "Him", true])
+          .query(createCategory(), [uuid, "Him", true, false])
           .catch((err) => console.log(err));
 
         const controller = new AppController();

@@ -19,14 +19,15 @@ export const createCategoriesTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getCategoryTable()}
 (id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  inReview BOOLEAN NOT NULL,
+  in_review BOOLEAN NOT NULL,
+  deleted BOOLEAN NOT NULL,
   UNIQUE(name)
   )`;
 
 export const createCategory = () => {
   return `INSERT INTO ${getCategoryTable()} 
-  (id, name, inReview)
-  VALUES ($1, $2, $3)
+  (id, name, in_review, deleted)
+  VALUES ($1, $2, $3, $4)
     ON CONFLICT (name) DO NOTHING
      RETURNING *`;
 };

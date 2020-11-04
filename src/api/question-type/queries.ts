@@ -23,6 +23,7 @@ export const getQuestionTypes = () => `SELECT * FROM ${getQuestionTypeTable()}`;
 export const createQuestionTypeTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getQuestionTypeTable()} (id UUID PRIMARY KEY,
     name TEXT NOT NULL,
+    deleted BOOLEAN NOT NULL,
     UNIQUE(name)
     )`;
 
@@ -30,7 +31,7 @@ export const dropQuestionTypeTable = () =>
   `DROP TABLE ${getQuestionTypeTable()}`;
 
 export const createQuestionType = () =>
-  `INSERT INTO ${getQuestionTypeTable()} (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`;
+  `INSERT INTO ${getQuestionTypeTable()} (id, name, deleted) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
 export const deleteQuestionType = () =>
   `DELETE FROM ${getQuestionTypeTable()} WHERE id = $1 RETURNING *`;

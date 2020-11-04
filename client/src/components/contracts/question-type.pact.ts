@@ -42,6 +42,7 @@ describe("Question Type pacts", () => {
             data: eachLike({
               id: "0",
               name: "question-type",
+              deleted: false,
             }),
           },
         },
@@ -86,6 +87,7 @@ describe("Question Type pacts", () => {
                 data: {
                   id: Matchers.somethingLike("0"),
                   name: "Newer",
+                  deleted: false,
                 },
               },
             },
