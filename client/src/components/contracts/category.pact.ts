@@ -43,7 +43,8 @@ describe("Pact with Qizzo API", () => {
             data: Matchers.eachLike({
               id: "1",
               name: "Night",
-              inreview: Matchers.like(false),
+              in_review: Matchers.like(false),
+              deleted: false,
             }),
           },
           status: 200,
@@ -93,7 +94,8 @@ describe("Pact with Qizzo API", () => {
             data: {
               id: Matchers.like("1"),
               name: "New Nightmare",
-              inreview: true,
+              in_review: true,
+              deleted: false,
             },
           },
         },
