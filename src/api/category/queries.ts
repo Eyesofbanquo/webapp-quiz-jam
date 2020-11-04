@@ -20,6 +20,7 @@ export const createCategoriesTable = () =>
 (id UUID PRIMARY KEY,
   name TEXT NOT NULL,
   inReview BOOLEAN NOT NULL,
+  deleted BOOLEAN NOT NULL,
   UNIQUE(name)
   )`;
 

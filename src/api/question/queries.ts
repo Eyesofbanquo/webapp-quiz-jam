@@ -26,6 +26,7 @@ export const createQuestionTable = () =>
   incorrectAnswers TEXT ARRAY NOT NULL,
   category_uid UUID REFERENCES ${getCategoryTable()}(id),
   question_type_uid UUID REFERENCES ${getQuestionTypeTable()}(id),
+  deleted BOOLEAN NOT NULL,
   UNIQUE(name)
   )`;
 

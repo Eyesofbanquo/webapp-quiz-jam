@@ -23,6 +23,7 @@ export const getQuestionTypes = () => `SELECT * FROM ${getQuestionTypeTable()}`;
 export const createQuestionTypeTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getQuestionTypeTable()} (id UUID PRIMARY KEY,
     name TEXT NOT NULL,
+    deleted BOOLEAN NOT NULL,
     UNIQUE(name)
     )`;
 
