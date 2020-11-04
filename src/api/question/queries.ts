@@ -21,9 +21,9 @@ export const createQuestionTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getQuestionTable()}
 (id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  inReview BOOLEAN NOT NULL,
-  correctAnswers TEXT ARRAY NOT NULL,
-  incorrectAnswers TEXT ARRAY NOT NULL,
+  in_review BOOLEAN NOT NULL,
+  correct_answers TEXT ARRAY NOT NULL,
+  incorrect_answers TEXT ARRAY NOT NULL,
   category_uid UUID REFERENCES ${getCategoryTable()}(id),
   question_type_uid UUID REFERENCES ${getQuestionTypeTable()}(id),
   deleted BOOLEAN NOT NULL,
@@ -32,8 +32,8 @@ export const createQuestionTable = () =>
 
 export const createQuestion = () => {
   return `INSERT INTO ${getQuestionTable()} 
-  (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid)
-   VALUES ($1, $2, $3, $4, $5, $6, $7)
+  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted)
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     ON CONFLICT (name) DO NOTHING
      RETURNING *`;
 };

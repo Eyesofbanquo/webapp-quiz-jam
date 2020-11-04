@@ -35,11 +35,11 @@ describe("Question Tests", () => {
       .catch((err) => console.log(err));
 
     await pool
-      .query(createCategory(), [categoryUUID, "Ha", true])
+      .query(createCategory(), [categoryUUID, "Ha", true, false])
       .catch((err) => console.log(err));
 
     await pool
-      .query(createQuestionType(), [questionTypeUUID, "Multiple Choice"])
+      .query(createQuestionType(), [questionTypeUUID, "Multiple Choice", false])
       .catch((err) => console.log(err));
   });
 
@@ -75,6 +75,7 @@ describe("Question Tests", () => {
           ["2", "3", "4"],
           categoryUUID,
           questionTypeUUID,
+          false,
         ])
         .catch((err) => {
           console.log(err);
@@ -145,6 +146,7 @@ describe("Question Tests", () => {
           question.incorrectAnswers,
           categoryUUID,
           questionTypeUUID,
+          false,
         ])
         .catch();
 
@@ -182,6 +184,7 @@ describe("Question Tests", () => {
             question.incorrectAnswers,
             categoryUUID,
             questionTypeUUID,
+            false,
           ])
           .catch();
       });

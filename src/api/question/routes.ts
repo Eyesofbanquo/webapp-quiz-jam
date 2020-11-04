@@ -50,6 +50,7 @@ questionsRouter.post("/questions", async (request, response) => {
       request.body.incorrectAnswers,
       request.body.categoryId,
       request.body.questionTypeId,
+      false,
     ])
     .then((result) => {
       if (result.rows.length === 0) {

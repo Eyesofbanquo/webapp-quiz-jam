@@ -24,7 +24,7 @@ describe("Question Type Tests", () => {
 
   before(async () => {
     await pool.query(createQuestionTypeTable()).catch();
-    await pool.query(createQuestionType(), [uuid, name]).catch();
+    await pool.query(createQuestionType(), [uuid, name, false]).catch();
   });
 
   after(async () => {
@@ -96,7 +96,7 @@ describe("Question Type Tests", () => {
 
     it(`should NOT post the same question type`, (done) => {
       const controller = new AppController();
-      pool.query(createQuestionType(), [uuidv4(), "same"]).catch();
+      pool.query(createQuestionType(), [uuidv4(), "same", false]).catch();
 
       chai
         .request(controller.app)
@@ -115,7 +115,7 @@ describe("Question Type Tests", () => {
     it(`should delete question type`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool.query(createQuestionType(), [uuid, "delete-me"]).catch();
+      pool.query(createQuestionType(), [uuid, "delete-me", false]).catch();
 
       chai
         .request(controller.app)
@@ -148,7 +148,7 @@ describe("Question Type Tests", () => {
     it(`should delete question and remove from db`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool.query(createQuestionType(), [uuid, "delete-mes"]).catch();
+      pool.query(createQuestionType(), [uuid, "delete-mes", false]).catch();
 
       chai
         .request(controller.app)
