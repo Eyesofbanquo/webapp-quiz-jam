@@ -1,7 +1,7 @@
 import { Pact } from "@pact-foundation/pact";
 const path = require("path");
 
-type PactName = "category" | "question" | "question-type";
+type PactName = "category" | "question" | "question-type" | "difficulty";
 
 export const provider = (name: PactName) =>
   new Pact({
