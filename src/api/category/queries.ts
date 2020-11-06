@@ -33,9 +33,9 @@ export const createCategory = () => {
 };
 
 export const getCategories = () => {
-  return `SELECT * FROM ${getCategoryTable()}`;
+  return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
 };
 
 export const deleteCategory = () => {
-  return `DELETE FROM ${getCategoryTable()} WHERE id = $1 RETURNING *`;
+  return `UPDATE ${getCategoryTable()} SET deleted = true WHERE id = $1 RETURNING *`;
 };

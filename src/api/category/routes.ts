@@ -2,7 +2,12 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { v4 as uuidv4 } from "uuid";
 import pool from "../../database/pool";
-import { createCategory, getCategories, getCategoryTable } from "./queries";
+import {
+  createCategory,
+  deleteCategory,
+  getCategories,
+  getCategoryTable,
+} from "./queries";
 import { create } from "ts-node";
 const cors = require("cors");
 
@@ -87,16 +92,8 @@ export class CategoryRouter {
     });
 
     this.router.delete("/categories/:id", (request, response) => {
-      let query = `DELETE FROM`;
-      if (process.env.NODE_ENV === "test") {
-        query = query + ` ${getCategoryTable()}`;
-      } else {
-        query = query + ` ${getCategoryTable()}`;
-      }
-      query = query + ` WHERE id = $1 RETURNING *`;
-
       pool
-        .query(query, [request.params.id])
+        .query(deleteCategory(), [request.params.id])
         .then((result) => {
           response.send({ success: true, data: result.rows[0] });
         })
