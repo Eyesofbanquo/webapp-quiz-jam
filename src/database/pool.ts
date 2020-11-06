@@ -28,10 +28,17 @@ const createTables = async () => {
 };
 
 const createDefaultValues = async () => {
-  await pool
-    .query(createCategory(), [uuidv4(), "League of Legends", true, false])
-    .catch((err) => console.log(err));
-  await pool.query(createQuestionType(), [uuidv4(), "pairs", false]).catch();
+  await createCategory({
+    id: uuidv4(),
+    name: "League of Legends",
+    in_review: true,
+    deleted: false,
+  }).catch((err) => console.log(err));
+  await createQuestionType({
+    id: uuidv4(),
+    name: "pairs",
+    deleted: false,
+  }).catch();
 };
 
 dotenv.config();

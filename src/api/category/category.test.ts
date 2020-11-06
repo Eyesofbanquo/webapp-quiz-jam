@@ -28,12 +28,15 @@ describe("Category", () => {
   });
   describe("/GET categories", () => {
     beforeEach(async () => {
-      await pool
-        .query(createCategory(), [uuidv4(), "Nightmare", false, false])
-        .catch((err) => {
-          console.log("called");
-          console.log(err);
-        });
+      await createCategory({
+        id: uuidv4(),
+        name: "Nightmare",
+        in_review: false,
+        deleted: false,
+      }).catch((err) => {
+        console.log("called");
+        console.log(err);
+      });
     });
 
     describe("On Success: STATUS 200", () => {
@@ -85,9 +88,12 @@ describe("Category", () => {
 
     describe("On Failure: STATUS 200", () => {
       it(`should not POST a category named "Ha" if it already exists`, (done) => {
-        pool
-          .query(createCategory(), [uuidv4(), "Ha", true, false])
-          .catch((err) => console.log(err));
+        createCategory({
+          id: uuidv4(),
+          name: "Ha",
+          in_review: true,
+          deleted: false,
+        }).catch((err) => console.log(err));
         const controller = new AppController();
         // Act:
         chai
@@ -112,9 +118,12 @@ describe("Category", () => {
     describe("On Success: STATUS 200", () => {
       it(`should DELETE an existing category named "Him"`, (done) => {
         const uuid = uuidv4();
-        pool
-          .query(createCategory(), [uuid, "Him", true, false])
-          .catch((err) => console.log(err));
+        createCategory({
+          id: uuid,
+          name: "Him",
+          in_review: true,
+          deleted: false,
+        }).catch((err) => console.log(err));
 
         const controller = new AppController();
         // Act:

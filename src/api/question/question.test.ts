@@ -34,13 +34,18 @@ describe("Question Tests", () => {
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
-    await pool
-      .query(createCategory(), [categoryUUID, "Ha", true, false])
-      .catch((err) => console.log(err));
+    await createCategory({
+      id: categoryUUID,
+      name: "Ha",
+      in_review: true,
+      deleted: false,
+    }).catch((err) => console.log(err));
 
-    await pool
-      .query(createQuestionType(), [questionTypeUUID, "Multiple Choice", false])
-      .catch((err) => console.log(err));
+    await createQuestionType({
+      id: questionTypeUUID,
+      name: "Multiple Choice",
+      deleted: false,
+    }).catch((err) => console.log(err));
   });
 
   after(async () => {

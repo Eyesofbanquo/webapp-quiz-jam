@@ -34,8 +34,7 @@ questionTypesRouter.get("/question-types", (request, response) => {
 });
 
 questionTypesRouter.post("/question-types", (request, response) => {
-  pool
-    .query(createQuestionType(), [uuidv4(), request.body.name, false])
+  createQuestionType({ id: uuidv4(), name: request.body.name, deleted: false })
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;

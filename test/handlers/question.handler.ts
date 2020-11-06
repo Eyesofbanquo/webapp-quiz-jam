@@ -19,12 +19,19 @@ export const questionsExist = async () => {
   await pool.query(createQuestionTypeTable()).catch();
 
   const categoryId = uuidv4();
-  await pool
-    .query(createCategory(), [categoryId, "Category", true, false])
-    .catch();
+  await createCategory({
+    id: categoryId,
+    name: "Category",
+    in_review: true,
+    deleted: false,
+  }).catch();
 
   const typeId = uuidv4();
-  await pool.query(createQuestionType(), [typeId, "Type", false]).catch();
+  await createQuestionType({
+    id: typeId,
+    name: "Type",
+    deleted: false,
+  }).catch();
 
   await pool.query(createQuestionTable()).catch();
   await createQuestion({
@@ -46,12 +53,19 @@ export const questionsWithNewCategoryAndType = async () => {
   await pool.query(createQuestionTypeTable()).catch();
 
   const categoryId = "54bb3cc4-e940-47bd-ba8b-f49e518333e1";
-  await pool
-    .query(createCategory(), [categoryId, "Category2", true, false])
-    .catch();
+  await createCategory({
+    id: categoryId,
+    name: "Category2",
+    in_review: true,
+    deleted: false,
+  }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
-  await pool.query(createQuestionType(), [typeId, "Type2", false]).catch();
+  await createQuestionType({
+    id: typeId,
+    name: "Type2",
+    deleted: false,
+  }).catch();
 
   await pool.query(createQuestionTable()).catch();
   return Promise.resolve("Question added to database");
@@ -62,12 +76,19 @@ export const questionABCExists = async () => {
   await pool.query(createQuestionTypeTable()).catch();
 
   const categoryId = "54bb3cc4-e940-47bd-ba8b-f49e518333e1";
-  await pool
-    .query(createCategory(), [categoryId, "Category2", true, false])
-    .catch();
+  await createCategory({
+    id: categoryId,
+    name: "Category2",
+    in_review: true,
+    deleted: false,
+  }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
-  await pool.query(createQuestionType(), [typeId, "Type2", false]).catch();
+  await createQuestionType({
+    id: typeId,
+    name: "Type2",
+    deleted: false,
+  }).catch();
 
   await pool.query(createQuestionTable()).catch();
   await createQuestion({
@@ -89,12 +110,19 @@ export const deleteQuestionHandler = async () => {
   await pool.query(createQuestionTypeTable()).catch();
 
   const categoryId = "54bb3cc4-e940-47bd-ba8b-f49e518333e1";
-  await pool
-    .query(createCategory(), [categoryId, "Category2", true, false])
-    .catch();
+  await createCategory({
+    id: categoryId,
+    name: "Category2",
+    in_review: true,
+    deleted: false,
+  }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
-  await pool.query(createQuestionType(), [typeId, "Type2", false]).catch();
+  await createQuestionType({
+    id: typeId,
+    name: "Type2",
+    deleted: false,
+  }).catch();
 
   await pool.query(createQuestionTable()).catch();
 

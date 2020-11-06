@@ -1,4 +1,6 @@
 import { uuid_generate_v4 } from "uuid";
+import pool from "../../database/pool";
+import { Category } from "./schema";
 
 export const CATEGORIES_TABLE = "categories";
 export const CATEGORIES_TABLE_TEST = "category_test";
@@ -24,12 +26,15 @@ export const createCategoriesTable = () =>
   UNIQUE(name)
   )`;
 
-export const createCategory = () => {
-  return `INSERT INTO ${getCategoryTable()} 
+export const createCategory = (props: Category) => {
+  return pool.query(
+    `INSERT INTO ${getCategoryTable()} 
   (id, name, in_review, deleted)
   VALUES ($1, $2, $3, $4)
     ON CONFLICT (name) DO NOTHING
-     RETURNING *`;
+     RETURNING *`,
+    [props.id, props.name, props.in_review, props.deleted]
+  );
 };
 
 export const getCategories = () => {
