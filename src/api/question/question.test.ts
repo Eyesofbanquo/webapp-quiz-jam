@@ -82,7 +82,8 @@ describe("Question Tests", () => {
         deleted: false,
         difficulty: "normal",
       }).catch((err) => {
-        console.log(err);
+        expect(err).to.eql(null);
+        done();
       });
 
       const controller = new AppController();
@@ -95,8 +96,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -123,8 +124,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -151,7 +152,10 @@ describe("Question Tests", () => {
         question_type_uid: questionTypeUUID,
         deleted: false,
         difficulty: "normal",
-      }).catch();
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -162,7 +166,10 @@ describe("Question Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
@@ -203,7 +210,10 @@ describe("Question Tests", () => {
             expect(response.body.data.name).to.eql(question.name);
             done();
           })
-          .catch((err) => done(err));
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
       });
     });
 
@@ -219,7 +229,10 @@ describe("Question Tests", () => {
             expect(response.body.data).to.eql(null);
             done();
           })
-          .catch((err) => done(err));
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
       });
     });
   });

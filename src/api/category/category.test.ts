@@ -56,8 +56,8 @@ describe("Category", () => {
             done();
           })
           .catch((err) => {
-            console.log(err);
-            done(err);
+            expect(err).to.eql(null);
+            done();
           });
       });
     });
@@ -80,8 +80,9 @@ describe("Category", () => {
             expect(response.status).to.eql(201);
             done();
           })
-          .catch((error) => {
-            done(error);
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
           });
       });
     });
@@ -107,8 +108,9 @@ describe("Category", () => {
             expect(response.body.data).to.equal(null);
             done();
           })
-          .catch((error) => {
-            done(error);
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
           });
       });
     });
@@ -123,7 +125,10 @@ describe("Category", () => {
           name: "Him",
           in_review: true,
           deleted: false,
-        }).catch((err) => console.log(err));
+        }).catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
 
         const controller = new AppController();
         // Act:
@@ -137,9 +142,9 @@ describe("Category", () => {
             expect(response.status).to.eql(200);
             done();
           })
-          .catch((error) => {
-            console.log(error);
-            done(error);
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
           });
       });
     });
@@ -160,9 +165,9 @@ describe("Category", () => {
             expect(response.status).to.eql(200);
             done();
           })
-          .catch((error) => {
-            console.log(error);
-            done(error);
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
           });
       });
     });

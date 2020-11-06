@@ -45,7 +45,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -66,7 +67,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -90,7 +92,8 @@ describe("Question Type Tests", () => {
             .catch();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -100,7 +103,10 @@ describe("Question Type Tests", () => {
         id: uuidv4(),
         name: "same",
         deleted: false,
-      }).catch();
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -111,7 +117,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
@@ -123,7 +132,10 @@ describe("Question Type Tests", () => {
         id: uuid,
         name: "delete-me",
         deleted: false,
-      }).catch();
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -133,7 +145,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data.name).to.eql("delete-me");
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
 
     it(`should return null for question type that does not exist`, (done) => {
@@ -148,7 +163,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 });

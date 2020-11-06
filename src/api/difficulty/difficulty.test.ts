@@ -18,6 +18,9 @@ describe("Difficulty Tests", () => {
 
         done();
       })
-      .catch((err) => done());
+      .catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
   });
 });
