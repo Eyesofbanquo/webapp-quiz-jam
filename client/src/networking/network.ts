@@ -45,7 +45,7 @@ export const makeRequest = (props: RequestOptions) => {
     options = optionsWithHeaders;
   }
 
-  console.log(options);
+  console.log(uri, options);
 
   var request = axios(uri, options);
 
