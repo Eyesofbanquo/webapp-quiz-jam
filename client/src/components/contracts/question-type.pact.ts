@@ -162,4 +162,53 @@ describe("Question Type pacts", () => {
       });
     });
   });
+
+  describe("DELETE", () => {
+    describe("ON SUCCESS", () => {
+      beforeEach(async () => {
+        await provider
+          .addInteraction({
+            state:
+              "the question type e998c46c-6f0f-4caa-92ad-8f482859938b exists",
+            uponReceiving: "a request to delete a question type",
+            withRequest: {
+              path: "/api/question-types/e998c46c-6f0f-4caa-92ad-8f482859938b",
+              method: "DELETE",
+            },
+            willRespondWith: {
+              status: 200,
+              body: {
+                success: true,
+                data: {
+                  id: "e998c46c-6f0f-4caa-92ad-8f482859938b",
+                  deleted: true,
+                },
+              },
+            },
+          })
+          .catch();
+      });
+      it("should delete the question type", async () => {
+        await makeRequest({
+          base: "127.0.0.1",
+          port: "4000",
+          endpoint: "question-types",
+          method: "delete",
+          data: {
+            id: "e998c46c-6f0f-4caa-92ad-8f482859938b",
+          },
+        })
+          .onReceive.then((result) => {
+            console.log(result.data.data);
+            expect(result.status).toEqual(200);
+            expect(result.data.data.id).toEqual(
+              "e998c46c-6f0f-4caa-92ad-8f482859938b"
+            );
+            expect(result.data.success).toEqual(true);
+            expect(result.data.data.deleted).toEqual(true);
+          })
+          .catch();
+      });
+    });
+  });
 });

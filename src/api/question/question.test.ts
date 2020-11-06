@@ -194,8 +194,7 @@ describe("Question Tests", () => {
 
         chai
           .request(controller.app)
-          .delete("/api/questions")
-          .send({ id: uuid })
+          .delete(`/api/questions/${uuid}`)
           .then((response) => {
             expect(response.status).to.eql(200);
             expect(response.body.success).to.eql(true);
@@ -212,8 +211,7 @@ describe("Question Tests", () => {
 
         chai
           .request(controller.app)
-          .delete("/api/questions")
-          .send({ id: uuidv4() })
+          .delete(`/api/questions/${uuidv4()}`)
           .then((response) => {
             expect(response.status).to.eql(200);
             expect(response.body.data).to.eql(null);

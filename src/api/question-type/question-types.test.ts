@@ -119,8 +119,7 @@ describe("Question Type Tests", () => {
 
       chai
         .request(controller.app)
-        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
-        .send({ id: uuid })
+        .delete(QUESTION_TYPE_GENERIC_ENDPOINT + `/${uuid}`)
         .then((response) => {
           expect(response.status).to.eql(200);
           expect(response.body.data.name).to.eql("delete-me");
@@ -135,31 +134,11 @@ describe("Question Type Tests", () => {
 
       chai
         .request(controller.app)
-        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
-        .send({ id: uuid })
+        .delete(QUESTION_TYPE_GENERIC_ENDPOINT + `/${uuid}`)
         .then((response) => {
           expect(response.status).to.eql(200);
           expect(response.body.data).to.eql(null);
           done();
-        })
-        .catch((err) => done(err));
-    });
-
-    it(`should delete question and remove from db`, (done) => {
-      const uuid = uuidv4();
-      const controller = new AppController();
-      pool.query(createQuestionType(), [uuid, "delete-mes", false]).catch();
-
-      chai
-        .request(controller.app)
-        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
-        .send({ id: uuid })
-        .then((response) => {
-          pool.query(getQuestionTypes()).then((result) => {
-            const allNames = result.rows.map((row) => row.name);
-            expect(allNames).to.not.contain("delete-mes");
-            done();
-          });
         })
         .catch((err) => done(err));
     });

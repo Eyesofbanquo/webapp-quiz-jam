@@ -158,4 +158,51 @@ describe("Pact with Qizzo API", () => {
       });
     });
   });
+
+  describe("DELETE", () => {
+    describe("ON SUCCESS", () => {
+      const uuid = "97dcb062-ffea-4885-baf3-a04ede5b0037";
+
+      beforeEach(async () => {
+        await provider.addInteraction({
+          state: "category with 97dcb062-ffea-4885-baf3-a04ede5b0037 exists",
+          uponReceiving: "a request to delete a category",
+          withRequest: {
+            path: "/api/categories/97dcb062-ffea-4885-baf3-a04ede5b0037",
+            method: "DELETE",
+          },
+          willRespondWith: {
+            status: 200,
+            body: {
+              success: true,
+              data: {
+                id: "97dcb062-ffea-4885-baf3-a04ede5b0037",
+                name: Matchers.somethingLike("aye"),
+                in_review: Matchers.somethingLike(true),
+                deleted: true,
+              },
+            },
+          },
+        });
+      });
+
+      it("Should delete a category", async () => {
+        const response = await makeRequest({
+          base: "127.0.0.1",
+          port: "4000",
+          endpoint: "categories",
+          method: "delete",
+          data: { id: "97dcb062-ffea-4885-baf3-a04ede5b0037" },
+        }).onReceive.then((response) => {
+          const status = response.status;
+          expect(status).toEqual(200);
+          expect(response.data.success).toEqual(true);
+          expect(response.data.data.id).toEqual(
+            "97dcb062-ffea-4885-baf3-a04ede5b0037"
+          );
+          expect(response.data.data.deleted).toEqual(true);
+        });
+      });
+    });
+  });
 });

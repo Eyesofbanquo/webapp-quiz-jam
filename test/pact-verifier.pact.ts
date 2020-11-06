@@ -17,15 +17,21 @@ import { v4 as uuidv4 } from "uuid";
 import {
   createQuestionType,
   createQuestionTypeTable,
+  deleteQuestionType,
   getQuestionTypeTable,
 } from "../src/api/question-type/queries";
 import {
   categoriesExist,
   categoryNightExist,
+  deleteCategoryWithUUID,
 } from "./handlers/category-handler";
-import { questionTypesExist } from "./handlers/question-type-handler";
+import {
+  deleteQuestionTypeHandler,
+  questionTypesExist,
+} from "./handlers/question-type-handler";
 import { getQuestionTable } from "../src/api/question/queries";
 import {
+  deleteQuestionHandler,
   questionABCExists,
   questionsExist,
   questionsWithNewCategoryAndType,
@@ -61,6 +67,7 @@ describe("Pact Verification", () => {
         stateHandlers: {
           "there are categories": categoriesExist,
           "The category Night already exists": categoryNightExist,
+          "category with 97dcb062-ffea-4885-baf3-a04ede5b0037 exists": deleteCategoryWithUUID,
         },
       };
 
@@ -94,6 +101,7 @@ describe("Pact Verification", () => {
         enablePending: true,
         stateHandlers: {
           "there are question types": questionTypesExist,
+          "the question type e998c46c-6f0f-4caa-92ad-8f482859938b exists": deleteQuestionTypeHandler,
         },
       };
 
@@ -134,6 +142,7 @@ describe("Pact Verification", () => {
           "questions exist": questionsExist,
           "questions exist with new category and question type ids": questionsWithNewCategoryAndType,
           "ABC question exists with new category and question type ids": questionABCExists,
+          "question 49fe1601-660e-47b8-9e49-dc001a020540 exists": deleteQuestionHandler,
         },
       };
 

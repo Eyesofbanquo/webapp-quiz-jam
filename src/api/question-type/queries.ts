@@ -18,7 +18,8 @@ interface QuestionTypeProps {
   table: typeof QUESTION_TYPE_TABLE | typeof QUESTION_TYPE_TABLE_TEST;
 }
 
-export const getQuestionTypes = () => `SELECT * FROM ${getQuestionTypeTable()}`;
+export const getQuestionTypes = () =>
+  `SELECT * FROM ${getQuestionTypeTable()} WHERE deleted = false`;
 
 export const createQuestionTypeTable = () =>
   `CREATE TABLE IF NOT EXISTS ${getQuestionTypeTable()} (id UUID PRIMARY KEY,
@@ -34,4 +35,4 @@ export const createQuestionType = () =>
   `INSERT INTO ${getQuestionTypeTable()} (id, name, deleted) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
 export const deleteQuestionType = () =>
-  `DELETE FROM ${getQuestionTypeTable()} WHERE id = $1 RETURNING *`;
+  `UPDATE ${getQuestionTypeTable()} SET deleted = true WHERE id = $1 RETURNING *`;

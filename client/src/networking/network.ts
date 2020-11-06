@@ -11,15 +11,20 @@ interface RequestOptions {
 
 export const makeRequest = (props: RequestOptions) => {
   const { endpoint, method, data, base, port } = props;
-  const uri = `/api/${endpoint}`;
+  let uri = `/api/${endpoint}`;
   var options = {
     method: method,
   };
-  if (data) {
+
+  /* Add the data. If the data is for a delete then modify URI instead of body */
+  if (data && method !== "delete") {
     var optionsWithData = { ...options, data: data };
     options = optionsWithData;
+  } else if (data && method === "delete") {
+    uri = uri + `/${data.id}`;
   }
 
+  /* This is for injecting a base and port. Used for contract testing */
   if (base && port) {
     var optionsWithBaseAndPort = {
       ...options,
@@ -28,6 +33,7 @@ export const makeRequest = (props: RequestOptions) => {
     options = optionsWithBaseAndPort;
   }
 
+  /* This is for adding headers to POSTABLE data */
   if (method === "post" || method == "delete") {
     var optionsWithHeaders = {
       ...options,
@@ -39,18 +45,9 @@ export const makeRequest = (props: RequestOptions) => {
     options = optionsWithHeaders;
   }
 
-  console.log(options);
+  console.log(uri, options);
 
   var request = axios(uri, options);
-  // var request = axios.request({
-  //   url: "/categories",
-  //   baseURL: "http://127.0.0.1:4000",
-  //   method: "GET",
-  //   headers: {
-  //     Accept: "application/json; charset=utf-8",
-  //     "Content-Type": "application/json; charset=utf-8",
-  //   },
-  // });
 
   return {
     onReceive: request,

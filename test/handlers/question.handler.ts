@@ -85,3 +85,32 @@ export const questionABCExists = async () => {
     .catch();
   return Promise.resolve("Question added to database");
 };
+
+export const deleteQuestionHandler = async () => {
+  await pool.query(createCategoriesTable()).catch();
+  await pool.query(createQuestionTypeTable()).catch();
+
+  const categoryId = "54bb3cc4-e940-47bd-ba8b-f49e518333e1";
+  await pool
+    .query(createCategory(), [categoryId, "Category2", true, false])
+    .catch();
+
+  const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
+  await pool.query(createQuestionType(), [typeId, "Type2", false]).catch();
+
+  await pool.query(createQuestionTable()).catch();
+
+  await pool
+    .query(createQuestion(), [
+      "49fe1601-660e-47b8-9e49-dc001a020540",
+      "ABCDEF",
+      true,
+      ["Correct"],
+      ["incorrect", "wrong", "notright"],
+      categoryId,
+      typeId,
+      false,
+    ])
+    .catch();
+  return Promise.resolve("Question added to database");
+};

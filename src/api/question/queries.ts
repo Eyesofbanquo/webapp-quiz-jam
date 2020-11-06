@@ -39,9 +39,9 @@ export const createQuestion = () => {
 };
 
 export const getQuestions = () => {
-  return `SELECT * FROM ${getQuestionTable()}`;
+  return `SELECT * FROM ${getQuestionTable()} WHERE deleted = false`;
 };
 
 export const deleteQuestion = () => {
-  return `DELETE FROM ${getQuestionTable()} WHERE id = $1 RETURNING *`;
+  return `UPDATE ${getQuestionTable()} SET deleted = true WHERE id = $1 RETURNING *`;
 };

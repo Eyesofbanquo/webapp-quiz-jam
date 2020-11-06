@@ -120,8 +120,7 @@ describe("Category", () => {
         // Act:
         chai
           .request(controller.app)
-          .delete("/api/categories")
-          .send({ id: uuid })
+          .delete(`/api/categories/${uuid}`)
           .then((response) => {
             // Assert
             expect(response.body.success).to.eql(true);
@@ -144,12 +143,11 @@ describe("Category", () => {
         // Act:
         chai
           .request(controller.app)
-          .delete("/api/categories")
-          .send({ id: uuid })
+          .delete(`/api/categories/${uuid}`)
           .then((response) => {
             // Assert
             expect(response.body.success).to.eql(false);
-            expect(response.body.data).to.eql(null);
+            expect(response.body.error.message).to.not.eql(null);
             expect(response.status).to.eql(200);
             done();
           })
