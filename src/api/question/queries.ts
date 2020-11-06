@@ -2,6 +2,7 @@ import { getCategoryTable } from "../../api/category/queries";
 import { uuid_generate_v4 } from "uuid";
 import { getQuestionTypeTable } from "../../api/question-type/queries";
 import pool from "../../database/pool";
+import { Question } from "./schema";
 
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";
@@ -32,17 +33,7 @@ export const createQuestionTable = () =>
   UNIQUE(name)
   )`;
 
-export const createQuestion = (props: {
-  id: string;
-  name: string;
-  in_review: boolean;
-  correct_answers: string[];
-  incorrect_answers: string[];
-  category_uid: string;
-  question_type_uid: string;
-  deleted: boolean;
-  difficulty: string;
-}) => {
+export const createQuestion = (props: Question) => {
   return pool.query(
     `INSERT INTO ${getQuestionTable()} 
   (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty)
