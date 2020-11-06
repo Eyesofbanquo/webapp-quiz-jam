@@ -288,4 +288,48 @@ describe("Question pacts", () => {
       });
     });
   });
+
+  describe("DELETE", () => {
+    describe("ON SUCCESS", () => {
+      beforeEach(async () => {
+        await provider.addInteraction({
+          state: "question 49fe1601-660e-47b8-9e49-dc001a020540 exists",
+          uponReceiving: "a request to delete question",
+          withRequest: {
+            path: "/api/questions/49fe1601-660e-47b8-9e49-dc001a020540",
+            method: "DELETE",
+          },
+          willRespondWith: {
+            status: 200,
+            body: {
+              success: true,
+              data: {
+                id: "49fe1601-660e-47b8-9e49-dc001a020540",
+                deleted: true,
+              },
+            },
+          },
+        });
+      });
+
+      it("should delete question", async () => {
+        await makeRequest({
+          base: "127.0.0.1",
+          port: "4000",
+          endpoint: "questions",
+          method: "delete",
+          data: {
+            id: "49fe1601-660e-47b8-9e49-dc001a020540",
+          },
+        }).onReceive.then((result) => {
+          expect(result.data.success).toBe(true);
+          expect(result.status).toEqual(200);
+          expect(result.data.data.id).toEqual(
+            "49fe1601-660e-47b8-9e49-dc001a020540"
+          );
+          expect(result.data.data.deleted).toEqual(true);
+        });
+      });
+    });
+  });
 });

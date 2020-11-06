@@ -69,9 +69,9 @@ questionsRouter.post("/questions", async (request, response) => {
     });
 });
 
-questionsRouter.delete("/questions", async (request, response) => {
+questionsRouter.delete("/questions/:id", async (request, response) => {
   pool
-    .query(deleteQuestion(), [request.body.id])
+    .query(deleteQuestion(), [request.params.id])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;

@@ -31,6 +31,7 @@ import {
 } from "./handlers/question-type-handler";
 import { getQuestionTable } from "../src/api/question/queries";
 import {
+  deleteQuestionHandler,
   questionABCExists,
   questionsExist,
   questionsWithNewCategoryAndType,
@@ -141,6 +142,7 @@ describe("Pact Verification", () => {
           "questions exist": questionsExist,
           "questions exist with new category and question type ids": questionsWithNewCategoryAndType,
           "ABC question exists with new category and question type ids": questionABCExists,
+          "question 49fe1601-660e-47b8-9e49-dc001a020540 exists": deleteQuestionHandler,
         },
       };
 
