@@ -41,17 +41,17 @@ questionsRouter.post("/questions", async (request, response) => {
     return;
   }
 
-  pool
-    .query(createQuestion(), [
-      uuidv4(),
-      request.body.name,
-      true,
-      request.body.correctAnswers,
-      request.body.incorrectAnswers,
-      request.body.categoryId,
-      request.body.questionTypeId,
-      false,
-    ])
+  createQuestion({
+    id: uuidv4(),
+    name: request.body.name,
+    in_review: true,
+    correct_answers: request.body.correctAnswers,
+    incorrect_answers: request.body.incorrectAnswers,
+    category_uid: request.body.categoryId,
+    question_type_uid: request.body.questionTypeId,
+    deleted: false,
+    difficulty: "normal",
+  })
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;

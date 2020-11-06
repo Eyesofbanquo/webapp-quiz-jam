@@ -1,6 +1,8 @@
 import { getCategoryTable } from "../../api/category/queries";
 import { uuid_generate_v4 } from "uuid";
 import { getQuestionTypeTable } from "../../api/question-type/queries";
+import pool from "../../database/pool";
+import { Question } from "./schema";
 
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";
@@ -27,15 +29,29 @@ export const createQuestionTable = () =>
   category_uid UUID REFERENCES ${getCategoryTable()}(id),
   question_type_uid UUID REFERENCES ${getQuestionTypeTable()}(id),
   deleted BOOLEAN NOT NULL,
+  difficulty TEXT NOT NULL,
   UNIQUE(name)
   )`;
 
-export const createQuestion = () => {
-  return `INSERT INTO ${getQuestionTable()} 
-  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted)
-   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+export const createQuestion = (props: Question) => {
+  return pool.query(
+    `INSERT INTO ${getQuestionTable()} 
+  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty)
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     ON CONFLICT (name) DO NOTHING
-     RETURNING *`;
+     RETURNING *`,
+    [
+      props.id,
+      props.name,
+      props.in_review,
+      props.correct_answers,
+      props.incorrect_answers,
+      props.category_uid,
+      props.question_type_uid,
+      props.deleted,
+      props.difficulty,
+    ]
+  );
 };
 
 export const getQuestions = () => {

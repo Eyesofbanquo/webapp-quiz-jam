@@ -6,5 +6,6 @@
 export interface Category {
   name: string;
   id: string;
-  inReview: boolean;
+  in_review: boolean;
+  deleted: boolean;
 }

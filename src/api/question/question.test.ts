@@ -34,13 +34,18 @@ describe("Question Tests", () => {
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
-    await pool
-      .query(createCategory(), [categoryUUID, "Ha", true, false])
-      .catch((err) => console.log(err));
+    await createCategory({
+      id: categoryUUID,
+      name: "Ha",
+      in_review: true,
+      deleted: false,
+    }).catch((err) => console.log(err));
 
-    await pool
-      .query(createQuestionType(), [questionTypeUUID, "Multiple Choice", false])
-      .catch((err) => console.log(err));
+    await createQuestionType({
+      id: questionTypeUUID,
+      name: "Multiple Choice",
+      deleted: false,
+    }).catch((err) => console.log(err));
   });
 
   after(async () => {
@@ -66,20 +71,20 @@ describe("Question Tests", () => {
     it("should GET all questions", (done) => {
       /** ! Assume */
       const uuid = uuidv4();
-      pool
-        .query(createQuestion(), [
-          uuid,
-          "Nightmare",
-          true,
-          ["1"],
-          ["2", "3", "4"],
-          categoryUUID,
-          questionTypeUUID,
-          false,
-        ])
-        .catch((err) => {
-          console.log(err);
-        });
+      createQuestion({
+        id: uuid,
+        name: "Nightmare",
+        in_review: true,
+        correct_answers: ["1"],
+        incorrect_answers: ["2", "3", "4"],
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       const controller = new AppController();
 
@@ -91,8 +96,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -119,8 +124,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -137,18 +142,20 @@ describe("Question Tests", () => {
         questionTypeId: questionTypeUUID,
       };
 
-      pool
-        .query(createQuestion(), [
-          uuid,
-          question.name,
-          true,
-          question.correctAnswers,
-          question.incorrectAnswers,
-          categoryUUID,
-          questionTypeUUID,
-          false,
-        ])
-        .catch();
+      createQuestion({
+        id: uuid,
+        name: question.name,
+        in_review: true,
+        correct_answers: question.correctAnswers,
+        incorrect_answers: question.incorrectAnswers,
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -159,7 +166,10 @@ describe("Question Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
@@ -175,18 +185,17 @@ describe("Question Tests", () => {
       };
 
       beforeEach(async () => {
-        await pool
-          .query(createQuestion(), [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-            false,
-          ])
-          .catch();
+        await createQuestion({
+          id: uuid,
+          name: question.name,
+          in_review: true,
+          correct_answers: question.correctAnswers,
+          incorrect_answers: question.incorrectAnswers,
+          category_uid: categoryUUID,
+          question_type_uid: questionTypeUUID,
+          deleted: false,
+          difficulty: "normal",
+        }).catch();
       });
 
       it(`should delete the entry`, (done) => {
@@ -201,7 +210,10 @@ describe("Question Tests", () => {
             expect(response.body.data.name).to.eql(question.name);
             done();
           })
-          .catch((err) => done(err));
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
       });
     });
 
@@ -217,7 +229,10 @@ describe("Question Tests", () => {
             expect(response.body.data).to.eql(null);
             done();
           })
-          .catch((err) => done(err));
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
       });
     });
   });

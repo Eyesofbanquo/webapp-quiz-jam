@@ -8,7 +8,23 @@ import {
 import * as dotenv from "dotenv";
 import { createCategory, createCategoriesTable } from "../api/category/queries";
 
+dotenv.config();
+
 const DATABASE = "qizzo";
+
+let databaseConfig;
+if (process.env.TRAVIS_DATABASE) {
+  databaseConfig = { connectionString: process.env.TRAVIS_DATABASE };
+} else if (process.env.DATABASE_URL) {
+  databaseConfig = { connectionString: process.env.DATABASE_URL };
+} else {
+  databaseConfig = { connectionString: process.env.LOCAL_DATABASE };
+}
+const pool = new Pool(databaseConfig);
+
+export default pool;
+
+/* These should be in their own helper files */
 
 const createProductionDatabase = async () => {
   await pool
@@ -28,23 +44,22 @@ const createTables = async () => {
 };
 
 const createDefaultValues = async () => {
-  await pool
-    .query(createCategory(), [uuidv4(), "League of Legends", true, false])
+  await createCategory({
+    id: uuidv4(),
+    name: "League of Legends",
+    in_review: true,
+    deleted: false,
+  })
+    .then((result) => {
+      console.log(result.rows);
+    })
     .catch((err) => console.log(err));
-  await pool.query(createQuestionType(), [uuidv4(), "pairs", false]).catch();
+  await createQuestionType({
+    id: uuidv4(),
+    name: "pairs",
+    deleted: false,
+  }).catch();
 };
-
-dotenv.config();
-
-let databaseConfig;
-if (process.env.TRAVIS_DATABASE) {
-  databaseConfig = { connectionString: process.env.TRAVIS_DATABASE };
-} else if (process.env.DATABASE_URL) {
-  databaseConfig = { connectionString: process.env.DATABASE_URL };
-} else {
-  databaseConfig = { connectionString: process.env.LOCAL_DATABASE };
-}
-const pool = new Pool(databaseConfig);
 
 if (process.env.DATABASE_URL) {
   console.log("prod");
@@ -64,10 +79,6 @@ if (
   process.env.NODE_ENV !== "test" &&
   process.env.NODE_ENV !== "pact"
 ) {
-  console.log("local");
-
   createTables().catch();
   createDefaultValues().catch();
 }
-
-export default pool;

@@ -150,4 +150,34 @@ describe("Pact Verification", () => {
       console.log("Pact Verification Complete!");
     });
   });
+
+  describe("Difficulty Verification", () => {
+    let pacts;
+    before((done) => {
+      glob("./webappjam-pacts/*-@(difficulty)-*.json", (error, files) => {
+        pacts = files.map((file) => path.resolve("./", file));
+        console.log(files, "bruh");
+
+        done();
+      });
+    });
+
+    it("should validate the expectations of the consumer", async () => {
+      const opts: VerifierOptions = {
+        provider: "QizzoProvider",
+        providerBaseUrl: `http://localhost:5000`,
+        pactUrls: pacts,
+        logLevel: "info",
+        enablePending: true,
+        stateHandlers: {
+          "Difficulty exists": async () => {
+            return Promise.resolve("Difficulty is loaded already");
+          },
+        },
+      };
+
+      await new Verifier(opts).verifyProvider().finally(async () => {});
+      console.log("Pact Verification Complete!");
+    });
+  });
 });

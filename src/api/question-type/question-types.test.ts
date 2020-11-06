@@ -24,7 +24,7 @@ describe("Question Type Tests", () => {
 
   before(async () => {
     await pool.query(createQuestionTypeTable()).catch();
-    await pool.query(createQuestionType(), [uuid, name, false]).catch();
+    await createQuestionType({ id: uuid, name: name, deleted: false }).catch();
   });
 
   after(async () => {
@@ -45,7 +45,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -66,7 +67,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -90,13 +92,21 @@ describe("Question Type Tests", () => {
             .catch();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
     it(`should NOT post the same question type`, (done) => {
       const controller = new AppController();
-      pool.query(createQuestionType(), [uuidv4(), "same", false]).catch();
+      createQuestionType({
+        id: uuidv4(),
+        name: "same",
+        deleted: false,
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -107,7 +117,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
@@ -115,7 +128,14 @@ describe("Question Type Tests", () => {
     it(`should delete question type`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool.query(createQuestionType(), [uuid, "delete-me", false]).catch();
+      createQuestionType({
+        id: uuid,
+        name: "delete-me",
+        deleted: false,
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
@@ -125,7 +145,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data.name).to.eql("delete-me");
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
 
     it(`should return null for question type that does not exist`, (done) => {
@@ -140,7 +163,10 @@ describe("Question Type Tests", () => {
           expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 });

@@ -50,8 +50,12 @@ export class CategoryRouter {
       const receivedBody = request.body as { name: string };
       /* Check that the item doesn't already exist first */
 
-      pool
-        .query(createCategory(), [uuidv4(), receivedBody.name, true, false])
+      createCategory({
+        id: uuidv4(),
+        name: receivedBody.name,
+        in_review: true,
+        deleted: false,
+      })
         .then((res) => {
           if (res.rows.length === 0) {
             response.statusCode = 200;

@@ -1,3 +1,6 @@
+import { QuestionType } from "./schema";
+import pool from "../../database/pool";
+
 export const QUESTION_TYPE_TABLE = "question_types";
 export const QUESTION_TYPE_TABLE_TEST = "question_type_test";
 
@@ -31,8 +34,11 @@ export const createQuestionTypeTable = () =>
 export const dropQuestionTypeTable = () =>
   `DROP TABLE ${getQuestionTypeTable()}`;
 
-export const createQuestionType = () =>
-  `INSERT INTO ${getQuestionTypeTable()} (id, name, deleted) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
+export const createQuestionType = (props: QuestionType) =>
+  pool.query(
+    `INSERT INTO ${getQuestionTypeTable()} (id, name, deleted) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
+    [props.id, props.name, props.deleted]
+  );
 
 export const deleteQuestionType = () =>
   `UPDATE ${getQuestionTypeTable()} SET deleted = true WHERE id = $1 RETURNING *`;
