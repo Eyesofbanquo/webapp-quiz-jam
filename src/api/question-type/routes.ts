@@ -52,9 +52,9 @@ questionTypesRouter.post("/question-types", (request, response) => {
     });
 });
 
-questionTypesRouter.delete("/question-types", (request, response) => {
+questionTypesRouter.delete("/question-types/:id", (request, response) => {
   pool
-    .query(deleteQuestionType(), [request.body.id])
+    .query(deleteQuestionType(), [request.params.id])
     .then((result) => {
       if (result.rows.length === 0) {
         response.statusCode = 200;
@@ -63,7 +63,7 @@ questionTypesRouter.delete("/question-types", (request, response) => {
       }
 
       response.statusCode = 200;
-      response.send({ sucess: false, data: result.rows[0] });
+      response.send({ success: true, data: result.rows[0] });
     })
     .catch((err) => {
       response.statusCode = 404;
