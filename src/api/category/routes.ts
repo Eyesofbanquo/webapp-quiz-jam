@@ -68,33 +68,17 @@ export class CategoryRouter {
   }
 
   delete() {
-    this.router.delete("/categories", (request, response) => {
-      let query = `DELETE FROM`;
-      if (process.env.NODE_ENV === "test") {
-        query = query + ` ${getCategoryTable()}`;
-      } else {
-        query = query + ` ${getCategoryTable()}`;
-      }
-      query = query + ` WHERE id = $1 RETURNING *`;
-
-      pool
-        .query(query, [request.body.id])
-        .then((result) => {
-          if (result.rows.length === 0) {
-            response.send({ success: false, data: null });
-            return;
-          }
-          response.send({ success: true, data: result.rows[0] });
-        })
-        .catch((error) => {
-          response.send({ success: false, data: null });
-        });
-    });
-
     this.router.delete("/categories/:id", (request, response) => {
       pool
         .query(deleteCategory(), [request.params.id])
         .then((result) => {
+          if (result.rows.length === 0) {
+            response.send({
+              success: false,
+              error: { message: "Category does not exist" },
+            });
+            return;
+          }
           response.send({ success: true, data: result.rows[0] });
         })
         .catch((error) => {
