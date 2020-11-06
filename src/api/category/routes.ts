@@ -49,6 +49,15 @@ export class CategoryRouter {
     this.router.post("/categories", (request, response) => {
       const receivedBody = request.body as { name: string };
       /* Check that the item doesn't already exist first */
+      let query = `INSERT INTO`;
+      if (process.env.NODE_ENV === "test") {
+        query = query + ` ${CategoryRouter.TEST_TABLE}`;
+      } else {
+        query = query + ` ${CategoryRouter.TABLE}`;
+      }
+      query =
+        query +
+        ` (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
       createCategory({
         id: uuidv4(),

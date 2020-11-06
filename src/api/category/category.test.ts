@@ -13,6 +13,7 @@ chai.use(require("chai-http"));
 var should = chai.should();
 
 const categories = require("../../stubs/categories.json");
+const TABLE = "category_test";
 describe("Category", () => {
   beforeEach(async () => {
     await pool
