@@ -22,7 +22,7 @@ questionTypesRouter.use(bodyParser.json());
 
 questionTypesRouter.get("/question-types", (request, response) => {
   pool
-    .query(getQuestionTypes({ table: table }))
+    .query(getQuestionTypes())
     .then((result) => {
       response.statusCode = 200;
       response.send({ success: true, data: result.rows });
@@ -34,11 +34,10 @@ questionTypesRouter.get("/question-types", (request, response) => {
 });
 
 questionTypesRouter.post("/question-types", (request, response) => {
-  pool
-    .query(createQuestionType({ table: table }), [uuidv4(), request.body.name])
+  createQuestionType({ id: uuidv4(), name: request.body.name, deleted: false })
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 304;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
@@ -52,18 +51,18 @@ questionTypesRouter.post("/question-types", (request, response) => {
     });
 });
 
-questionTypesRouter.delete("/question-types", (request, response) => {
+questionTypesRouter.delete("/question-types/:id", (request, response) => {
   pool
-    .query(deleteQuestionType({ table: table }), [request.body.id])
+    .query(deleteQuestionType(), [request.params.id])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 404;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
 
       response.statusCode = 200;
-      response.send({ sucess: false, data: result.rows[0] });
+      response.send({ success: true, data: result.rows[0] });
     })
     .catch((err) => {
       response.statusCode = 404;

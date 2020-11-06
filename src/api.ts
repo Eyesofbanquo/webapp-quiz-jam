@@ -5,6 +5,7 @@ import { CategoryRouter } from "./api/category/routes";
 import { multipleChoiceRouter } from "./api/multiple-choice/routes";
 import { questionsRouter } from "./api/question/routes";
 import { questionTypesRouter } from "./api/question-type/routes";
+import { difficultyRouter } from "./api/difficulty/routes";
 
 export class APIController {
   api: express.Router;
@@ -21,5 +22,7 @@ export class APIController {
     this.api.use("/", questionsRouter);
 
     this.api.use("/", questionTypesRouter);
+
+    this.api.use("/", difficultyRouter);
   }
 }

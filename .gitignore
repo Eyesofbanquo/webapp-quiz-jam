@@ -17,6 +17,8 @@ pids
 
 .postman.json
 
+webappjam-pacts
+
 qizzoapp_com.crt
 server.key
 
@@ -128,3 +130,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 node_modules
+
+client/pacts

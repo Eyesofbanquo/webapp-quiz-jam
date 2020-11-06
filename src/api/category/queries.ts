@@ -1,32 +1,46 @@
 import { uuid_generate_v4 } from "uuid";
+import pool from "../../database/pool";
+import { Category } from "./schema";
 
 export const CATEGORIES_TABLE = "categories";
 export const CATEGORIES_TABLE_TEST = "category_test";
+export const CATEGORIES_TABLE_PACT = "category_pact";
 
-interface CategoryProps {
-  table: typeof CATEGORIES_TABLE | typeof CATEGORIES_TABLE_TEST;
-}
+export const getCategoryTable = () => {
+  switch (process.env.NODE_ENV) {
+    case "test":
+      return CATEGORIES_TABLE_TEST;
+    case "pact":
+      return CATEGORIES_TABLE_PACT;
+    default:
+      return CATEGORIES_TABLE;
+  }
+};
 
-export const createCategoriesTable = (props: CategoryProps) =>
-  `CREATE TABLE IF NOT EXISTS ${props.table}
+export const createCategoriesTable = () =>
+  `CREATE TABLE IF NOT EXISTS ${getCategoryTable()}
 (id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  inReview BOOLEAN NOT NULL,
+  in_review BOOLEAN NOT NULL,
+  deleted BOOLEAN NOT NULL,
   UNIQUE(name)
   )`;
 
-export const createCategory = (props: CategoryProps) => {
-  return `INSERT INTO ${props.table} 
-  (id, name, inReview)
-  VALUES ($1, $2, $3)
+export const createCategory = (props: Category) => {
+  return pool.query(
+    `INSERT INTO ${getCategoryTable()} 
+  (id, name, in_review, deleted)
+  VALUES ($1, $2, $3, $4)
     ON CONFLICT (name) DO NOTHING
-     RETURNING *`;
+     RETURNING *`,
+    [props.id, props.name, props.in_review, props.deleted]
+  );
 };
 
-export const getCategories = (props: CategoryProps) => {
-  return `SELECT * FROM ${props.table}`;
+export const getCategories = () => {
+  return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
 };
 
-export const deleteCategory = (props: CategoryProps) => {
-  return `DELETE FROM ${props.table} WHERE id = $1 RETURNING *`;
+export const deleteCategory = () => {
+  return `UPDATE ${getCategoryTable()} SET deleted = true WHERE id = $1 RETURNING *`;
 };

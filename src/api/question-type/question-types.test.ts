@@ -23,14 +23,12 @@ describe("Question Type Tests", () => {
   const name = "matching";
 
   before(async () => {
-    await pool.query(createQuestionTypeTable({ table: TABLE })).catch();
-    await pool
-      .query(createQuestionType({ table: TABLE }), [uuid, name])
-      .catch();
+    await pool.query(createQuestionTypeTable()).catch();
+    await createQuestionType({ id: uuid, name: name, deleted: false }).catch();
   });
 
   after(async () => {
-    await pool.query(dropQuestionTypeTable({ table: TABLE })).catch();
+    await pool.query(dropQuestionTypeTable()).catch();
   });
 
   describe("/GET", () => {
@@ -47,7 +45,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -68,7 +67,8 @@ describe("Question Type Tests", () => {
           done();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -83,7 +83,7 @@ describe("Question Type Tests", () => {
         .then((response) => {
           const check = response.body as QuestionTypeResponse;
           pool
-            .query(getQuestionTypes({ table: TABLE }))
+            .query(getQuestionTypes())
             .then((result) => {
               const allNames = result.rows.map((data) => data.name);
               expect(allNames).to.contain(typeName);
@@ -92,25 +92,35 @@ describe("Question Type Tests", () => {
             .catch();
         })
         .catch((err) => {
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
     it(`should NOT post the same question type`, (done) => {
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuidv4(), "same"])
-        .catch();
+      createQuestionType({
+        id: uuidv4(),
+        name: "same",
+        deleted: false,
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
         .post(QUESTION_TYPE_GENERIC_ENDPOINT)
         .send({ name: "same" })
         .then((response) => {
-          expect(response.status).to.eql(304);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
@@ -118,41 +128,45 @@ describe("Question Type Tests", () => {
     it(`should delete question type`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuid, "delete-me"])
-        .catch();
+      createQuestionType({
+        id: uuid,
+        name: "delete-me",
+        deleted: false,
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
-        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
-        .send({ id: uuid })
+        .delete(QUESTION_TYPE_GENERIC_ENDPOINT + `/${uuid}`)
         .then((response) => {
           expect(response.status).to.eql(200);
           expect(response.body.data.name).to.eql("delete-me");
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
 
-    it(`should delete question and remove from db`, (done) => {
+    it(`should return null for question type that does not exist`, (done) => {
       const uuid = uuidv4();
       const controller = new AppController();
-      pool
-        .query(createQuestionType({ table: TABLE }), [uuid, "delete-mes"])
-        .catch();
 
       chai
         .request(controller.app)
-        .delete(QUESTION_TYPE_GENERIC_ENDPOINT)
-        .send({ id: uuid })
+        .delete(QUESTION_TYPE_GENERIC_ENDPOINT + `/${uuid}`)
         .then((response) => {
-          pool.query(getQuestionTypes({ table: TABLE })).then((result) => {
-            const allNames = result.rows.map((row) => row.name);
-            expect(allNames).to.not.contain("delete-mes");
-            done();
-          });
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
+          done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 });

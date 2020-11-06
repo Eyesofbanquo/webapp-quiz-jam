@@ -6,7 +6,15 @@ import { expect } from "chai";
 import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 import { expectation } from "sinon";
-import { createQuestion } from "./queries";
+import { createQuestion, createQuestionTable } from "./queries";
+import {
+  createQuestionType,
+  createQuestionTypeTable,
+} from "../../api/question-type/queries";
+import {
+  createCategoriesTable,
+  createCategory,
+} from "../../api/category/queries";
 
 const TABLE = "questions_test";
 describe("Question Tests", () => {
@@ -15,42 +23,29 @@ describe("Question Tests", () => {
   before(async () => {
     categoryUUID = uuidv4();
     questionTypeUUID = uuidv4();
+
     await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS category_test
-    (id UUID PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    inReview BOOLEAN NOT NULL,
-    UNIQUE(name)
-    )`
-      )
+      .query(createCategoriesTable())
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
     await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS question_type_test
-    (id UUID PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    UNIQUE(name)
-    )`
-      )
+      .query(createQuestionTypeTable())
       .then((res) => console.log(""))
       .catch((err) => console.log(err));
 
-    pool
-      .query(
-        `INSERT INTO category_test (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`,
-        [categoryUUID, "Ha", true]
-      )
-      .catch((err) => console.log(err));
+    await createCategory({
+      id: categoryUUID,
+      name: "Ha",
+      in_review: true,
+      deleted: false,
+    }).catch((err) => console.log(err));
 
-    pool
-      .query(
-        `INSERT INTO question_type_test (id, name) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING RETURNING *`,
-        [questionTypeUUID, "Multiple Choice"]
-      )
-      .catch((err) => console.log(err));
+    await createQuestionType({
+      id: questionTypeUUID,
+      name: "Multiple Choice",
+      deleted: false,
+    }).catch((err) => console.log(err));
   });
 
   after(async () => {
@@ -63,20 +58,7 @@ describe("Question Tests", () => {
   });
 
   beforeEach(async () => {
-    await pool
-      .query(
-        `CREATE TABLE IF NOT EXISTS ${TABLE}
-        (id UUID PRIMARY KEY,
-          name TEXT NOT NULL,
-          inReview BOOLEAN NOT NULL,
-          correctAnswers TEXT ARRAY NOT NULL,
-          incorrectAnswers TEXT ARRAY NOT NULL,
-          category_uid UUID REFERENCES category_test(id),
-          question_type_uid UUID REFERENCES question_type_test(id),
-          UNIQUE(name)
-          )`
-      )
-      .catch((err) => console.log(err));
+    await pool.query(createQuestionTable()).catch((err) => console.log(err));
   });
 
   afterEach(async () => {
@@ -89,19 +71,20 @@ describe("Question Tests", () => {
     it("should GET all questions", (done) => {
       /** ! Assume */
       const uuid = uuidv4();
-      pool
-        .query(createQuestion({ table: TABLE }), [
-          uuid,
-          "Nightmare",
-          true,
-          ["1"],
-          ["2", "3", "4"],
-          categoryUUID,
-          questionTypeUUID,
-        ])
-        .catch((err) => {
-          console.log(err);
-        });
+      createQuestion({
+        id: uuid,
+        name: "Nightmare",
+        in_review: true,
+        correct_answers: ["1"],
+        incorrect_answers: ["2", "3", "4"],
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       const controller = new AppController();
 
@@ -113,8 +96,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
   });
@@ -141,8 +124,8 @@ describe("Question Tests", () => {
           done();
         })
         .catch((err) => {
-          console.log(err);
-          done(err);
+          expect(err).to.eql(null);
+          done();
         });
     });
 
@@ -159,39 +142,40 @@ describe("Question Tests", () => {
         questionTypeId: questionTypeUUID,
       };
 
-      pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-          ]
-        )
-        .catch();
+      createQuestion({
+        id: uuid,
+        name: question.name,
+        in_review: true,
+        correct_answers: question.correctAnswers,
+        incorrect_answers: question.incorrectAnswers,
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch((err) => {
+        expect(err).to.eql(null);
+        done();
+      });
 
       chai
         .request(controller.app)
         .post("/api/questions")
         .send(question)
         .then((response) => {
-          expect(response.status).to.eql(304);
+          expect(response.status).to.eql(200);
+          expect(response.body.data).to.eql(null);
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => {
+          expect(err).to.eql(null);
+          done();
+        });
     });
   });
 
   describe("/DELETE", () => {
-    it(`should delete an entry from the database if it exists`, (done) => {
-      const controller = new AppController();
-
+    describe("if entry already exists", () => {
       const uuid = uuidv4();
-
       const question = {
         name: "NightmareQuestion",
         correctAnswers: ["1"],
@@ -200,46 +184,56 @@ describe("Question Tests", () => {
         questionTypeId: questionTypeUUID,
       };
 
-      pool
-        .query(
-          `INSERT INTO ${TABLE} (id, name, inReview, correctAnswers, incorrectAnswers, category_uid, question_type_uid) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-          ]
-        )
-        .catch();
+      beforeEach(async () => {
+        await createQuestion({
+          id: uuid,
+          name: question.name,
+          in_review: true,
+          correct_answers: question.correctAnswers,
+          incorrect_answers: question.incorrectAnswers,
+          category_uid: categoryUUID,
+          question_type_uid: questionTypeUUID,
+          deleted: false,
+          difficulty: "normal",
+        }).catch();
+      });
 
-      chai
-        .request(controller.app)
-        .delete("/api/questions")
-        .send({ id: uuid })
-        .then((response) => {
-          expect(response.status).to.eql(200);
-          expect(response.body.success).to.eql(true);
-          expect(response.body.data.name).to.eql(question.name);
-          done();
-        })
-        .catch((err) => done(err));
+      it(`should delete the entry`, (done) => {
+        const controller = new AppController();
+
+        chai
+          .request(controller.app)
+          .delete(`/api/questions/${uuid}`)
+          .then((response) => {
+            expect(response.status).to.eql(200);
+            expect(response.body.success).to.eql(true);
+            expect(response.body.data.name).to.eql(question.name);
+            done();
+          })
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
+      });
     });
 
-    it(`should return a NOT FOUND if the entry doesn't exist`, (done) => {
-      const controller = new AppController();
+    describe("if the entry does not exist", () => {
+      it(`should return null data`, (done) => {
+        const controller = new AppController();
 
-      chai
-        .request(controller.app)
-        .delete("/api/questions")
-        .send({ id: uuidv4() })
-        .then((response) => {
-          expect(response.status).to.eql(404);
-          done();
-        })
-        .catch((err) => done(err));
+        chai
+          .request(controller.app)
+          .delete(`/api/questions/${uuidv4()}`)
+          .then((response) => {
+            expect(response.status).to.eql(200);
+            expect(response.body.data).to.eql(null);
+            done();
+          })
+          .catch((err) => {
+            expect(err).to.eql(null);
+            done();
+          });
+      });
     });
   });
 });

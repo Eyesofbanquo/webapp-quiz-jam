@@ -1,61 +1,16 @@
 import { Pool } from "pg";
 import { v4 as uuidv4 } from "uuid";
-import { createQuestionTable, QUESTION_TABLE } from "../api/question/queries";
+import { createQuestionTable } from "../api/question/queries";
 import {
-  QUESTION_TYPE_TABLE,
   createQuestionTypeTable,
   createQuestionType,
 } from "../api/question-type/queries";
 import * as dotenv from "dotenv";
-import { createCategory, CATEGORIES_TABLE } from "../api/category/queries";
-
-const DATABASE = "qizzo";
-
-const createProductionDatabase = async () => {
-  await pool
-    .query(`CREATE DATABASE ${DATABASE}`)
-    .catch((err) => console.log(err));
-};
-
-const createTables = async () => {
-  await pool
-    .query(
-      `CREATE TABLE IF NOT EXISTS ${CATEGORIES_TABLE}
-  (id UUID PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  inReview BOOLEAN NOT NULL,
-  UNIQUE(name)
-  )`
-    )
-    .then((res) => console.log(""))
-    .catch((err) => console.log(err));
-
-  await pool
-    .query(createQuestionTypeTable({ table: QUESTION_TYPE_TABLE }))
-    .catch((err) => console.log(err));
-
-  await pool
-    .query(createQuestionTable({ table: QUESTION_TABLE }))
-    .catch((err) => console.log(err));
-};
-
-const createDefaultValues = async () => {
-  await pool
-    .query(createCategory({ table: CATEGORIES_TABLE }), [
-      uuidv4(),
-      "League of Legends",
-      true,
-    ])
-    .catch((err) => console.log(err));
-  await pool
-    .query(createQuestionType({ table: QUESTION_TYPE_TABLE }), [
-      uuidv4(),
-      "pairs",
-    ])
-    .catch();
-};
+import { createCategory, createCategoriesTable } from "../api/category/queries";
 
 dotenv.config();
+
+const DATABASE = "qizzo";
 
 let databaseConfig;
 if (process.env.TRAVIS_DATABASE) {
@@ -67,16 +22,63 @@ if (process.env.TRAVIS_DATABASE) {
 }
 const pool = new Pool(databaseConfig);
 
+export default pool;
+
+/* These should be in their own helper files */
+
+const createProductionDatabase = async () => {
+  await pool
+    .query(`CREATE DATABASE ${DATABASE}`)
+    .catch((err) => console.log(err));
+};
+
+const createTables = async () => {
+  await pool
+    .query(createCategoriesTable())
+    .then((res) => console.log(""))
+    .catch((err) => console.log(err));
+
+  await pool.query(createQuestionTypeTable()).catch((err) => console.log(err));
+
+  await pool.query(createQuestionTable()).catch((err) => console.log(err));
+};
+
+const createDefaultValues = async () => {
+  await createCategory({
+    id: uuidv4(),
+    name: "League of Legends",
+    in_review: true,
+    deleted: false,
+  })
+    .then((result) => {
+      console.log(result.rows);
+    })
+    .catch((err) => console.log(err));
+  await createQuestionType({
+    id: uuidv4(),
+    name: "pairs",
+    deleted: false,
+  }).catch();
+};
+
 if (process.env.DATABASE_URL) {
-  // create-tables
+  console.log("prod");
   createProductionDatabase().catch();
   createTables().catch();
   createDefaultValues().catch();
 }
 
-if (process.env.LOCAL_DATABASE) {
+/* Only need to make sure the database exists while the unit tests control the tables */
+if (process.env.TRAVIS_DATABASE) {
+  createProductionDatabase().catch();
+}
+
+/* This is to prevent the unit tests from creating unnecessary tables on launch */
+if (
+  process.env.LOCAL_DATABASE &&
+  process.env.NODE_ENV !== "test" &&
+  process.env.NODE_ENV !== "pact"
+) {
   createTables().catch();
   createDefaultValues().catch();
 }
-
-export default pool;

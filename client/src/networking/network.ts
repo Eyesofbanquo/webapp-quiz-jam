@@ -2,21 +2,55 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface RequestOptions {
-  endpoint: "multiple" | "categories" | "question-types" | "questions";
+  base?: string;
+  port?: string;
+  endpoint:
+    | "multiple"
+    | "categories"
+    | "question-types"
+    | "questions"
+    | "difficulty";
   method: "get" | "post" | "delete" | "put";
   data?: any;
 }
 
 export const makeRequest = (props: RequestOptions) => {
-  const { endpoint, method, data } = props;
-  const uri = `/api/${endpoint}`;
+  const { endpoint, method, data, base, port } = props;
+  let uri = `/api/${endpoint}`;
   var options = {
     method: method,
   };
-  if (data) {
+
+  /* Add the data. If the data is for a delete then modify URI instead of body */
+  if (data && method !== "delete") {
     var optionsWithData = { ...options, data: data };
     options = optionsWithData;
+  } else if (data && method === "delete") {
+    uri = uri + `/${data.id}`;
   }
+
+  /* This is for injecting a base and port. Used for contract testing */
+  if (base && port) {
+    var optionsWithBaseAndPort = {
+      ...options,
+      baseURL: `http://${base}:${port}`,
+    };
+    options = optionsWithBaseAndPort;
+  }
+
+  /* This is for adding headers to POSTABLE data */
+  if (method === "post" || method == "delete") {
+    var optionsWithHeaders = {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+    options = optionsWithHeaders;
+  }
+
+  console.log(uri, options);
 
   var request = axios(uri, options);
 

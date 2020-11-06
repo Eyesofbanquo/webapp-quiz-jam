@@ -16,11 +16,8 @@ export const questionsRouter = express.Router();
 questionsRouter.use(bodyParser.json());
 
 questionsRouter.get("/questions", (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
-
   pool
-    .query(getQuestions({ table: table }))
+    .query(getQuestions())
     .then((result) => {
       response.statusCode = 200;
       response.send({ success: true, data: result.rows });
@@ -32,22 +29,32 @@ questionsRouter.get("/questions", (request, response) => {
 });
 
 questionsRouter.post("/questions", async (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
+  if (request.body.categoryId.length === 0) {
+    response.statusCode = 200;
+    response.send({ success: false, error: "Please provide a category" });
+    return;
+  }
 
-  pool
-    .query(createQuestion({ table: table }), [
-      uuidv4(),
-      request.body.name,
-      true,
-      request.body.correctAnswers,
-      request.body.incorrectAnswers,
-      request.body.categoryId,
-      request.body.questionTypeId,
-    ])
+  if (request.body.questionTypeId.length === 0) {
+    response.statusCode = 200;
+    response.send({ success: false, error: "Please provide a question type" });
+    return;
+  }
+
+  createQuestion({
+    id: uuidv4(),
+    name: request.body.name,
+    in_review: true,
+    correct_answers: request.body.correctAnswers,
+    incorrect_answers: request.body.incorrectAnswers,
+    category_uid: request.body.categoryId,
+    question_type_uid: request.body.questionTypeId,
+    deleted: false,
+    difficulty: "normal",
+  })
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 304;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
@@ -56,21 +63,18 @@ questionsRouter.post("/questions", async (request, response) => {
       response.send({ success: true, data: result.rows[0] });
     })
     .catch((error) => {
-      console.log(request.body);
+      console.log(error, "bruhman");
       response.statusCode = 403;
       response.send({ success: false, data: null });
     });
 });
 
-questionsRouter.delete("/questions", async (request, response) => {
-  const table =
-    process.env.NODE_ENV === "test" ? QUESTION_TABLE_TEST : QUESTION_TABLE;
-
+questionsRouter.delete("/questions/:id", async (request, response) => {
   pool
-    .query(deleteQuestion({ table: table }), [request.body.id])
+    .query(deleteQuestion(), [request.params.id])
     .then((result) => {
       if (result.rows.length === 0) {
-        response.statusCode = 404;
+        response.statusCode = 200;
         response.send({ success: false, data: null });
         return;
       }
