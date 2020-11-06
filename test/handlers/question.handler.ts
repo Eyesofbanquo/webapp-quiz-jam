@@ -27,18 +27,17 @@ export const questionsExist = async () => {
   await pool.query(createQuestionType(), [typeId, "Type", false]).catch();
 
   await pool.query(createQuestionTable()).catch();
-  await pool
-    .query(createQuestion(), [
-      uuidv4(),
-      "Random",
-      true,
-      ["Correct"],
-      ["incorrect", "wrong", "notright"],
-      categoryId,
-      typeId,
-      false,
-    ])
-    .catch();
+  await createQuestion({
+    id: uuidv4(),
+    name: "Random",
+    in_review: true,
+    correct_answers: ["Correct"],
+    incorrect_answers: ["incorrect", "wrong", "notright"],
+    category_uid: categoryId,
+    question_type_uid: typeId,
+    deleted: false,
+    difficulty: "normal",
+  }).catch();
   return Promise.resolve("Question added to database");
 };
 
@@ -71,18 +70,17 @@ export const questionABCExists = async () => {
   await pool.query(createQuestionType(), [typeId, "Type2", false]).catch();
 
   await pool.query(createQuestionTable()).catch();
-  await pool
-    .query(createQuestion(), [
-      uuidv4(),
-      "ABC",
-      true,
-      ["Correct"],
-      ["incorrect", "wrong", "notright"],
-      categoryId,
-      typeId,
-      false,
-    ])
-    .catch();
+  await createQuestion({
+    id: uuidv4(),
+    name: "ABC",
+    in_review: true,
+    correct_answers: ["Correct"],
+    incorrect_answers: ["incorrect", "wrong", "notright"],
+    category_uid: categoryId,
+    question_type_uid: typeId,
+    deleted: false,
+    difficulty: "normal",
+  }).catch();
   return Promise.resolve("Question added to database");
 };
 
@@ -100,17 +98,16 @@ export const deleteQuestionHandler = async () => {
 
   await pool.query(createQuestionTable()).catch();
 
-  await pool
-    .query(createQuestion(), [
-      "49fe1601-660e-47b8-9e49-dc001a020540",
-      "ABCDEF",
-      true,
-      ["Correct"],
-      ["incorrect", "wrong", "notright"],
-      categoryId,
-      typeId,
-      false,
-    ])
-    .catch();
+  await createQuestion({
+    id: "49fe1601-660e-47b8-9e49-dc001a020540",
+    name: "ABCDEF",
+    in_review: true,
+    correct_answers: ["Correct"],
+    incorrect_answers: ["incorrect", "wrong", "notright"],
+    category_uid: categoryId,
+    question_type_uid: typeId,
+    deleted: false,
+    difficulty: "normal",
+  }).catch();
   return Promise.resolve("Question added to database");
 };

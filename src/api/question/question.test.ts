@@ -66,20 +66,19 @@ describe("Question Tests", () => {
     it("should GET all questions", (done) => {
       /** ! Assume */
       const uuid = uuidv4();
-      pool
-        .query(createQuestion(), [
-          uuid,
-          "Nightmare",
-          true,
-          ["1"],
-          ["2", "3", "4"],
-          categoryUUID,
-          questionTypeUUID,
-          false,
-        ])
-        .catch((err) => {
-          console.log(err);
-        });
+      createQuestion({
+        id: uuid,
+        name: "Nightmare",
+        in_review: true,
+        correct_answers: ["1"],
+        incorrect_answers: ["2", "3", "4"],
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch((err) => {
+        console.log(err);
+      });
 
       const controller = new AppController();
 
@@ -137,18 +136,17 @@ describe("Question Tests", () => {
         questionTypeId: questionTypeUUID,
       };
 
-      pool
-        .query(createQuestion(), [
-          uuid,
-          question.name,
-          true,
-          question.correctAnswers,
-          question.incorrectAnswers,
-          categoryUUID,
-          questionTypeUUID,
-          false,
-        ])
-        .catch();
+      createQuestion({
+        id: uuid,
+        name: question.name,
+        in_review: true,
+        correct_answers: question.correctAnswers,
+        incorrect_answers: question.incorrectAnswers,
+        category_uid: categoryUUID,
+        question_type_uid: questionTypeUUID,
+        deleted: false,
+        difficulty: "normal",
+      }).catch();
 
       chai
         .request(controller.app)
@@ -175,18 +173,17 @@ describe("Question Tests", () => {
       };
 
       beforeEach(async () => {
-        await pool
-          .query(createQuestion(), [
-            uuid,
-            question.name,
-            true,
-            question.correctAnswers,
-            question.incorrectAnswers,
-            categoryUUID,
-            questionTypeUUID,
-            false,
-          ])
-          .catch();
+        await createQuestion({
+          id: uuid,
+          name: question.name,
+          in_review: true,
+          correct_answers: question.correctAnswers,
+          incorrect_answers: question.incorrectAnswers,
+          category_uid: categoryUUID,
+          question_type_uid: questionTypeUUID,
+          deleted: false,
+          difficulty: "normal",
+        }).catch();
       });
 
       it(`should delete the entry`, (done) => {
