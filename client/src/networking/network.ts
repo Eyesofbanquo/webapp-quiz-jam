@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 interface RequestOptions {
   base?: string;
   port?: string;
-  endpoint: "multiple" | "categories" | "question-types" | "questions";
+  endpoint:
+    | "multiple"
+    | "categories"
+    | "question-types"
+    | "questions"
+    | "difficulty";
   method: "get" | "post" | "delete" | "put";
   data?: any;
 }
