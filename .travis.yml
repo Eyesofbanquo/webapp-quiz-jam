@@ -1,12 +1,9 @@
 language: node_js
 node_js:
   - stable
-install:
-  - npm install newman
 stages:
   - express
   - staging
-  - newman
   - deploy
 
 git:
@@ -48,14 +45,6 @@ jobs:
         api_key:
           secure: POaE5i+67DuHYwq0KIoVH/tvmXSQiFXQyoym7nWJR42Sijok+f/hikvllcVyToO99X3obuef8qYUDwUSNbglyIncfhoc/hiALeW3hPOxTX1nCsO9jBCW3nyWcTgxVTE5E72Cjsk4Mh0UJI0zlzuqZp06Dli3zDNEDjBzOvFbIpez3YuventSctgP+k3Mz4KGQZ6FJd+f2mmUplDjVKCCo6xiWP6M2GCGKpRU6XMobfxVqI5oCbhEbZPmWj1ycf2z1QRq0g1hoWW3p6EoriNwRGD1ciCHw57B70KriwKKeTsnxY1EMYsZcrhvFHN1QhhbNQDxCBRSy11RKB8ahhg3Q6U3Oj0skZH4i9lEOe7AbS2iMna07N9tjbcf/GvfaOhNc4MiAqVjEY+abe2FERZlEU1RAcnf4AyzJSs+rX5lL0wZJc70e/HndNdo38pGBViK+CDmhX6hChwrixMvq/YpZ5ZGurOTJE4mNxdCQ2gAG7/cGKhcWFEjCxMhHO/fqGNQV87/mVL8rJXZRg0W04sH4pobwCMSDSZwOXpCFYk2z6SyJY1tcP7vG1j4PyRfvTtjICTZmuHf52SDWx50l/c9X+iffkxQUyGRZ7RUXAlIt9pt3FQ/IDI2CFx/VgRyZQt4Y1bpX+E0Y+sAzSq6Jqq+V71Sb65VXT2vQ7TxI2x7LDc=
       if: branch = staging
-    - stage: newman
-      name: "Newman tests"
-      script:
-        - newman run https://api.getpostman.com/collections/${POSTMAN_UID}?apikey=${POSTMAN_KEY}
-      cache:
-        directories:
-          - node_modules
-      if: branch = staging
     - stage: Deploy to Master
       script: skip
       deploy:
@@ -65,7 +54,5 @@ jobs:
           secure: POaE5i+67DuHYwq0KIoVH/tvmXSQiFXQyoym7nWJR42Sijok+f/hikvllcVyToO99X3obuef8qYUDwUSNbglyIncfhoc/hiALeW3hPOxTX1nCsO9jBCW3nyWcTgxVTE5E72Cjsk4Mh0UJI0zlzuqZp06Dli3zDNEDjBzOvFbIpez3YuventSctgP+k3Mz4KGQZ6FJd+f2mmUplDjVKCCo6xiWP6M2GCGKpRU6XMobfxVqI5oCbhEbZPmWj1ycf2z1QRq0g1hoWW3p6EoriNwRGD1ciCHw57B70KriwKKeTsnxY1EMYsZcrhvFHN1QhhbNQDxCBRSy11RKB8ahhg3Q6U3Oj0skZH4i9lEOe7AbS2iMna07N9tjbcf/GvfaOhNc4MiAqVjEY+abe2FERZlEU1RAcnf4AyzJSs+rX5lL0wZJc70e/HndNdo38pGBViK+CDmhX6hChwrixMvq/YpZ5ZGurOTJE4mNxdCQ2gAG7/cGKhcWFEjCxMhHO/fqGNQV87/mVL8rJXZRg0W04sH4pobwCMSDSZwOXpCFYk2z6SyJY1tcP7vG1j4PyRfvTtjICTZmuHf52SDWx50l/c9X+iffkxQUyGRZ7RUXAlIt9pt3FQ/IDI2CFx/VgRyZQt4Y1bpX+E0Y+sAzSq6Jqq+V71Sb65VXT2vQ7TxI2x7LDc=
       if: branch = master
   exclude:
-    - stage: newman
-      if: type = pull_request
     - stage: staging
       if: type = pull_request
