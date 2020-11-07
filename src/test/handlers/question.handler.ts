@@ -1,18 +1,18 @@
 // questions exist
-import pool from "../../src/database/pool";
+import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 import {
   createQuestionTable,
   createQuestion,
-} from "../../src/api/question/queries";
+} from "../../api/question/queries";
 import {
   createCategoriesTable,
   createCategory,
-} from "../../src/api/category/queries";
+} from "../../api/category/queries";
 import {
   createQuestionType,
   createQuestionTypeTable,
-} from "../../src/api/question-type/queries";
+} from "../../api/question-type/queries";
 
 export const questionsExist = async () => {
   await pool.query(createCategoriesTable()).catch();

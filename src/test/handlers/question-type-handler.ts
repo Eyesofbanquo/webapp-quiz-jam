@@ -1,8 +1,8 @@
 import {
   createQuestionType,
   createQuestionTypeTable,
-} from "../../src/api/question-type/queries";
-import pool from "../../src/database/pool";
+} from "../../api/question-type/queries";
+import pool from "../../database/pool";
 import { v4 as uuidv4 } from "uuid";
 
 export const questionTypesExist = async () => {

@@ -1,25 +1,25 @@
 import "chai-http";
 import * as chai from "chai";
 import { expect } from "chai";
-import { AppController } from "../server";
+import { AppController } from "../../server";
 import "mocha";
 import { Verifier, VerifierOptions } from "@pact-foundation/pact";
 // const path = require("path");
 import * as path from "path";
 const glob = require("glob");
-import pool from "../src/database/pool";
+import pool from "../database/pool";
 import {
   createCategoriesTable,
   createCategory,
   getCategoryTable,
-} from "../src/api/category/queries";
+} from "../api/category/queries";
 import { v4 as uuidv4 } from "uuid";
 import {
   createQuestionType,
   createQuestionTypeTable,
   deleteQuestionType,
   getQuestionTypeTable,
-} from "../src/api/question-type/queries";
+} from "../api/question-type/queries";
 import {
   categoriesExist,
   categoryNightExist,
@@ -29,7 +29,7 @@ import {
   deleteQuestionTypeHandler,
   questionTypesExist,
 } from "./handlers/question-type-handler";
-import { getQuestionTable } from "../src/api/question/queries";
+import { getQuestionTable } from "../api/question/queries";
 import {
   deleteQuestionHandler,
   questionABCExists,
