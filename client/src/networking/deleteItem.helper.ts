@@ -1,8 +1,5 @@
-import { makeRequest } from "../networking/network";
-
-export interface Deletable {
-  id: string;
-}
+import { Deletable } from "../models/Deletable";
+import { makeRequest } from "./network";
 
 export async function deleteRequest<T extends Deletable>(props: {
   items: T[];

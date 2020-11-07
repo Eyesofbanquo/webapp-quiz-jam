@@ -6,8 +6,8 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { Category } from "../../category/category";
-import { GenericMenuList } from "./GenericMenuList";
+import { Category } from "../../models/category";
+import { GenericMenuList } from "../../need/a-menu/two-part/GenericMenuList";
 
 export const CategoryMenu: React.FC<{
   categories: Category[];

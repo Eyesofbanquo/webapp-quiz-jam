@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { CollapsibleAlert } from "../../components/CollapsibleAlert";
+import { CollapsibleAlert } from "../../need/an-alert/CollapsibleAlert";
 import { makeRequest } from "../../networking/network";
 
 export const CategoryForm: React.FC = () => {

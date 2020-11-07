@@ -3,7 +3,7 @@ import { Pact, Matchers } from "@pact-foundation/pact";
 const { eachLike, like } = require("@pact-foundation/pact").Matchers;
 
 import * as path from "path";
-import { makeRequest } from "../../networking/network";
+import { makeRequest } from "../networking/network";
 import { provider as Provider } from "./setup";
 
 const baseport = {

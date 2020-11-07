@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
-import { MultipleChoiceQuestion } from "./multiplechoice";
+import { MultipleChoiceQuestion } from "../../models/multiplechoice";
 
 interface Question {
   id: string;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useMakeRequest } from "../../networking/network";
-import { Category } from "./category";
+import { Category } from "../../models/category";
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { DeleteItem } from "../../components/DeleteItem";
-import { deleteRequest } from "../../components/deleteItem.helper";
+import { DeleteItem } from "../../views/DeleteItem";
+import { deleteRequest } from "../../networking/deleteItem.helper";
 
 interface CategoryRequest {
   success: boolean;
