@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
-import { DeleteItem } from "../../components/DeleteItem";
-import { EmptyContent } from "../../components/EmptyContent";
-import { deleteRequest } from "../../components/deleteItem.helper";
-import { MultipleChoiceQuestion } from "./multiplechoice";
+import { DeleteItem } from "../../views/DeleteItem";
+import { EmptyContent } from "../../views/EmptyContent";
+import { deleteRequest } from "../../networking/deleteItem.helper";
+import { MultipleChoiceQuestion } from "../../models/multiplechoice";
 
 interface QuestionRequest {
   success: boolean;

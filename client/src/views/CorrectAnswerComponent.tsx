@@ -1,6 +1,7 @@
 import { Card, TextField } from "@material-ui/core";
 import React from "react";
 
+/* Can create abstract unit called 'AnswerComponent' where he helperText and state is injected */
 export const CorrectAnswerComponent: React.FC<{
   isCorrectChoice: boolean;
   choiceText: string;

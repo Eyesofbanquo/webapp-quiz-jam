@@ -1,12 +1,12 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import { QuizForm } from "./features/multiple-choice-form/MultipleChoiceForm";
-import { Nav } from "./components";
-import { CategoryList } from "./features/category/CategoryList";
-import { CategoryForm } from "./features/category/CategoryForm";
-import { CreatorForm } from "./features/creator-mode/CreatorForm";
-import { QuestionList } from "./features/questions/QuestionsList";
+import { QuizForm } from "./screens/multiple-choice/MultipleChoiceForm";
+import { Nav } from "./views";
+import { CategoryList } from "./screens/category/CategoryList";
+import { CategoryForm } from "./screens/category/CategoryForm";
+import { CreatorForm } from "./screens/creator-mode/CreatorForm";
+import { QuestionList } from "./screens/questions/QuestionsList";
 
 const App = () => {
   return (

@@ -8,15 +8,15 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import React, { useEffect, useReducer, useState } from "react";
-import { CorrectAnswerComponent } from "./components/CorrectAnswerComponent";
-import { QuestionComponent } from "./components/QuestionComponent";
+import { CorrectAnswerComponent } from "../../views/CorrectAnswerComponent";
+import { QuestionComponent } from "../../views/question/QuestionComponent";
 import { makeRequest, useMakeRequest } from "../../networking/network";
-import { CollapsibleAlert } from "../../components/CollapsibleAlert";
-import { initialFormState, validateFields } from "./helper";
-import { reducer } from "./helper";
-import { Category } from "../category/category";
-import { CategoryMenu } from "./components/CategoryMenu";
-import { DifficultyMenu } from "./components/DifficultyMenu";
+import { CollapsibleAlert } from "../../need/an-alert/CollapsibleAlert";
+import { initialFormState, validateFields } from "../../controllers/form";
+import { reducer } from "../../controllers/form";
+import { Category } from "../../models/category";
+import { CategoryMenu } from "../../views/category/CategoryMenu";
+import { DifficultyMenu } from "../../views/DifficultyMenu";
 
 const difficulty = ["easy", "normal", "hard"];
 interface CategoryRequest {

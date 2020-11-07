@@ -1,4 +1,4 @@
-import { Deletable } from "../../components/deleteItem.helper";
+import { Deletable } from "./Deletable";
 
 export interface MultipleChoiceQuestion extends Deletable {
   category: string;

@@ -6,7 +6,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { GenericMenuList } from "./GenericMenuList";
+import { GenericMenuList } from "../need/a-menu/two-part/GenericMenuList";
 
 const MenuContent: React.FC<{
   difficulty: string[];

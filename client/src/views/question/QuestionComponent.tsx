@@ -1,6 +1,7 @@
 import { Paper, TextareaAutosize } from "@material-ui/core";
 import React from "react";
 
+/* Can create a abstract unit called EditableHeader */
 export const QuestionComponent: React.FC<{
   questionText: string;
   setQuestionText: (text: string) => void;
