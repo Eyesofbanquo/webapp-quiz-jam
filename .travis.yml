@@ -33,26 +33,10 @@ jobs:
       name: "Express Tests"
       script:
         - npm run test
-      cache:
-        directories:
-          - node_modules
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
-      cache:
-        directories:
-          - node_modules
-    - stage: e2e
-      name: "Cypress tests"
-      script:
-        - npm install cypress
-        - npm install start-server-and-test
-        - npm run test:ci:e2e
-      cache:
-        npm: true
-        directories:
-          - ~/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip
