@@ -24,7 +24,6 @@ services:
 env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
   - CLIENT=true
-  - CLIENT=false
 
 before_script:
   - psql -c 'create database testing;' -U postgres
@@ -59,7 +58,6 @@ jobs:
         npm: true
         directories:
           - node_modules
-      env: CLIENT=true
     - stage: staging
       name: "Deploy to staging"
       script: skip
