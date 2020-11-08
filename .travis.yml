@@ -27,18 +27,18 @@ before_script:
 
 jobs:
   include:
-  - stage: express
-    name: "Express Tests"
-    script:
-      - npm run test
-    cache:
-      npm: true
     - stage: express
-    name: "Contract tests"
-    script:
-      - npm run test:pact
-    cache:
-      npm: true
+      name: "Express Tests"
+      script:
+        - npm run test
+      cache:
+        npm: true
+    - stage: express
+      name: "Contract tests"
+      script:
+        - npm run test:pact
+      cache:
+        npm: true
     - stage: e2e
       name: "Cypress tests"
       script:
