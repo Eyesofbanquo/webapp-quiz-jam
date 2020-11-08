@@ -5,15 +5,10 @@ node_js:
 
 stages:
   - express
-      env: CLIENT=false
   - staging
-      env: CLIENT=false
   - deploy
-      env: CLIENT=false
   - e2e
-      env: CLIENT=false
   - storybook
-      env: CLIENT=true
 
 addons:
   apt:
@@ -64,6 +59,7 @@ jobs:
         npm: true
         directories:
           - node_modules
+      env: CLIENT=true
     - stage: staging
       name: "Deploy to staging"
       script: skip
