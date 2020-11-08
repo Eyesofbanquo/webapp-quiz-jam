@@ -26,6 +26,7 @@ jobs:
     - stage: express
       name: "Express Tests"
       script:
+        - npm install
         - npm run test
       cache:
         directories:
