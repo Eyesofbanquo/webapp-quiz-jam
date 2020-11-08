@@ -1,12 +1,18 @@
 language: node_js
+
 node_js:
   - stable
-install:
-  - npm install newman
+
 stages:
   - express
   - staging
   - deploy
+  - e2e
+
+addons:
+  apt:
+    packages:
+      - libgconf-2-4
 
 git:
   submodules: true
@@ -18,7 +24,6 @@ env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
 
 before_script:
-  - npm install
   - psql -c 'create database testing;' -U postgres
 
 jobs:
@@ -28,15 +33,21 @@ jobs:
       script:
         - npm run test
       cache:
-        directories:
-          - node_modules
+        npm: true
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
       cache:
+        npm: true
+    - stage: e2e
+      name: "Cypress tests"
+      script:
+        - npm run test:ci:e2e
+      cache:
+        npm: true
         directories:
-          - node_modules
+          - /home/travis/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip

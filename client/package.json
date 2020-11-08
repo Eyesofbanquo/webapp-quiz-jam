@@ -24,6 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "e2e": "NODE_ENV=test react-scripts start && npm test",
     "eject": "react-scripts eject",
     "config": "ts-jest config:init",
     "test:pact": "CI=true react-scripts test --runInBand --testMatch \"**/**.pact.ts\""
@@ -47,5 +48,12 @@
   "devDependencies": {
     "@types/react": "^16.9.50",
     "@types/react-dom": "^16.9.8"
+  },
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/compilers/react-typescript@3.1.61"
+    },
+    "componentsDefaultDirectory": "components/{name}",
+    "packageManager": "npm"
   }
 }
