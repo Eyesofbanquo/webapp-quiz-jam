@@ -2,8 +2,11 @@ language: node_js
 node_js:
   - stable
 install:
+  - npm install cypress
+  - npm install start-server-and-test
   - npm install newman
 stages:
+  - cache
   - express
   - staging
   - deploy
@@ -29,6 +32,13 @@ before_script:
 
 jobs:
   include:
+    - stage: cache
+      name: "Warm up cache"
+      script: true
+      cache:
+        directories:
+          - node_modules
+          - ~/.cache
     - stage: express
       name: "Express Tests"
       script:
@@ -46,8 +56,6 @@ jobs:
     - stage: e2e
       name: "Cypress tests"
       script:
-        - npm install cypress
-        - npm install start-server-and-test
         - npm run test:ci:e2e
       cache:
         npm: true
