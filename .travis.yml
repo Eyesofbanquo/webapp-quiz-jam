@@ -20,7 +20,7 @@ env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
 
 before_script:
-  - npm install
+  - npm ci
   - psql -c 'create database testing;' -U postgres
 
 jobs:
@@ -44,8 +44,10 @@ jobs:
       script:
         - npm run test:ci:e2e
       cache:
+        npm: true
         directories:
           - node_modules
+          - ~/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip
