@@ -20,7 +20,7 @@ env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
 
 before_script:
-  - npm ci
+  - npm install
   - psql -c 'create database testing;' -U postgres
 
 jobs:
