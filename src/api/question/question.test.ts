@@ -17,13 +17,10 @@ import {
 } from "../../api/category/queries";
 
 const TABLE = "questions_test";
+const categoryUUID = uuidv4();
+const questionTypeUUID = uuidv4();
 describe("Question Tests", () => {
-  let categoryUUID;
-  let questionTypeUUID;
   before(async () => {
-    categoryUUID = uuidv4();
-    questionTypeUUID = uuidv4();
-
     await pool
       .query(createCategoriesTable())
       .then((res) => console.log(""))
