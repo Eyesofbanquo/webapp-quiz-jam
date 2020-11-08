@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Nav = () => (
-  <AppBar position="static">
+  <AppBar className={"nav"} position="static">
     <Toolbar>
       <Link
         style={{ textDecoration: "none", padding: 16, color: "white" }}

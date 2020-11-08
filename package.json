@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha -r ts-node/register src/**/**.test.ts test/test.ts  --exit",
+    "test": "NODE_ENV=test mocha -r ts-node/register src/**/**.test.ts src/tests/random.ts  --exit",
     "test:pact": "NODE_ENV=pact mocha -r ts-node/register src/pact-verification/**.pact.ts --exit",
+    "e2e": "NODE_ENV=test mocha -r ts-node/register src/tests/random.ts --timeout 30000 --exit",
     "dev": "nodemon -x ts-node ./server.ts",
     "start": "ts-node ./server.ts",
     "heroku-postbuild": "cd client && npm install && npm run build"
@@ -42,5 +43,9 @@
     "typescript": "^4.0.3",
     "typings": "^2.1.1",
     "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^5.4.0",
+    "puppeteer": "^5.4.1"
   }
 }
