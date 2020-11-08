@@ -26,18 +26,11 @@ jobs:
     - stage: express
       name: "Express Tests"
       script:
-        - npm install
         - npm run test
-      cache:
-        directories:
-          - node_modules
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
-      cache:
-        directories:
-          - node_modules
     - stage: staging
       name: "Deploy to staging"
       script: skip
