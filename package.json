@@ -8,7 +8,7 @@
     "test:pact": "NODE_ENV=pact mocha -r ts-node/register src/pact-verification/**.pact.ts --exit",
     "test:cy": "cypress run",
     "test:e2e": "cd client && npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
-    "test:ci:e2e": "cd client && npm install && npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
+    "test:ci:e2e": "CI=false cd client && npm install && npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
     "dev": "nodemon -x ts-node ./server.ts",
     "start": "ts-node ./server.ts",
     "heroku-postbuild": "cd client && npm install && npm run build"
