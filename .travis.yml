@@ -27,10 +27,26 @@ before_script:
 
 jobs:
   include:
+  - stage: express
+    name: "Express Tests"
+    script:
+      - npm run test
+    cache:
+      npm: true
+    - stage: express
+    name: "Contract tests"
+    script:
+      - npm run test:pact
+    cache:
+      npm: true
     - stage: e2e
       name: "Cypress tests"
       script:
         - npm run test:ci:e2e
+      cache:
+        npm: true
+        directories:
+          - /home/travis/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip
