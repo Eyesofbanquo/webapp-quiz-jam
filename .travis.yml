@@ -23,7 +23,6 @@ services:
 
 env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
-  - CLIENT=true
 
 before_script:
   - psql -c 'create database testing;' -U postgres
