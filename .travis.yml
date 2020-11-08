@@ -9,6 +9,11 @@ stages:
   - deploy
   - e2e
 
+addons:
+  apt:
+    packages:
+      - libgconf-2-4
+
 git:
   submodules: true
 
@@ -47,6 +52,7 @@ jobs:
       cache:
         directories:
           - node_modules
+          - ~/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip
