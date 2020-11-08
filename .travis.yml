@@ -5,9 +5,15 @@ node_js:
 
 stages:
   - express
+      env: CLIENT=false
   - staging
+      env: CLIENT=false
   - deploy
+      env: CLIENT=false
   - e2e
+      env: CLIENT=false
+  - storybook
+      env: CLIENT=true
 
 addons:
   apt:
@@ -22,6 +28,8 @@ services:
 
 env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
+  - CLIENT=true
+  - CLIENT=false
 
 before_script:
   - psql -c 'create database testing;' -U postgres
@@ -48,6 +56,14 @@ jobs:
         npm: true
         directories:
           - /home/travis/.cache
+    - stage: storybook
+      name: "Storybook"
+      script:
+        - cd client && npm install && npm run chromatic
+      cache:
+        npm: true
+        directories:
+          - node_modules
     - stage: staging
       name: "Deploy to staging"
       script: skip
