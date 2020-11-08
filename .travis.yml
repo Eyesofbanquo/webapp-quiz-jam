@@ -8,6 +8,9 @@ stages:
   - deploy
   - e2e
 
+install:
+  - npm ci
+
 addons:
   apt:
     packages:
@@ -29,8 +32,6 @@ jobs:
   include:
     - stage: express
       name: "Express Tests"
-      install:
-        - npm install
       script:
         - npm run test
       cache:
@@ -38,8 +39,6 @@ jobs:
           - node_modules
     - stage: express
       name: "Contract tests"
-      install:
-        - npm install
       script:
         - npm run test:pact
       cache:
@@ -47,8 +46,6 @@ jobs:
           - node_modules
     - stage: e2e
       name: "Cypress tests"
-      install:
-        - npm ci
       script:
         - npm install cypress
         - npm install start-server-and-test
