@@ -29,17 +29,8 @@ jobs:
   include:
     - stage: e2e
       name: "Cypress tests"
-      install:
-        - npm install
-        - npm install cypress --save-dev
-        - npm install start-server-and-test
       script:
         - npm run test:ci:e2e
-      cache:
-        npm: true
-        directories:
-          - node_modules
-          - /home/travis/.cache/Cypress
     - stage: staging
       name: "Deploy to staging"
       script: skip
