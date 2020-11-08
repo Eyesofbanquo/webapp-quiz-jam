@@ -22,6 +22,9 @@ webappjam-pacts
 qizzoapp_com.crt
 server.key
 
+#ignore Bit
+client/.bit
+
 # Realm
 *.realm
 *.realm.lock
