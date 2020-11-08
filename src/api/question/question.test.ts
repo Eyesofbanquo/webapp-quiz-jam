@@ -129,9 +129,7 @@ describe("Question Tests", () => {
         });
     });
 
-    it("should NOT post a new question if it already exists", (done) => {
-      const controller = new AppController();
-
+    describe("ON FAIL", () => {
       const uuid = uuidv4();
 
       const question = {
@@ -142,34 +140,41 @@ describe("Question Tests", () => {
         questionTypeId: questionTypeUUID,
       };
 
-      createQuestion({
-        id: uuid,
-        name: question.name,
-        in_review: true,
-        correct_answers: question.correctAnswers,
-        incorrect_answers: question.incorrectAnswers,
-        category_uid: categoryUUID,
-        question_type_uid: questionTypeUUID,
-        deleted: false,
-        difficulty: "normal",
-      }).catch((err) => {
-        expect(err).to.eql(null);
-        done();
+      beforeEach(async () => {
+        await createQuestion({
+          id: uuid,
+          name: question.name,
+          in_review: true,
+          correct_answers: question.correctAnswers,
+          incorrect_answers: question.incorrectAnswers,
+          category_uid: categoryUUID,
+          question_type_uid: questionTypeUUID,
+          deleted: false,
+          difficulty: "normal",
+        }).catch((err) => {
+          console.log(err);
+        });
       });
 
-      chai
-        .request(controller.app)
-        .post("/api/questions")
-        .send(question)
-        .then((response) => {
-          expect(response.status).to.eql(200);
-          expect(response.body.data).to.eql(null);
-          done();
-        })
-        .catch((err) => {
-          expect(err).to.eql(null);
-          done();
-        });
+      it("should NOT post a new question if it already exists", (done) => {
+        const controller = new AppController();
+
+        chai
+          .request(controller.app)
+          .post("/api/questions")
+          .send(question)
+          .then((response) => {
+            expect(response.status).to.eql(200);
+            expect(response.body.success).to.eql(false);
+            expect(response.body.data).to.eql(null);
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            expect(err).to.eql(null);
+            done();
+          });
+      });
     });
   });
 
