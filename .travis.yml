@@ -72,3 +72,5 @@ jobs:
       if: type = pull_request
     - stage: express
       if: branch = staging
+    - stage: e2e
+      if: branch = staging
