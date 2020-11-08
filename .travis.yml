@@ -1,15 +1,13 @@
 language: node_js
 node_js:
   - stable
-
+install:
+  - npm install newman
 stages:
   - express
   - staging
   - deploy
   - e2e
-
-install:
-  - npm ci
 
 addons:
   apt:
@@ -26,6 +24,7 @@ env:
   - TRAVIS_DATABASE=$TRAVIS_DATABASE
 
 before_script:
+  - npm ci
   - psql -c 'create database testing;' -U postgres
 
 jobs:
@@ -51,7 +50,7 @@ jobs:
         - npm install start-server-and-test
         - npm run test:ci:e2e
       cache:
-          - npm: true
+        npm: true
         directories:
           - ~/.cache
     - stage: staging
