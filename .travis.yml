@@ -40,15 +40,6 @@ jobs:
       cache:
         directories:
           - node_modules
-    - stage: e2e
-      name: "e2e tests"
-      script:
-        - npm run test:ci:e2e
-      cache:
-        npm: true
-        directories:
-          - node_modules
-          - ~/.cache
     - stage: staging
       name: "Deploy to staging"
       script: skip
