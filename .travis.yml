@@ -39,7 +39,7 @@ jobs:
         npm: true
         directories:
           - node_modules
-          - ~/.cache
+          - /home/travis/.cache/Cypress
     - stage: staging
       name: "Deploy to staging"
       script: skip
