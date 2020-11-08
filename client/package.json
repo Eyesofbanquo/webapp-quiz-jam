@@ -47,5 +47,12 @@
   "devDependencies": {
     "@types/react": "^16.9.50",
     "@types/react-dom": "^16.9.8"
+  },
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/compilers/react-typescript@3.1.61"
+    },
+    "componentsDefaultDirectory": "components/{name}",
+    "packageManager": "npm"
   }
 }
