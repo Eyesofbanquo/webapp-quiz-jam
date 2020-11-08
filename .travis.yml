@@ -8,6 +8,7 @@ stages:
   - staging
   - deploy
   - e2e
+  - storybook
 
 addons:
   apt:
