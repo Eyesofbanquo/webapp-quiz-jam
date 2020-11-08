@@ -42,7 +42,7 @@ jobs:
     - stage: express
       name: "e2e tests"
       script:
-        - npm run test:e2e
+        - npm run test:ci:e2e
       cache:
         directories:
           - node_modules
