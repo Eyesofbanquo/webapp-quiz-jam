@@ -32,27 +32,6 @@ before_script:
 
 jobs:
   include:
-    - stage: cache
-      name: "Warm up cache"
-      script: true
-      cache:
-        directories:
-          - node_modules
-          - ~/.cache
-    - stage: express
-      name: "Express Tests"
-      script:
-        - npm run test
-      cache:
-        directories:
-          - node_modules
-    - stage: express
-      name: "Contract tests"
-      script:
-        - npm run test:pact
-      cache:
-        directories:
-          - node_modules
     - stage: e2e
       name: "Cypress tests"
       script:
