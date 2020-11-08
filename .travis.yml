@@ -51,7 +51,7 @@ jobs:
         - npm install start-server-and-test
         - npm run test:ci:e2e
       cache:
-          npm: true
+          - npm: true
         directories:
           - ~/.cache
     - stage: staging
