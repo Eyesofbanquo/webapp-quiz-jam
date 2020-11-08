@@ -9,6 +9,7 @@ stages:
   - express
   - staging
   - deploy
+  - e2e
 
 git:
   submodules: true
@@ -39,7 +40,7 @@ jobs:
       cache:
         directories:
           - node_modules
-    - stage: express
+    - stage: e2e
       name: "e2e tests"
       script:
         - npm run test:ci:e2e
