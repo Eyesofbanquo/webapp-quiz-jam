@@ -23,6 +23,7 @@ qizzoapp_com.crt
 server.key
 
 #ignore Bit
+cypress/videos
 client/.bit
 
 # Realm

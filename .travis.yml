@@ -3,6 +3,8 @@ node_js:
   - stable
 install:
   - npm install newman
+  - npm install --save-dev start-server-and-test
+  - npm install cypress
 stages:
   - express
   - staging
@@ -34,6 +36,13 @@ jobs:
       name: "Contract tests"
       script:
         - npm run test:pact
+      cache:
+        directories:
+          - node_modules
+    - stage: express
+      name: "e2e tests"
+      script:
+        - npm run test:e2e
       cache:
         directories:
           - node_modules

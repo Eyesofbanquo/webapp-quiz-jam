@@ -13,5 +13,18 @@
         "origin": "AUTHORED",
         "exported": true
     },
+    "eyesofbanquo.qizzo/need@0.0.2": {
+        "files": [
+            {
+                "relativePath": "src/need/an-alert/CollapsibleAlert.tsx",
+                "test": false,
+                "name": "CollapsibleAlert.tsx"
+            }
+        ],
+        "mainFile": "src/need/an-alert/CollapsibleAlert.tsx",
+        "trackDir": "src/need",
+        "origin": "AUTHORED",
+        "exported": true
+    },
     "version": "14.8.8"
 }
