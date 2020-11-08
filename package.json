@@ -11,7 +11,7 @@
     "test:ci:e2e": "cd client && npm install && CI=false npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
     "dev": "nodemon -x ts-node ./server.ts",
     "start": "ts-node ./server.ts",
-    "heroku-postbuild": "cd client && npm ci && npm run build"
+    "heroku-postbuild": "cd client && npm ci --also=dev && npm run build"
   },
   "author": "",
   "license": "ISC",

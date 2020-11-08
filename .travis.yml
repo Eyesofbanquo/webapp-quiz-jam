@@ -70,3 +70,5 @@ jobs:
   exclude:
     - stage: staging
       if: type = pull_request
+    - stage: express
+      if: branch = staging
