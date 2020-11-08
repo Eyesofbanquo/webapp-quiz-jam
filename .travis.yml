@@ -49,14 +49,6 @@ jobs:
         npm: true
         directories:
           - /home/travis/.cache
-    - stage: storybook
-      name: "Storybook"
-      script:
-        - cd client && npm install && npm run chromatic
-      cache:
-        npm: true
-        directories:
-          - node_modules
     - stage: staging
       name: "Deploy to staging"
       script: skip
