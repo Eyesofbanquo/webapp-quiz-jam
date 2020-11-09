@@ -119,18 +119,19 @@ describe("Category", () => {
 
   describe("/DELETE categories", () => {
     describe("On Success: STATUS 200", () => {
-      it(`should DELETE an existing category named "Him"`, (done) => {
-        const uuid = uuidv4();
-        createCategory({
+      const uuid = uuidv4();
+
+      beforeEach(async () => {
+        await createCategory({
           id: uuid,
           name: "Him",
           in_review: true,
           deleted: false,
         }).catch((err) => {
           expect(err).to.eql(null);
-          done();
         });
-
+      });
+      it(`should DELETE an existing category named "Him"`, (done) => {
         const controller = new AppController();
         // Act:
         chai
