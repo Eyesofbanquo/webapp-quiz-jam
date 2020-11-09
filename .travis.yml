@@ -35,12 +35,14 @@ jobs:
         - npm run test
       cache:
         npm: true
+      if: NOT branch = master
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
       cache:
         npm: true
+      if: NOT branch = master
     - stage: e2e
       name: "Cypress tests"
       script:
@@ -49,6 +51,7 @@ jobs:
         npm: true
         directories:
           - /home/travis/.cache
+      if: NOT branch = master
     - stage: staging
       name: "Deploy to staging"
       script: skip
