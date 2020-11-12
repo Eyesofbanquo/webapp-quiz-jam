@@ -9,6 +9,7 @@ export const QuestionComponent: React.FC<{
   return (
     <Paper style={{ padding: 16, borderRadius: 8, margin: 4 }}>
       <TextareaAutosize
+        id={"question-name-textfield"}
         style={{ width: "100%" }}
         aria-label="minimum height"
         rowsMin={3}
