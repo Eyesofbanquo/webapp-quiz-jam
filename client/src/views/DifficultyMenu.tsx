@@ -5,44 +5,32 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GenericMenuList } from "../need/a-menu/two-part/GenericMenuList";
+import { useMakeRequest } from "../networking/network";
 
-const MenuContent: React.FC<{
-  difficulty: string[];
-  difficultyIndex: number;
-  setDifficultyIndex: (difficulty: number) => void;
-  setAnchorElement: React.Dispatch<React.SetStateAction<null>>;
-}> = ({
-  difficulty,
-  difficultyIndex,
-  setDifficultyIndex,
-  setAnchorElement,
-}) => (
-  <>
-    {difficulty.map((difficulty, index) => {
-      return (
-        <MenuItem
-          key={difficulty}
-          selected={index === difficultyIndex}
-          onClick={(event) => {
-            setDifficultyIndex(index);
-            setAnchorElement(null);
-          }}
-        >
-          {difficulty}
-        </MenuItem>
-      );
-    })}
-  </>
-);
+export interface DifficultyMenuProps {
+  onSelect: (difficulty: string) => void;
+}
 
-export const DifficultyMenu: React.FC<{
-  difficulty: string[];
-  difficultyIndex: number;
-  setDifficultyIndex: (difficulty: number) => void;
-}> = ({ difficulty, difficultyIndex, setDifficultyIndex }) => {
+interface DifficultyRequest {
+  success: boolean;
+  data: string[];
+}
+
+export const DifficultyMenu: React.FC<DifficultyMenuProps> = ({ onSelect }) => {
   const [anchorElement, setAnchorElement] = useState(null);
+  const [difficultyIndex, setDifficultyIndex] = useState(0);
+  const [difficulty, setDifficulty] = useState<string[]>([]);
+
+  const { request: difficultyRequest } = useMakeRequest<DifficultyRequest>({
+    endpoint: "difficulty",
+    method: "get",
+  });
+
+  useEffect(() => {
+    setDifficulty(difficultyRequest?.data ?? []);
+  }, [difficultyRequest]);
 
   return (
     <>
@@ -62,12 +50,21 @@ export const DifficultyMenu: React.FC<{
           setAnchorElement(null);
         }}
       >
-        <MenuContent
-          difficulty={difficulty}
-          difficultyIndex={difficultyIndex}
-          setDifficultyIndex={setDifficultyIndex}
-          setAnchorElement={setAnchorElement}
-        />
+        {difficulty.map((difficulty, index) => {
+          return (
+            <MenuItem
+              key={difficulty}
+              selected={index === difficultyIndex}
+              onClick={(event) => {
+                setDifficultyIndex(index);
+                onSelect(difficulty);
+                setAnchorElement(null);
+              }}
+            >
+              {difficulty}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
