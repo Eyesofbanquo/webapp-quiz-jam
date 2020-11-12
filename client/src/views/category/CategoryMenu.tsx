@@ -36,6 +36,10 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onSelect }) => {
     setCategories(categoryRequest?.data ?? []);
   }, [categoryRequest]);
 
+  useEffect(() => {
+    onSelect(categories[categoryIndex]);
+  }, [categories]);
+
   return (
     <>
       <GenericMenuList
