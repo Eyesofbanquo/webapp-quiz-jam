@@ -18,7 +18,6 @@ import { Category } from "../../models/category";
 import { CategoryMenu } from "../../views/category/CategoryMenu";
 import { DifficultyMenu } from "../../views/DifficultyMenu";
 
-const difficulty = ["easy", "normal", "hard"];
 interface CategoryRequest {
   success: boolean;
   data: Category[];
@@ -26,6 +25,7 @@ interface CategoryRequest {
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>();
   const [questionTypes, setQuestionTypes] = useState<
     { id: string; name: string }[]
   >([]);
@@ -70,13 +70,8 @@ export const QuizForm: React.FC<{}> = () => {
               }}
             />
             <DifficultyMenu
-              difficulty={difficulty}
-              difficultyIndex={state.difficultyIndex}
-              setDifficultyIndex={(index) => {
-                dispatch({
-                  type: "difficultyIndex",
-                  payload: index,
-                });
+              onSelect={(difficulty) => {
+                setSelectedDifficulty(difficulty);
               }}
             />
           </Grid>
@@ -155,7 +150,7 @@ export const QuizForm: React.FC<{}> = () => {
                   data: {
                     categoryId: `${selectedCategory?.id ?? ""}`,
                     questionTypeId: `${questionTypes[0].id}`,
-                    difficulty: `${difficulty[state.difficultyIndex]}`,
+                    difficulty: `${selectedDifficulty ?? "easy"}`,
                     name: `${state.questionText}`,
                     correctAnswers: [`${state.firstChoice}`],
                     incorrectAnswers: [
