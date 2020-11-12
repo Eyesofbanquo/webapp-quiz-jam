@@ -32,10 +32,6 @@ export const DifficultyMenu: React.FC<DifficultyMenuProps> = ({ onSelect }) => {
     setDifficulty(difficultyRequest?.data ?? []);
   }, [difficultyRequest]);
 
-  useEffect(() => {
-    onSelect(difficulty[difficultyIndex]);
-  }, [difficulty]);
-
   return (
     <>
       <GenericMenuList
