@@ -43,6 +43,11 @@ jobs:
       cache:
         npm: true
       if: NOT branch = master
+    - stage: storybook
+      name: "Story book"
+      script:
+        - npm run storybook
+      if: NOT branch = master
     - stage: e2e
       name: "Cypress tests"
       script:
@@ -76,4 +81,6 @@ jobs:
     - stage: express
       if: branch = staging
     - stage: e2e
+      if: branch = staging
+    - stage: storybook
       if: branch = staging
