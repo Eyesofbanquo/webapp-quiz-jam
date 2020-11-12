@@ -24,6 +24,13 @@ const expressMiddleware = (router) => {
       ],
     });
   });
+
+  router.get("/api/difficulty", (request, response) => {
+    response.send({
+      success: true,
+      data: ["easy", "normal", "hard"],
+    });
+  });
 };
 
 module.exports = expressMiddleware;
