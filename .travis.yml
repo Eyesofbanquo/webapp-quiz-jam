@@ -83,4 +83,4 @@ jobs:
     - stage: e2e
       if: branch = staging
     - stage: storybook
-      if: branch = staging
+      if: branch = staging AND type = pull_request
