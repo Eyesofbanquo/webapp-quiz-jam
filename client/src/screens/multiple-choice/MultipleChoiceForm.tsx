@@ -25,27 +25,15 @@ interface CategoryRequest {
 }
 export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [questionTypes, setQuestionTypes] = useState<
     { id: string; name: string }[]
   >([]);
-
-  const {
-    request: categoryRequest,
-    setRequest: setCategoryRequest,
-  } = useMakeRequest<CategoryRequest>({
-    endpoint: "categories",
-    method: "get",
-  });
 
   const { request: questionTypesRequest } = useMakeRequest<{
     success: Boolean;
     data: [{ id: string; name: string }];
   }>({ endpoint: "question-types", method: "get" });
-
-  useEffect(() => {
-    setCategories(categoryRequest?.data ?? []);
-  }, [categoryRequest]);
 
   useEffect(() => {
     setQuestionTypes(questionTypesRequest?.data ?? []);
@@ -77,13 +65,8 @@ export const QuizForm: React.FC<{}> = () => {
           <h1>Create a question</h1>
           <Grid container direction="row" justify="center">
             <CategoryMenu
-              categories={categories}
-              categoryIndex={state.categoryIndex}
-              setCategoryIndex={(index) => {
-                dispatch({
-                  type: "categoryIndex",
-                  payload: index,
-                });
+              onSelect={(category) => {
+                setSelectedCategory(category);
               }}
             />
             <DifficultyMenu
@@ -170,7 +153,7 @@ export const QuizForm: React.FC<{}> = () => {
                   endpoint: "questions",
                   method: "post",
                   data: {
-                    categoryId: `${categories[state.categoryIndex].id}`,
+                    categoryId: `${selectedCategory?.id ?? ""}`,
                     questionTypeId: `${questionTypes[0].id}`,
                     difficulty: `${difficulty[state.difficultyIndex]}`,
                     name: `${state.questionText}`,
