@@ -30,6 +30,13 @@ export const QuizForm: React.FC<{}> = () => {
     { id: string; name: string }[]
   >([]);
 
+  const array: (
+    | "firstChoice"
+    | "secondChoice"
+    | "thirdChoice"
+    | "fourthChoice"
+  )[] = ["firstChoice", "secondChoice", "thirdChoice", "fourthChoice"];
+
   const { request: questionTypesRequest } = useMakeRequest<{
     success: Boolean;
     data: [{ id: string; name: string }];
@@ -88,46 +95,34 @@ export const QuizForm: React.FC<{}> = () => {
             });
           }}
         />
-        <CorrectAnswerComponent
-          isCorrectChoice
-          choiceText={state.firstChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "firstChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.secondChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "secondChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.thirdChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "thirdChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.fourthChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "fourthChoice",
-              payload: text,
-            });
-          }}
-        />
+        {array.map((value, index) => {
+          if (index === 0) {
+            return (
+              <CorrectAnswerComponent
+                isCorrectChoice
+                choiceText={state[value]}
+                setChoiceText={(text) => {
+                  dispatch({
+                    type: value,
+                    payload: text,
+                  });
+                }}
+              />
+            );
+          }
+          return (
+            <CorrectAnswerComponent
+              isCorrectChoice={false}
+              choiceText={state[value]}
+              setChoiceText={(text) => {
+                dispatch({
+                  type: value,
+                  payload: text,
+                });
+              }}
+            />
+          );
+        })}
       </Grid>
       <Grid item xs={8}>
         <Grid container justify="center">
