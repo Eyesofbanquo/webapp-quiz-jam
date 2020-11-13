@@ -57,6 +57,7 @@ export const QuizForm: React.FC<{}> = () => {
       <Grid item xs={8}>
         <Grid container>
           <CollapsibleAlert
+            id={"post-status-alert"}
             type="success"
             text="Success!"
             showAlert={state.showSuccessAlert}
@@ -95,11 +96,28 @@ export const QuizForm: React.FC<{}> = () => {
             });
           }}
         />
-        {array.map((value, index) => {
-          if (index === 0) {
+        <Grid id="question-answer-choices">
+          {array.map((value, index) => {
+            if (index === 0) {
+              const isCorrect = true;
+              return (
+                <CorrectAnswerComponent
+                  key={index}
+                  isCorrectChoice
+                  choiceText={state[value]}
+                  setChoiceText={(text) => {
+                    dispatch({
+                      type: value,
+                      payload: text,
+                    });
+                  }}
+                />
+              );
+            }
             return (
               <CorrectAnswerComponent
-                isCorrectChoice
+                key={index}
+                isCorrectChoice={false}
                 choiceText={state[value]}
                 setChoiceText={(text) => {
                   dispatch({
@@ -109,24 +127,13 @@ export const QuizForm: React.FC<{}> = () => {
                 }}
               />
             );
-          }
-          return (
-            <CorrectAnswerComponent
-              isCorrectChoice={false}
-              choiceText={state[value]}
-              setChoiceText={(text) => {
-                dispatch({
-                  type: value,
-                  payload: text,
-                });
-              }}
-            />
-          );
-        })}
+          })}
+        </Grid>
       </Grid>
       <Grid item xs={8}>
         <Grid container justify="center">
           <Button
+            id={"choice-form-submit-button"}
             variant="contained"
             color="primary"
             onClick={(event) => {

@@ -7,8 +7,63 @@
 
 /// <reference types="cypress" />
 
-describe("Example test", () => {
-  it("can do as I please", () => {
-    cy.visit("/");
+import "pg";
+import { setupCypressTables, dropTables } from "../../src/database/pool";
+import {
+  createQuestionTable,
+  deleteQuestion,
+} from "../../src/api/question/queries";
+describe("Multiple Choice Form test", () => {
+  describe("All Tests", () => {
+    beforeEach(() => {
+      dropTables().catch();
+      setupCypressTables().catch();
+      cy.visit("/");
+    });
+    it("can create a normal question", () => {
+      cy.get("#creator-mode-nav-item").click();
+      cy.get("#create-question-button").click();
+
+      cy.get("#choose-category-menu .MuiListItemText-primary").should(
+        "have.text",
+        "Choose a category"
+      );
+      cy.get("#choose-category-menu").click();
+      cy.get("#choose-category-submenu").should("be.visible");
+      cy.get("#choose-category-submenu #0-submenu-item").should("be.visible");
+      cy.get("#choose-category-submenu #0-submenu-item").click();
+
+      cy.get("#choose-difficulty-menu .MuiListItemText-primary").should(
+        "have.text",
+        "Choose a difficulty"
+      );
+      cy.get("#choose-difficulty-menu").click();
+      cy.get("#choose-difficulty-submenu").should("be.visible");
+      cy.get("#choose-difficulty-submenu #1-submenu-item").should("be.visible");
+      cy.get("#choose-difficulty-submenu #1-submenu-item").click();
+
+      cy.get("#question-name-textfield").should("be.visible");
+      cy.get("#question-name-textfield").type("New Question");
+
+      cy.get("#question-answer-choices").should("be.visible");
+
+      // Correct answers should exist
+      cy.get('*[data-correct="correct"]').each(($value, index) =>
+        cy.wrap($value).should("be.visible")
+      );
+
+      /// Add mandatory text to the correct answer boxes
+      cy.get('*[data-correct="correct"]').each(($value, index) =>
+        cy.wrap($value).type(`answer ${index}`)
+      );
+
+      /// Type into incorrect boxes IF they exist
+      cy.get('*[data-correct="incorrect"]').each(($value, index) =>
+        cy.wrap($value).type(`incorrect answer ${index}`)
+      );
+
+      cy.get("#choice-form-submit-button").click();
+      cy.get("#post-status-alert").should("be.visible");
+    });
   });
 });

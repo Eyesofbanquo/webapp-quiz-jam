@@ -62,15 +62,15 @@ const setupTables = async () => {
   }
 };
 
-const setupCypressTables = async () => {
+export const setupCypressTables = async () => {
   if (process.env.NODE_ENV === "cypress") {
-    await dropTables().catch();
+    // await dropTables().catch();
     await createTables().catch();
     await createDefaultValues().catch();
   }
 };
 
-const dropTables = async () => {
+export const dropTables = async () => {
   await pool.query(dropCategoryTable()).catch();
   await pool.query(dropQuestionTable()).catch();
   await pool.query(dropQuestionTypeTable()).catch();
