@@ -7,13 +7,17 @@ import { Question } from "./schema";
 export const QUESTION_TABLE = "questions";
 export const QUESTION_TABLE_TEST = "questions_test";
 export const QUESTION_TABLE_PACT = "questions_pact";
+export const QUESTION_TABLE_CYPRESS = "questions_cypress";
 
 export const getQuestionTable = () => {
+  console.log(process.env.NODE_ENV);
   switch (process.env.NODE_ENV) {
     case "test":
       return QUESTION_TABLE_TEST;
     case "pact":
       return QUESTION_TABLE_PACT;
+    case "cypress":
+      return QUESTION_TABLE_CYPRESS;
     default:
       return QUESTION_TABLE;
   }
@@ -60,4 +64,8 @@ export const getQuestions = () => {
 
 export const deleteQuestion = () => {
   return `UPDATE ${getQuestionTable()} SET deleted = true WHERE id = $1 RETURNING *`;
+};
+
+export const dropQuestionTable = () => {
+  return `DROP TABLE ${getQuestionTable()}`;
 };

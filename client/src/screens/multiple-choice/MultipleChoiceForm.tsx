@@ -26,9 +26,17 @@ export const QuizForm: React.FC<{}> = () => {
   const [state, dispatch] = useReducer(reducer, initialFormState);
   const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>();
+  const [warningLabel, setWarningLabel] = useState<string>("");
   const [questionTypes, setQuestionTypes] = useState<
     { id: string; name: string }[]
   >([]);
+
+  const array: (
+    | "firstChoice"
+    | "secondChoice"
+    | "thirdChoice"
+    | "fourthChoice"
+  )[] = ["firstChoice", "secondChoice", "thirdChoice", "fourthChoice"];
 
   const { request: questionTypesRequest } = useMakeRequest<{
     success: Boolean;
@@ -50,6 +58,7 @@ export const QuizForm: React.FC<{}> = () => {
       <Grid item xs={8}>
         <Grid container>
           <CollapsibleAlert
+            id={"post-status-alert"}
             type="success"
             text="Success!"
             showAlert={state.showSuccessAlert}
@@ -88,50 +97,44 @@ export const QuizForm: React.FC<{}> = () => {
             });
           }}
         />
-        <CorrectAnswerComponent
-          isCorrectChoice
-          choiceText={state.firstChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "firstChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.secondChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "secondChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.thirdChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "thirdChoice",
-              payload: text,
-            });
-          }}
-        />
-        <CorrectAnswerComponent
-          isCorrectChoice={false}
-          choiceText={state.fourthChoice}
-          setChoiceText={(text) => {
-            dispatch({
-              type: "fourthChoice",
-              payload: text,
-            });
-          }}
-        />
+        <Grid id="question-answer-choices">
+          {array.map((value, index) => {
+            if (index === 0) {
+              const isCorrect = true;
+              return (
+                <CorrectAnswerComponent
+                  key={index}
+                  isCorrectChoice
+                  choiceText={state[value]}
+                  setChoiceText={(text) => {
+                    dispatch({
+                      type: value,
+                      payload: text,
+                    });
+                  }}
+                />
+              );
+            }
+            return (
+              <CorrectAnswerComponent
+                key={index}
+                isCorrectChoice={false}
+                choiceText={state[value]}
+                setChoiceText={(text) => {
+                  dispatch({
+                    type: value,
+                    payload: text,
+                  });
+                }}
+              />
+            );
+          })}
+        </Grid>
       </Grid>
       <Grid item xs={8}>
         <Grid container justify="center">
           <Button
+            id={"choice-form-submit-button"}
             variant="contained"
             color="primary"
             onClick={(event) => {
@@ -160,32 +163,43 @@ export const QuizForm: React.FC<{}> = () => {
                     ],
                   },
                 }).onReceive.then((response) => {
-                  dispatch({
-                    type: "showSuccessAlert",
-                    payload: true,
-                  });
-                  dispatch({
-                    type: "questionText",
-                    payload: "",
-                  });
-                  dispatch({
-                    type: "firstChoice",
-                    payload: "",
-                  });
-                  dispatch({
-                    type: "secondChoice",
-                    payload: "",
-                  });
-                  dispatch({
-                    type: "thirdChoice",
-                    payload: "",
-                  });
-                  dispatch({
-                    type: "fourthChoice",
-                    payload: "",
-                  });
+                  if (response.data.success === false) {
+                    setWarningLabel("This question already exists");
+                    dispatch({
+                      type: "showAlert",
+                      payload: true,
+                    });
+                  } else {
+                    dispatch({
+                      type: "showSuccessAlert",
+                      payload: true,
+                    });
+                    dispatch({
+                      type: "questionText",
+                      payload: "",
+                    });
+                    dispatch({
+                      type: "firstChoice",
+                      payload: "",
+                    });
+                    dispatch({
+                      type: "secondChoice",
+                      payload: "",
+                    });
+                    dispatch({
+                      type: "thirdChoice",
+                      payload: "",
+                    });
+                    dispatch({
+                      type: "fourthChoice",
+                      payload: "",
+                    });
+                  }
                 });
               } else {
+                setWarningLabel(
+                  "You must correctly fill out all fields to move on."
+                );
                 dispatch({
                   type: "showAlert",
                   payload: true,
@@ -198,8 +212,9 @@ export const QuizForm: React.FC<{}> = () => {
         </Grid>
         <Grid container>
           <CollapsibleAlert
+            id={"warning-alert"}
             type="info"
-            text="You must fill out all fields to move on."
+            text={warningLabel}
             showAlert={state.showAlert}
             setShowAlert={(val) => {
               dispatch({

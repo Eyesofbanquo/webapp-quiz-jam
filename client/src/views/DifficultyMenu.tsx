@@ -39,7 +39,8 @@ export const DifficultyMenu: React.FC<DifficultyMenuProps> = ({ onSelect }) => {
   return (
     <>
       <GenericMenuList
-        title={"Choose your difficulty"}
+        id={"choose-difficulty-menu"}
+        title={"Choose a difficulty"}
         subtitle={difficulty[difficultyIndex]}
         onClick={(event) => {
           setAnchorElement(event.currentTarget as any);
@@ -47,6 +48,7 @@ export const DifficultyMenu: React.FC<DifficultyMenuProps> = ({ onSelect }) => {
       />
 
       <Menu
+        id={"choose-difficulty-submenu"}
         open={Boolean(anchorElement)}
         anchorEl={anchorElement}
         keepMounted
@@ -57,6 +59,7 @@ export const DifficultyMenu: React.FC<DifficultyMenuProps> = ({ onSelect }) => {
         {difficulty.map((difficulty, index) => {
           return (
             <MenuItem
+              id={`${index}-submenu-item`}
               key={difficulty}
               selected={index === difficultyIndex}
               onClick={(event) => {

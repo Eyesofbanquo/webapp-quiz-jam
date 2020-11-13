@@ -17,7 +17,7 @@ interface Props {
   setShowAlert: (isVisible: boolean) => void;
 }
 
-const Template: Story<Props> = (args) => <CollapsibleAlert {...args} />;
+const Template: Story<Props> = (args) => <CollapsibleAlert id="" {...args} />;
 
 let showAlert = false;
 export const Info = Template.bind({});

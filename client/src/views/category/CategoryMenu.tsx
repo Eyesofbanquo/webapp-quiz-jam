@@ -43,13 +43,15 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onSelect }) => {
   return (
     <>
       <GenericMenuList
-        title={"Choose your category"}
+        id={"choose-category-menu"}
+        title={"Choose a category"}
         subtitle={categories[categoryIndex]?.name}
         onClick={(event) => {
           setAnchorElement(event.currentTarget as any);
         }}
       />
       <Menu
+        id={"choose-category-submenu"}
         open={Boolean(anchorElement)}
         anchorEl={anchorElement}
         keepMounted
@@ -60,6 +62,7 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onSelect }) => {
         {categories.map((category, index) => {
           return (
             <MenuItem
+              id={`${index}-submenu-item`}
               key={category?.id}
               selected={index === categoryIndex}
               onClick={(event) => {

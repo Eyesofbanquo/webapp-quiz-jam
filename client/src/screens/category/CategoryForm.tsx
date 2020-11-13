@@ -17,6 +17,7 @@ export const CategoryForm: React.FC = () => {
       style={{ padding: 16 }}
     >
       <CollapsibleAlert
+        id={"category-upload-alert"}
         type={uploaded ? "success" : "error"}
         text={
           uploaded

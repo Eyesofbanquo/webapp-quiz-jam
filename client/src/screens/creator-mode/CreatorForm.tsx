@@ -4,21 +4,29 @@ import { Link } from "react-router-dom";
 
 interface Item {
   name: string;
-  actions: { name: string; endpoint: string }[];
+  actions: { name: string; endpoint: string; id: string }[];
 }
 const items: Item[] = [
   {
     name: "Category",
     actions: [
-      { name: "Show Categories", endpoint: "/categories" },
-      { name: "Create a Category", endpoint: "/create-category" },
+      { name: "Show Categories", endpoint: "/categories", id: "show-category" },
+      {
+        name: "Create a Category",
+        endpoint: "/create-category",
+        id: "create-category",
+      },
     ],
   },
   {
-    name: "Quiz",
+    name: "Question",
     actions: [
-      { name: "Show Quizzes", endpoint: "/questions" },
-      { name: "Create a Quiz", endpoint: "/create-quiz" },
+      { name: "Show Questions", endpoint: "/questions", id: "show-questions" },
+      {
+        name: "Create a Question",
+        endpoint: "/create-quiz",
+        id: "create-question",
+      },
     ],
   },
 ];
@@ -37,6 +45,7 @@ export const CreatorForm: React.FC = () => {
             <Typography variant="h3">{item.name}</Typography>
             {item.actions.map((action) => (
               <Link
+                id={`${action.id.toLowerCase()}-button`}
                 to={action.endpoint}
                 style={{ textDecoration: "none", margin: 8 }}
               >
