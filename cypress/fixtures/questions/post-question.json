@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "data": {
+    "id": "0",
+    "name": "New Question",
+    "in_review": true,
+    "correct_answers": ["A"],
+    "incorrect_answers": ["B", "C", "D"],
+    "category_uid": "1",
+    "question_type_uid": "2",
+    "deleted": false,
+    "difficulty": "normal"
+  }
+}
