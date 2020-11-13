@@ -1,12 +1,20 @@
 import { Pool } from "pg";
 import { v4 as uuidv4 } from "uuid";
-import { createQuestionTable } from "../api/question/queries";
+import {
+  createQuestionTable,
+  dropQuestionTable,
+} from "../api/question/queries";
 import {
   createQuestionTypeTable,
   createQuestionType,
+  dropQuestionTypeTable,
 } from "../api/question-type/queries";
 import * as dotenv from "dotenv";
-import { createCategory, createCategoriesTable } from "../api/category/queries";
+import {
+  createCategory,
+  createCategoriesTable,
+  dropCategoryTable,
+} from "../api/category/queries";
 
 dotenv.config();
 
@@ -43,6 +51,31 @@ const createTables = async () => {
   await pool.query(createQuestionTable()).catch((err) => console.log(err));
 };
 
+const setupTables = async () => {
+  if (
+    process.env.LOCAL_DATABASE &&
+    process.env.NODE_ENV !== "test" &&
+    process.env.NODE_ENV !== "pact"
+  ) {
+    await createTables().catch();
+    await createDefaultValues().catch();
+  }
+};
+
+const setupCypressTables = async () => {
+  if (process.env.NODE_ENV === "cypress") {
+    await dropTables().catch();
+    await createTables().catch();
+    await createDefaultValues().catch();
+  }
+};
+
+const dropTables = async () => {
+  await pool.query(dropCategoryTable()).catch();
+  await pool.query(dropQuestionTable()).catch();
+  await pool.query(dropQuestionTypeTable()).catch();
+};
+
 const createDefaultValues = async () => {
   await createCategory({
     id: uuidv4(),
@@ -73,12 +106,4 @@ if (process.env.TRAVIS_DATABASE) {
 }
 
 /* This is to prevent the unit tests from creating unnecessary tables on launch */
-if (
-  process.env.LOCAL_DATABASE &&
-  process.env.NODE_ENV !== "test" &&
-  process.env.NODE_ENV !== "pact" &&
-  process.env.NODE_ENV !== "cypress"
-) {
-  createTables().catch();
-  createDefaultValues().catch();
-}
+setupTables().catch();
