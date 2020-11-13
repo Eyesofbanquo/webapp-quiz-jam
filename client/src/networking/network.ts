@@ -66,6 +66,7 @@ export function useMakeRequest<T>(props: RequestOptions) {
       method: props.method,
       data: props.data,
     }).onReceive.then((result) => {
+      console.log("from-network-call", result);
       setRequest(result.data);
     });
   }, []);

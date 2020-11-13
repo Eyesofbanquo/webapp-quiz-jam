@@ -8,21 +8,80 @@
 /// <reference types="cypress" />
 
 import "pg";
-import { setupCypressTables, dropTables } from "../../src/database/pool";
+import { v4 as uuid } from "uuid";
+import { setupCypressTables, dropTables } from "../../../src/database/pool";
 import {
+  createQuestion,
   createQuestionTable,
   deleteQuestion,
-} from "../../src/api/question/queries";
+} from "../../../src/api/question/queries";
+import { createCategory } from "api/category/queries";
 describe("Multiple Choice Form test", () => {
-  describe("All Tests", () => {
+  before(() => {});
+  describe("Creation: Success", () => {
     beforeEach(() => {
-      dropTables().catch();
-      setupCypressTables().catch();
+      cy.server();
+      cy.fixture("categories.json").then((data) => {
+        console.log(data);
+        cy.route({
+          method: "GET",
+          url: "/api/categories",
+          response: data,
+        }).as("categories");
+      });
+      cy.route({
+        method: "GET",
+        url: "/api/difficulty",
+        response: {
+          success: true,
+          data: ["easy", "normal", "hard"],
+        },
+      }).as("difficulty");
+
+      cy.route({
+        method: "GET",
+        url: "/api/question-types",
+        response: {
+          success: true,
+          data: [
+            {
+              name: "pairs",
+              id: "88303ca2-7def-4988-8aac-5f8d7bc62124",
+              deleted: false,
+            },
+          ],
+        },
+      }).as("types");
+
+      cy.route({
+        method: "POST",
+        url: "/api/questions",
+        response: {
+          success: true,
+          data: {
+            id: "0",
+            name: "New Question",
+            in_review: true,
+            correct_answers: ["A"],
+            incorrect_answers: ["B", "C", "D"],
+            category_uid: "1",
+            question_type_uid: "2",
+            deleted: false,
+            difficulty: "normal",
+          },
+        },
+      }).as("question-response");
+
       cy.visit("/");
     });
     it("can create a normal question", () => {
       cy.get("#creator-mode-nav-item").click();
+
       cy.get("#create-question-button").click();
+
+      cy.wait("@categories");
+      cy.wait("@difficulty");
+      cy.wait("@types");
 
       cy.get("#choose-category-menu .MuiListItemText-primary").should(
         "have.text",
@@ -63,6 +122,9 @@ describe("Multiple Choice Form test", () => {
       );
 
       cy.get("#choice-form-submit-button").click();
+
+      cy.wait("@question-response");
+
       cy.get("#post-status-alert").should("be.visible");
     });
   });

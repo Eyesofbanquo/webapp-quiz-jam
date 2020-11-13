@@ -55,7 +55,8 @@ const setupTables = async () => {
   if (
     process.env.LOCAL_DATABASE &&
     process.env.NODE_ENV !== "test" &&
-    process.env.NODE_ENV !== "pact"
+    process.env.NODE_ENV !== "pact" &&
+    process.env.NODE_ENV !== "cypress"
   ) {
     await createTables().catch();
     await createDefaultValues().catch();
@@ -63,8 +64,12 @@ const setupTables = async () => {
 };
 
 export const setupCypressTables = async () => {
+  console.log("ok");
+  console.log("EHEIHIE");
   if (process.env.NODE_ENV === "cypress") {
     // await dropTables().catch();
+    console.log("ok");
+    console.log("EHEIHIE");
     await createTables().catch();
     await createDefaultValues().catch();
   }
