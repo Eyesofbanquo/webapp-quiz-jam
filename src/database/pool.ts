@@ -62,7 +62,6 @@ const createDefaultValues = async () => {
 };
 
 if (process.env.DATABASE_URL) {
-  console.log("prod");
   createProductionDatabase().catch();
   createTables().catch();
   createDefaultValues().catch();
@@ -77,7 +76,8 @@ if (process.env.TRAVIS_DATABASE) {
 if (
   process.env.LOCAL_DATABASE &&
   process.env.NODE_ENV !== "test" &&
-  process.env.NODE_ENV !== "pact"
+  process.env.NODE_ENV !== "pact" &&
+  process.env.NODE_ENV !== "cypress"
 ) {
   createTables().catch();
   createDefaultValues().catch();

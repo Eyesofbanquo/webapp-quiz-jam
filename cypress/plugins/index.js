@@ -14,16 +14,13 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-const dotenvPlugin = require('cypress-dotenv');
+const dotenvPlugin = require("cypress-dotenv");
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   // process.env = null;
 
-  config = dotenvPlugin(config)
+  config = dotenvPlugin(config);
 
-  // process.env = Cypress.env();
-  // console.log(process.env);
-  // console.log('help');
   return config;
-}
+};

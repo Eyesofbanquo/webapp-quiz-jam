@@ -5,6 +5,7 @@ import { Category } from "./schema";
 export const CATEGORIES_TABLE = "categories";
 export const CATEGORIES_TABLE_TEST = "category_test";
 export const CATEGORIES_TABLE_PACT = "category_pact";
+export const CATEGORIES_TABLE_CYPRESS = "category_cypress";
 
 export const getCategoryTable = () => {
   switch (process.env.NODE_ENV) {
@@ -12,6 +13,8 @@ export const getCategoryTable = () => {
       return CATEGORIES_TABLE_TEST;
     case "pact":
       return CATEGORIES_TABLE_PACT;
+    case "cypress":
+      return CATEGORIES_TABLE_CYPRESS;
     default:
       return CATEGORIES_TABLE;
   }
@@ -43,4 +46,8 @@ export const getCategories = () => {
 
 export const deleteCategory = () => {
   return `UPDATE ${getCategoryTable()} SET deleted = true WHERE id = $1 RETURNING *`;
+};
+
+export const dropCategoryTable = () => {
+  return `DROP TABLE ${getCategoryTable()}`;
 };
