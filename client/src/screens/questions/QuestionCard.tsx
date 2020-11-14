@@ -47,13 +47,15 @@ const RightGrid: React.FC<QuestionComponent> = ({ question }) => (
 );
 
 export const QuestionCard: React.FC<{
+  index: number;
   question: Question;
   onPress: (question: Question) => void;
-}> = ({ question, onPress }) => {
+}> = ({ question, onPress, index }) => {
   const theme = useStyles();
 
   return (
     <Paper
+      data-row={`question-row-${index}`}
       className={theme.paper}
       style={{ cursor: "pointer", margin: 8 }}
       onClick={() => {

@@ -76,24 +76,23 @@ export const setupCypressTables = async () => {
 };
 
 export const dropTables = async () => {
-  await pool.query(dropCategoryTable()).catch();
   await pool.query(dropQuestionTable()).catch();
   await pool.query(dropQuestionTypeTable()).catch();
+  await pool.query(dropCategoryTable()).catch();
 };
+
+export const seedCategoryUUID = uuidv4();
+export const seedQuestionTypeUUID = uuidv4();
 
 const createDefaultValues = async () => {
   await createCategory({
-    id: uuidv4(),
+    id: seedCategoryUUID,
     name: "League of Legends",
     in_review: true,
     deleted: false,
-  })
-    .then((result) => {
-      console.log(result.rows);
-    })
-    .catch((err) => console.log(err));
+  }).catch((err) => console.log(err));
   await createQuestionType({
-    id: uuidv4(),
+    id: seedQuestionTypeUUID,
     name: "pairs",
     deleted: false,
   }).catch();
