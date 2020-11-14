@@ -202,6 +202,7 @@ describe("Multiple Choice Form test", () => {
 
       cy.get("#choice-form-submit-button").click();
 
+      cy.get("#creator-mode-nav-item").should("be.visible");
       cy.get("#creator-mode-nav-item").click();
 
       cy.get("#show-questions-button").click();
