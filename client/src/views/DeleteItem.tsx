@@ -12,6 +12,7 @@ export const DeleteItem: React.FC<DeleteQuestionProps> = ({
 }) => {
   return (
     <Grid
+      id={"delete-content-screen"}
       container
       direction="column"
       justify="center"
@@ -20,7 +21,12 @@ export const DeleteItem: React.FC<DeleteQuestionProps> = ({
     >
       <h1>Would you like to delete this item?</h1>
       <h3>{itemName}</h3>
-      <Button variant="contained" color="secondary" onClick={onDelete}>
+      <Button
+        data-delete-button
+        variant="contained"
+        color="secondary"
+        onClick={onDelete}
+      >
         Delete
       </Button>
     </Grid>

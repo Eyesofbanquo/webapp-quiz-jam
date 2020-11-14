@@ -9,12 +9,12 @@
 
 import "pg";
 import { v4 as uuid } from "uuid";
-import { setupCypressTables, dropTables } from "../../../src/database/pool";
+import { setupCypressTables, dropTables } from "../../../../src/database/pool";
 import {
   createQuestion,
   createQuestionTable,
   deleteQuestion,
-} from "../../../src/api/question/queries";
+} from "../../../../src/api/question/queries";
 import { createCategory } from "api/category/queries";
 describe("Multiple Choice Form test", () => {
   before(() => {
