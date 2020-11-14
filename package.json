@@ -9,7 +9,7 @@
     "test:cy": "cypress run",
     "test:cy:open": "cypress open",
     "test:cy:local": "cd client && npm run build && cd .. && NODE_ENV=cypress start-server-and-test dev http://localhost:5000 test:cy:open",
-    "test:e2e": "cd client && npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
+    "test:e2e": "cd client && npm run build && cd ..  && NODE_ENV=cypress start-server-and-test start http://localhost:5000 test:cy",
     "test:ci:e2e": "cd client && npm install && CI=false npm run build && cd ..  && start-server-and-test start http://localhost:5000 test:cy",
     "dev": "nodemon -x ts-node ./server.ts",
     "start": "ts-node ./server.ts",
