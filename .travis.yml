@@ -35,14 +35,14 @@ jobs:
         - npm run test
       cache:
         npm: true
-      if: (NOT branch = master OR branch = staging)
+      if: (NOT branch = master OR branch = staging OR type = pull_request)
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
       cache:
         npm: true
-      if: (NOT branch = master OR branch = staging)
+      if: (NOT branch = master OR branch = staging OR type = pull_request)
     - stage: storybook
       name: "Story book"
       script:
