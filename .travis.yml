@@ -35,19 +35,19 @@ jobs:
         - npm run test
       cache:
         npm: true
-      if: NOT branch = master
+      if: (NOT branch = master AND branch = staging)
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
       cache:
         npm: true
-      if: NOT branch = master
+      if: (NOT branch = master AND branch = staging)
     - stage: storybook
       name: "Story book"
       script:
         - npm run storybook
-      if: NOT branch = master
+      if: (branch = staging AND type = pull_request)
     - stage: e2e
       name: "Cypress tests"
       script:
@@ -80,5 +80,3 @@ jobs:
       if: type = pull_request
     - stage: e2e
       if: branch = staging
-    - stage: storybook
-      if: branch = staging OR type = pull_request OR branch = master
