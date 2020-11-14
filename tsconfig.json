@@ -5,6 +5,6 @@
     "baseUrl": "./src",
     "moduleResolution": "Node",
   },
-  "include": ["src/**/*.ts", "server.ts", "cypress/**/*.ts"],
+  "include": ["src/**/*.ts", "server.ts", "cypress/**/*.ts", "cypress/plugins/index.js"],
   "exclude": ["node_modules"]
 }
