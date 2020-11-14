@@ -178,4 +178,37 @@ describe("Multiple Choice Form test", () => {
       );
     });
   });
+
+  describe("Verify question created", () => {
+    beforeEach(() => {
+      cy.task("create:db");
+      cy.visit("/create-quiz");
+    });
+    afterEach(() => {
+      cy.task("destroy:db");
+    });
+
+    it("should show question that was created", () => {
+      cy.get("#question-name-textfield").type("Cypress Question");
+
+      cy.get('*[data-correct="correct"]').each(($value, index) =>
+        cy.wrap($value).type(`answer ${index}`)
+      );
+
+      /// Type into incorrect boxes IF they exist
+      cy.get('*[data-correct="incorrect"]').each(($value, index) =>
+        cy.wrap($value).type(`incorrect answer ${index}`)
+      );
+
+      cy.get("#choice-form-submit-button").click();
+
+      cy.get("#creator-mode-nav-item").click();
+
+      cy.get("#show-questions-button").click();
+
+      cy.get("*[data-row]").each(($value, index) =>
+        cy.wrap($value).should("be.visible")
+      );
+    });
+  });
 });

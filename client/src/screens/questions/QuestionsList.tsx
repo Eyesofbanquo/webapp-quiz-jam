@@ -64,8 +64,9 @@ export const QuestionList = () => {
       alignItems="center"
       style={{ padding: 16 }}
     >
-      {questions?.map((question) => (
+      {questions?.map((question, index) => (
         <QuestionCard
+          index={index}
           key={question.id}
           question={question}
           onPress={(question) => {
