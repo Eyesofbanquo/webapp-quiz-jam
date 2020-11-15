@@ -61,7 +61,7 @@ jobs:
     - stage: smoke
       name: "Smoke Test"
       script:
-        - npm run heroku-postbuild
+        - npm run smoke-test
       cache:
         npm: true
         directories:
