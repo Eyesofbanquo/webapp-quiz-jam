@@ -14,8 +14,7 @@
     "dev": "nodemon -x ts-node ./server.ts",
     "start": "ts-node ./server.ts",
     "storybook": "cd client && npm ci && npm run build-storybook && npm run chromatic-cli",
-    "heroku-postbuild": "cd client && npm ci && npm run build",
-    "smoke-test": "cd client && npm ci && CI=false npm run build"
+    "heroku-postbuild": "cd client && npm ci --also=dev && CI=false npm run build"
   },
   "author": "",
   "license": "ISC",
