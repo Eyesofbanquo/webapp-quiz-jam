@@ -3,7 +3,7 @@ import React from "react";
 import { TextField } from "../../need/a-textfield/TextField";
 
 /* Can create a abstract unit called EditableHeader */
-export const QuestionComponent: React.FC<{
+export const QuestionNameTextField: React.FC<{
   questionText: string;
   setQuestionText: (text: string) => void;
 }> = ({ questionText, setQuestionText }) => {

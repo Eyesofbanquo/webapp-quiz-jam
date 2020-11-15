@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useReducer, useState } from "react";
 import { CorrectAnswerComponent } from "../../views/CorrectAnswerComponent";
-import { QuestionComponent } from "../../views/question/QuestionComponent";
+import { QuestionNameTextField } from "../../views/question/QuestionNameTextField";
 import { makeRequest, useMakeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../need/an-alert/CollapsibleAlert";
 import { initialFormState, validateFields } from "../../controllers/form";
@@ -88,7 +88,7 @@ export const QuizForm: React.FC<{}> = () => {
       </Grid>
 
       <Grid item xs={8}>
-        <QuestionComponent
+        <QuestionNameTextField
           questionText={state.questionText}
           setQuestionText={(text) => {
             dispatch({
