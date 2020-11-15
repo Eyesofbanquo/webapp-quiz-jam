@@ -9,6 +9,7 @@ stages:
   - deploy
   - e2e
   - storybook
+  - smoke
 
 addons:
   apt:
@@ -57,9 +58,22 @@ jobs:
         directories:
           - /home/travis/.cache
       if: (branch = staging AND type = pull_request)
+    - stage: smoke
+      name: "Smoke Test"
+      script:
+        - npm run heroku-postbuild
+      cache:
+        npm: true
+        directories:
+          - /home/travis/.cache
+      if: branch = staging AND type = pull_request
     - stage: staging
       name: "Deploy to staging"
       script: skip
+      cache:
+        npm: true
+        directories:
+          - /home/travis/.cache
       deploy:
         provider: heroku
         app:
