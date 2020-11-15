@@ -8,7 +8,7 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import React, { useEffect, useReducer, useState } from "react";
-import { CorrectAnswerComponent } from "../../views/CorrectAnswerComponent";
+import { AnswerChoiceTextField } from "../../views/question/AnswerChoiceTextField";
 import { QuestionNameTextArea } from "../../views/question/QuestionNameTextArea";
 import { makeRequest, useMakeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../need/an-alert/CollapsibleAlert";
@@ -102,7 +102,7 @@ export const QuizForm: React.FC<{}> = () => {
             if (index === 0) {
               const isCorrect = true;
               return (
-                <CorrectAnswerComponent
+                <AnswerChoiceTextField
                   key={index}
                   isCorrectChoice
                   choiceText={state[value]}
@@ -116,7 +116,7 @@ export const QuizForm: React.FC<{}> = () => {
               );
             }
             return (
-              <CorrectAnswerComponent
+              <AnswerChoiceTextField
                 key={index}
                 isCorrectChoice={false}
                 choiceText={state[value]}
