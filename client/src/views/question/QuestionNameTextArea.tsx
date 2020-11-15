@@ -1,14 +1,14 @@
 import { Paper, TextareaAutosize } from "@material-ui/core";
 import React from "react";
-import { TextField } from "../../need/a-textfield/TextField";
+import { TextArea } from "../../need/a-textarea/TextArea";
 
 /* Can create a abstract unit called EditableHeader */
-export const QuestionNameTextField: React.FC<{
+export const QuestionNameTextArea: React.FC<{
   questionText: string;
   setQuestionText: (text: string) => void;
 }> = ({ questionText, setQuestionText }) => {
   return (
-    <TextField
+    <TextArea
       id={"question-name-textfield"}
       text={questionText}
       setText={setQuestionText}

@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 
 import {
-  TextField as Component,
+  TextArea as Component,
   TextFieldProps,
-} from "../../../need/a-textfield/TextField";
+} from "../../../need/a-textarea/TextArea";
 
 export default {
   title: "Qizzo/TextFields",

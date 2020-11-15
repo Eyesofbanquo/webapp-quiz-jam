@@ -8,7 +8,7 @@ export interface TextFieldProps {
   setText: (text: string) => void;
 }
 
-export const TextField: React.FC<TextFieldProps> = ({
+export const TextArea: React.FC<TextFieldProps> = ({
   id,
   placeholder,
   text,
