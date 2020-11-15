@@ -47,7 +47,7 @@ jobs:
       name: "Story book"
       script:
         - npm run storybook
-      if: (branch = staging AND type = pull_request)
+      if: branch = staging
     - stage: e2e
       name: "Cypress tests"
       script:
