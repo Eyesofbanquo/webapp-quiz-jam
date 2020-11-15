@@ -36,7 +36,7 @@ export default pool;
 
 const createProductionDatabase = async () => {
   await pool
-    .query(`CREATE DATABASE ${DATABASE}`)
+    .query(`CREATE DATABASE IF NOT EXISTS ${DATABASE}`)
     .catch((err) => console.log(err));
 };
 

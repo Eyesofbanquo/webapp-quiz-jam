@@ -8,8 +8,8 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import React, { useEffect, useReducer, useState } from "react";
-import { CorrectAnswerComponent } from "../../views/CorrectAnswerComponent";
-import { QuestionComponent } from "../../views/question/QuestionComponent";
+import { AnswerChoiceTextField } from "../../views/question/AnswerChoiceTextField";
+import { QuestionNameTextArea } from "../../views/question/QuestionNameTextArea";
 import { makeRequest, useMakeRequest } from "../../networking/network";
 import { CollapsibleAlert } from "../../need/an-alert/CollapsibleAlert";
 import { initialFormState, validateFields } from "../../controllers/form";
@@ -88,7 +88,7 @@ export const QuizForm: React.FC<{}> = () => {
       </Grid>
 
       <Grid item xs={8}>
-        <QuestionComponent
+        <QuestionNameTextArea
           questionText={state.questionText}
           setQuestionText={(text) => {
             dispatch({
@@ -102,7 +102,7 @@ export const QuizForm: React.FC<{}> = () => {
             if (index === 0) {
               const isCorrect = true;
               return (
-                <CorrectAnswerComponent
+                <AnswerChoiceTextField
                   key={index}
                   isCorrectChoice
                   choiceText={state[value]}
@@ -116,7 +116,7 @@ export const QuizForm: React.FC<{}> = () => {
               );
             }
             return (
-              <CorrectAnswerComponent
+              <AnswerChoiceTextField
                 key={index}
                 isCorrectChoice={false}
                 choiceText={state[value]}
