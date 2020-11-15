@@ -5,8 +5,8 @@ import { MultipleChoiceQuestion } from "../../models/multiplechoice";
 interface Question {
   id: string;
   name: string;
-  incorrectAnswers: string[];
-  correctAnswers: string[];
+  incorrect_answers: string[];
+  correct_answers: string[];
   inReview: boolean;
   categoryId: string;
   questionTypeId: string;
@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     margin: "auto",
-    width: 500,
   },
 }));
 
@@ -31,7 +30,8 @@ const LeftGrid: React.FC<QuestionComponent> = ({ question }) => (
         {question.name}
       </Typography>
       <Typography variant="body2" gutterBottom>
-        {question.id}
+        Correct Answer Choices: {question.correct_answers.length} | Incorrect
+        Answer Choices: {question.incorrect_answers.length}
       </Typography>
       <Typography variant="body2" color="textSecondary">
         Author
@@ -62,7 +62,7 @@ export const QuestionCard: React.FC<{
         onPress(question);
       }}
     >
-      <Grid item xs={12} sm container>
+      <Grid item>
         <LeftGrid question={question} />
         <RightGrid question={question} />
       </Grid>

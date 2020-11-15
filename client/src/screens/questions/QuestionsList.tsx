@@ -14,8 +14,8 @@ interface QuestionRequest {
 interface Question {
   id: string;
   name: string;
-  incorrectAnswers: string[];
-  correctAnswers: string[];
+  incorrect_answers: string[];
+  correct_answers: string[];
   inReview: boolean;
   categoryId: string;
   questionTypeId: string;
@@ -57,13 +57,7 @@ export const QuestionList = () => {
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      style={{ padding: 16 }}
-    >
+    <Grid container xs={12} direction="row" style={{ padding: 16 }}>
       {questions?.map((question, index) => (
         <QuestionCard
           index={index}
