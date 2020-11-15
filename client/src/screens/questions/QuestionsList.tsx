@@ -5,22 +5,12 @@ import { makeRequest, useMakeRequest } from "../../networking/network";
 import { DeleteItem } from "../../views/DeleteItem";
 import { EmptyContent } from "../../views/EmptyContent";
 import { deleteRequest } from "../../networking/deleteItem.helper";
-import { MultipleChoiceQuestion } from "../../models/multiplechoice";
+import { Question } from "../../models/question";
 
 interface QuestionRequest {
   success: boolean;
   data: Question[];
 }
-interface Question {
-  id: string;
-  name: string;
-  incorrectAnswers: string[];
-  correctAnswers: string[];
-  inReview: boolean;
-  categoryId: string;
-  questionTypeId: string;
-}
-
 export const QuestionList = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
 
@@ -57,13 +47,7 @@ export const QuestionList = () => {
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      style={{ padding: 16 }}
-    >
+    <Grid container xs={12} direction="row" style={{ padding: 16 }}>
       {questions?.map((question, index) => (
         <QuestionCard
           index={index}

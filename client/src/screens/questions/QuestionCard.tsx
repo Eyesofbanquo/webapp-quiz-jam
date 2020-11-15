@@ -1,50 +1,15 @@
 import React from "react";
-import { Grid, Paper, makeStyles, Typography } from "@material-ui/core";
-import { MultipleChoiceQuestion } from "../../models/multiplechoice";
-
-interface Question {
-  id: string;
-  name: string;
-  incorrectAnswers: string[];
-  correctAnswers: string[];
-  inReview: boolean;
-  categoryId: string;
-  questionTypeId: string;
-}
-
-type QuestionComponent = {
-  question: Question;
-};
+import { Grid, Paper, makeStyles } from "@material-ui/core";
+import { Question } from "../../models/question";
+import { QuestionCardLeftGridItem } from "./QuestionCardLeftGridItem";
+import { QuestionCardRightGridItem } from "./QuestionCardRightGridItem";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     margin: "auto",
-    width: 500,
   },
 }));
-
-const LeftGrid: React.FC<QuestionComponent> = ({ question }) => (
-  <Grid item xs container direction="column" spacing={2}>
-    <Grid item xs>
-      <Typography gutterBottom variant="subtitle1">
-        {question.name}
-      </Typography>
-      <Typography variant="body2" gutterBottom>
-        {question.id}
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
-        Author
-      </Typography>
-    </Grid>
-  </Grid>
-);
-
-const RightGrid: React.FC<QuestionComponent> = ({ question }) => (
-  <Grid item>
-    <Typography variant="subtitle1">{question.inReview}</Typography>
-  </Grid>
-);
 
 export const QuestionCard: React.FC<{
   index: number;
@@ -62,9 +27,9 @@ export const QuestionCard: React.FC<{
         onPress(question);
       }}
     >
-      <Grid item xs={12} sm container>
-        <LeftGrid question={question} />
-        <RightGrid question={question} />
+      <Grid item>
+        <QuestionCardLeftGridItem question={question} />
+        <QuestionCardRightGridItem in_review={question.in_review} />
       </Grid>
     </Paper>
   );
