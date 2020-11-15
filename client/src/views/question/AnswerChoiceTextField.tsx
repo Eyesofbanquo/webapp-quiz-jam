@@ -10,7 +10,7 @@ export const AnswerChoiceTextField: React.FC<{
   const helperText = isCorrectChoice
     ? "Insert the correct answer choice here."
     : "Insert an answer choice here.";
-
+  const dataCorrectText = isCorrectChoice ? "correct" : "incorrect";
   return (
     <TextField
       id={id}
@@ -21,7 +21,7 @@ export const AnswerChoiceTextField: React.FC<{
       setText={setChoiceText}
       helperText={helperText}
       additionalProps={{
-        "data-correct": isCorrectChoice ? "correct" : "incorrect",
+        "data-correct": dataCorrectText,
       }}
     />
   );

@@ -3,28 +3,29 @@ import React, { useState } from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 
 import {
-  TextArea as Component,
-  TextAreaProps,
-} from "../../../need/a-textarea/TextArea";
+  TextField as Component,
+  TextFieldProps,
+} from "../../../need/a-textfield/TextField";
 
 export default {
-  title: "Qizzo/TextAreas",
+  title: "Qizzo/TextFields",
   component: Component,
   argTypes: { setText: { action: "onChange" } },
 } as Meta;
 
-const Template: Story<TextAreaProps> = (args) => {
+const Template: Story<TextFieldProps> = (args) => {
   const [text, setText] = useState<string>("");
   return (
     <Component
-      id={"0"}
+      id={"id"}
+      required
+      label="Required"
       text={text}
-      placeholder={"Placeholder"}
-      setText={(text) => {
-        setText(text);
-      }}
+      errorCondition={text.length === 0}
+      setText={setText}
+      helperText={"For Storybook"}
     />
   );
 };
 
-export const TextArea = Template.bind({});
+export const TextField = Template.bind({});

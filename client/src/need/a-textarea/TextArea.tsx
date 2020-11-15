@@ -1,14 +1,14 @@
 import { Paper, TextareaAutosize } from "@material-ui/core";
 import React from "react";
 
-export interface TextFieldProps {
+export interface TextAreaProps {
   id: string;
   placeholder: string;
   text: string;
   setText: (text: string) => void;
 }
 
-export const TextArea: React.FC<TextFieldProps> = ({
+export const TextArea: React.FC<TextAreaProps> = ({
   id,
   placeholder,
   text,
