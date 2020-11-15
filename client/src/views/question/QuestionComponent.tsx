@@ -1,5 +1,6 @@
 import { Paper, TextareaAutosize } from "@material-ui/core";
 import React from "react";
+import { TextField } from "../../need/a-textfield/TextField";
 
 /* Can create a abstract unit called EditableHeader */
 export const QuestionComponent: React.FC<{
@@ -7,18 +8,11 @@ export const QuestionComponent: React.FC<{
   setQuestionText: (text: string) => void;
 }> = ({ questionText, setQuestionText }) => {
   return (
-    <Paper style={{ padding: 16, borderRadius: 8, margin: 4 }}>
-      <TextareaAutosize
-        id={"question-name-textfield"}
-        style={{ width: "100%" }}
-        aria-label="minimum height"
-        rowsMin={3}
-        value={questionText}
-        onChange={(event) => {
-          setQuestionText(event.target.value);
-        }}
-        placeholder="Insert your question here."
-      />
-    </Paper>
+    <TextField
+      id={"question-name-textfield"}
+      text={questionText}
+      setText={setQuestionText}
+      placeholder={"Insert your question here."}
+    />
   );
 };

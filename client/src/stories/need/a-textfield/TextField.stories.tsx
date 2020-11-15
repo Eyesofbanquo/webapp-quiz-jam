@@ -17,6 +17,7 @@ const Template: Story<TextFieldProps> = (args) => {
   const [text, setText] = useState<string>("");
   return (
     <Component
+      id={"0"}
       text={text}
       placeholder={"Placeholder"}
       setText={(text) => {
