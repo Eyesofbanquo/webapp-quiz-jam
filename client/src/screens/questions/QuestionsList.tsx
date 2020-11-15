@@ -5,22 +5,12 @@ import { makeRequest, useMakeRequest } from "../../networking/network";
 import { DeleteItem } from "../../views/DeleteItem";
 import { EmptyContent } from "../../views/EmptyContent";
 import { deleteRequest } from "../../networking/deleteItem.helper";
-import { MultipleChoiceQuestion } from "../../models/multiplechoice";
+import { Question } from "../../models/question";
 
 interface QuestionRequest {
   success: boolean;
   data: Question[];
 }
-interface Question {
-  id: string;
-  name: string;
-  incorrect_answers: string[];
-  correct_answers: string[];
-  inReview: boolean;
-  categoryId: string;
-  questionTypeId: string;
-}
-
 export const QuestionList = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
 
