@@ -4,10 +4,6 @@ import { Question } from "../../models/question";
 import { QuestionCardLeftGridItem } from "./QuestionCardLeftGridItem";
 import { QuestionCardRightGridItem } from "./QuestionCardRightGridItem";
 
-type QuestionComponent = {
-  question: Question;
-};
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
