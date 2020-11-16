@@ -33,6 +33,18 @@ describe("Create Category", () => {
     });
   });
 
+  context("When a category is created", () => {
+    it("Should show in on the all categories screen", () => {
+      cy.get("#category-input-field").type("New");
+
+      cy.get("#create-category-submit-button").click();
+
+      cy.get("#go-to-show-categories").click();
+
+      cy.get("[data-row]").should("have.length.greaterThan", 0);
+    });
+  });
+
   it("Should not create a category without text", () => {
     cy.get("#create-category-submit-button").click();
 

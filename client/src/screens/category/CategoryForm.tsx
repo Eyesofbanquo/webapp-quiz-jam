@@ -76,7 +76,11 @@ export const CategoryForm: React.FC = () => {
         </Button>
       </Grid>
       <Grid item>
-        <Link to={`/categories`} style={{ textDecoration: "none" }}>
+        <Link
+          id={"go-to-show-categories"}
+          to={`/categories`}
+          style={{ textDecoration: "none" }}
+        >
           <Button variant="contained" color="secondary" onClick={() => {}}>
             View Categories
           </Button>
