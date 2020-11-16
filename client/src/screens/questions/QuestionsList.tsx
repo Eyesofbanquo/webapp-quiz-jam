@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { QuestionCard } from "./QuestionCard";
 import { makeRequest, useMakeRequest } from "../../networking/network";
-import { DeleteItem } from "../../views/DeleteItem";
-import { EmptyContent } from "../../views/EmptyContent";
+import { DeleteItem } from "../DeleteItem";
+import { EmptyContent } from "../EmptyContent";
 import { deleteRequest } from "../../networking/deleteItem.helper";
 import { Question } from "../../models/question";
 

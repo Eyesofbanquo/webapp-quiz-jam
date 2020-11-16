@@ -13,6 +13,7 @@ export const CollapsibleAlert: React.FC<{
   <Collapse in={showAlert} style={{ margin: "auto" }}>
     <Alert
       id={id}
+      data-alert-type={type}
       action={
         <IconButton
           aria-label="close"

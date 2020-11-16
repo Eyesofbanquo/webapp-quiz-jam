@@ -23,6 +23,7 @@ import pool, {
 import { v4 as uuidv4 } from "uuid";
 import { createQuestion } from "../../src/api/question/queries";
 import { Question } from "../../src/api/question/schema";
+import { createCategory } from "api/category/queries";
 const dotenvPlugin = require("cypress-dotenv");
 
 module.exports = (on, config) => {
@@ -54,6 +55,16 @@ module.exports = (on, config) => {
         deleted: false,
         difficulty: "normal",
       }).catch();
+      return null;
+    },
+    "add-category:db": async () => {
+      process.env.NODE_ENV = "cypress";
+      await createCategory({
+        id: uuidv4(),
+        name: "New",
+        in_review: true,
+        deleted: false,
+      });
       return null;
     },
     "destroy:db": async () => {
