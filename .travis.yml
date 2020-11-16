@@ -9,6 +9,7 @@ stages:
   - deploy
   - e2e
   - storybook
+  - smoke
 
 addons:
   apt:
@@ -35,14 +36,19 @@ jobs:
         - npm run test
       cache:
         npm: true
-      if: NOT branch = master
+      if: (NOT branch = master AND NOT branch = staging AND NOT type = pull_request)
     - stage: express
       name: "Contract tests"
       script:
         - npm run test:pact
       cache:
         npm: true
-      if: NOT branch = master
+      if: (NOT branch = master AND NOT branch = staging AND NOT type = pull_request)
+    - stage: storybook
+      name: "Story book"
+      script:
+        - npm run storybook
+      if: branch = staging
     - stage: e2e
       name: "Cypress tests"
       script:
@@ -51,10 +57,23 @@ jobs:
         npm: true
         directories:
           - /home/travis/.cache
-      if: NOT branch = master
+      if: (branch = staging AND type = pull_request)
+    - stage: smoke
+      name: "Smoke Test"
+      script:
+        - npm run heroku-postbuild
+      cache:
+        npm: true
+        directories:
+          - /home/travis/.cache
+      if: branch = staging AND type = pull_request
     - stage: staging
       name: "Deploy to staging"
       script: skip
+      cache:
+        npm: true
+        directories:
+          - /home/travis/.cache
       deploy:
         provider: heroku
         app:
@@ -73,7 +92,3 @@ jobs:
   exclude:
     - stage: staging
       if: type = pull_request
-    - stage: express
-      if: branch = staging
-    - stage: e2e
-      if: branch = staging

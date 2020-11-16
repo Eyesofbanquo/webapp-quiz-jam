@@ -1,22 +1,31 @@
 import { Paper, TextareaAutosize } from "@material-ui/core";
 import React from "react";
 
-/* Can create a abstract unit called EditableHeader */
-export const QuestionComponent: React.FC<{
-  questionText: string;
-  setQuestionText: (text: string) => void;
-}> = ({ questionText, setQuestionText }) => {
+export interface TextAreaProps {
+  id: string;
+  placeholder: string;
+  text: string;
+  setText: (text: string) => void;
+}
+
+export const TextArea: React.FC<TextAreaProps> = ({
+  id,
+  placeholder,
+  text,
+  setText,
+}) => {
   return (
     <Paper style={{ padding: 16, borderRadius: 8, margin: 4 }}>
       <TextareaAutosize
+        id={id}
         style={{ width: "100%" }}
         aria-label="minimum height"
         rowsMin={3}
-        value={questionText}
+        value={text}
         onChange={(event) => {
-          setQuestionText(event.target.value);
+          setText(event.target.value);
         }}
-        placeholder="Insert your question here."
+        placeholder={placeholder}
       />
     </Paper>
   );

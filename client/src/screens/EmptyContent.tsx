@@ -4,6 +4,7 @@ import React from "react";
 export const EmptyContent: React.FC<{ itemType: string }> = ({ itemType }) => {
   return (
     <Grid
+      id={"no-content-view"}
       container
       direction="column"
       justify="center"

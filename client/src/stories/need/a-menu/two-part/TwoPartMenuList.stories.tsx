@@ -17,9 +17,9 @@ interface Props {
 
 const Template: Story<Props> = (args) => <GenericMenuList {...args} />;
 
-export const Main = Template.bind({});
-Main.args = {
-  title: "Margaux",
-  subtitle: "Pernin",
+export const TwoPartMenuList = Template.bind({});
+TwoPartMenuList.args = {
+  title: "Title",
+  subtitle: "Subtitle",
   onClick: (event) => {},
 };

@@ -5,27 +5,53 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Category } from "../../models/category";
 import { GenericMenuList } from "../../need/a-menu/two-part/GenericMenuList";
+import { useMakeRequest } from "../../networking/network";
 
-export const CategoryMenu: React.FC<{
-  categories: Category[];
-  categoryIndex: number;
-  setCategoryIndex: (index: number) => void;
-}> = ({ categories, categoryIndex, setCategoryIndex }) => {
+export interface CategoryMenuProps {
+  onSelect: (category: Category) => void;
+}
+
+interface CategoryRequest {
+  success: boolean;
+  data: Category[];
+}
+
+export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onSelect }) => {
   const [anchorElement, setAnchorElement] = useState(null);
+  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const {
+    request: categoryRequest,
+    setRequest: setCategoryRequest,
+  } = useMakeRequest<CategoryRequest>({
+    endpoint: "categories",
+    method: "get",
+  });
+
+  useEffect(() => {
+    setCategories(categoryRequest?.data ?? []);
+  }, [categoryRequest]);
+
+  useEffect(() => {
+    onSelect(categories[categoryIndex]);
+  }, [categories]);
 
   return (
     <>
       <GenericMenuList
-        title={"Choose your category"}
+        id={"choose-category-menu"}
+        title={"Choose a category"}
         subtitle={categories[categoryIndex]?.name}
         onClick={(event) => {
           setAnchorElement(event.currentTarget as any);
         }}
       />
       <Menu
+        id={"choose-category-submenu"}
         open={Boolean(anchorElement)}
         anchorEl={anchorElement}
         keepMounted
@@ -36,10 +62,12 @@ export const CategoryMenu: React.FC<{
         {categories.map((category, index) => {
           return (
             <MenuItem
+              id={`${index}-submenu-item`}
               key={category?.id}
               selected={index === categoryIndex}
               onClick={(event) => {
                 setCategoryIndex(index);
+                onSelect(categories[index]);
                 setAnchorElement(null);
               }}
             >

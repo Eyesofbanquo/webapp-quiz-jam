@@ -1,10 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "noEmit": false
-  },
+    "noEmit": false,
+    },
   "include": [
     "../node_modules/cypress",
-    "./*/*.ts"
+    "./**/*.ts", "plugins/index.js"
   ]
 }

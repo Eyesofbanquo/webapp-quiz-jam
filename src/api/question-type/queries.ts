@@ -3,8 +3,8 @@ import pool from "../../database/pool";
 
 export const QUESTION_TYPE_TABLE = "question_types";
 export const QUESTION_TYPE_TABLE_TEST = "question_type_test";
-
 export const QUESTION_TYPE_TABLE_PACT = "question_type_pact";
+export const QUESTION_TYPE_TABLE_CYPRESS = "question_type_cypress";
 
 export const getQuestionTypeTable = () => {
   switch (process.env.NODE_ENV) {
@@ -12,6 +12,8 @@ export const getQuestionTypeTable = () => {
       return QUESTION_TYPE_TABLE_TEST;
     case "pact":
       return QUESTION_TYPE_TABLE_PACT;
+    case "cypress":
+      return QUESTION_TYPE_TABLE_CYPRESS;
     default:
       return QUESTION_TYPE_TABLE;
   }

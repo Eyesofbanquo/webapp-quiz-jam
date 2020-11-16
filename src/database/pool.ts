@@ -1,12 +1,20 @@
 import { Pool } from "pg";
 import { v4 as uuidv4 } from "uuid";
-import { createQuestionTable } from "../api/question/queries";
+import {
+  createQuestionTable,
+  dropQuestionTable,
+} from "../api/question/queries";
 import {
   createQuestionTypeTable,
   createQuestionType,
+  dropQuestionTypeTable,
 } from "../api/question-type/queries";
 import * as dotenv from "dotenv";
-import { createCategory, createCategoriesTable } from "../api/category/queries";
+import {
+  createCategory,
+  createCategoriesTable,
+  dropCategoryTable,
+} from "../api/category/queries";
 
 dotenv.config();
 
@@ -28,7 +36,7 @@ export default pool;
 
 const createProductionDatabase = async () => {
   await pool
-    .query(`CREATE DATABASE ${DATABASE}`)
+    .query(`CREATE DATABASE IF NOT EXISTS ${DATABASE}`)
     .catch((err) => console.log(err));
 };
 
@@ -43,26 +51,54 @@ const createTables = async () => {
   await pool.query(createQuestionTable()).catch((err) => console.log(err));
 };
 
+const setupTables = async () => {
+  if (
+    process.env.LOCAL_DATABASE &&
+    process.env.NODE_ENV !== "test" &&
+    process.env.NODE_ENV !== "pact" &&
+    process.env.NODE_ENV !== "cypress"
+  ) {
+    await createTables().catch();
+    await createDefaultValues().catch();
+  }
+};
+
+export const setupCypressTables = async () => {
+  console.log("ok");
+  console.log("EHEIHIE");
+  if (process.env.NODE_ENV === "cypress") {
+    // await dropTables().catch();
+    console.log("ok");
+    console.log("EHEIHIE");
+    await createTables().catch();
+    await createDefaultValues().catch();
+  }
+};
+
+export const dropTables = async () => {
+  await pool.query(dropQuestionTable()).catch();
+  await pool.query(dropQuestionTypeTable()).catch();
+  await pool.query(dropCategoryTable()).catch();
+};
+
+export const seedCategoryUUID = uuidv4();
+export const seedQuestionTypeUUID = uuidv4();
+
 const createDefaultValues = async () => {
   await createCategory({
-    id: uuidv4(),
+    id: seedCategoryUUID,
     name: "League of Legends",
     in_review: true,
     deleted: false,
-  })
-    .then((result) => {
-      console.log(result.rows);
-    })
-    .catch((err) => console.log(err));
+  }).catch((err) => console.log(err));
   await createQuestionType({
-    id: uuidv4(),
+    id: seedQuestionTypeUUID,
     name: "pairs",
     deleted: false,
   }).catch();
 };
 
 if (process.env.DATABASE_URL) {
-  console.log("prod");
   createProductionDatabase().catch();
   createTables().catch();
   createDefaultValues().catch();
@@ -74,11 +110,4 @@ if (process.env.TRAVIS_DATABASE) {
 }
 
 /* This is to prevent the unit tests from creating unnecessary tables on launch */
-if (
-  process.env.LOCAL_DATABASE &&
-  process.env.NODE_ENV !== "test" &&
-  process.env.NODE_ENV !== "pact"
-) {
-  createTables().catch();
-  createDefaultValues().catch();
-}
+setupTables().catch();

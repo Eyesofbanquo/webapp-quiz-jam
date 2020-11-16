@@ -7,6 +7,7 @@ import { makeRequest } from "../../networking/network";
 export const CategoryForm: React.FC = () => {
   const [categoryName, setCategoryName] = useState<string>("");
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [alertText, setAlertText] = useState<string>("");
   const [uploaded, setUploaded] = useState<boolean>(false);
   return (
     <Grid
@@ -17,18 +18,16 @@ export const CategoryForm: React.FC = () => {
       style={{ padding: 16 }}
     >
       <CollapsibleAlert
+        id={"category-upload-alert"}
         type={uploaded ? "success" : "error"}
-        text={
-          uploaded
-            ? "The category has been added!"
-            : "This category already exists. Please try again."
-        }
+        text={alertText}
         showAlert={showSuccessAlert}
         setShowAlert={setShowSuccessAlert}
       />
       <Grid item>
         <TextField
-          id="standard-full-width"
+          id={"category-input-field"}
+          className="standard-full-width"
           label={categoryName}
           style={{ margin: 8 }}
           placeholder="Category name"
@@ -44,6 +43,7 @@ export const CategoryForm: React.FC = () => {
       </Grid>
       <Grid item direction="column">
         <Button
+          id={"create-category-submit-button"}
           variant="contained"
           color="primary"
           onClick={() => {
@@ -55,17 +55,32 @@ export const CategoryForm: React.FC = () => {
                   name: categoryName,
                 },
               }).onReceive.then((results) => {
-                setUploaded(results.data.data !== null);
-                setShowSuccessAlert(true);
+                if (results.data.data !== null) {
+                  setAlertText(
+                    `Successfully added the category "${categoryName}"!`
+                  );
+                  setUploaded(true);
+                } else {
+                  setAlertText(`The category "${categoryName}" already exists`);
+                  setUploaded(false);
+                }
               });
+            } else {
+              setAlertText(`Please input a name for the category.`);
+              setUploaded(false);
             }
+            setShowSuccessAlert(true);
           }}
         >
           Submit
         </Button>
       </Grid>
       <Grid item>
-        <Link to={`/categories`} style={{ textDecoration: "none" }}>
+        <Link
+          id={"go-to-show-categories"}
+          to={`/categories`}
+          style={{ textDecoration: "none" }}
+        >
           <Button variant="contained" color="secondary" onClick={() => {}}>
             View Categories
           </Button>

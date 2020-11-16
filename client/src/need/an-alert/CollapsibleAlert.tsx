@@ -4,13 +4,16 @@ import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 
 export const CollapsibleAlert: React.FC<{
+  id: string;
   type: AlertProps["severity"];
   text: string;
   showAlert: boolean;
   setShowAlert: (isVisible: boolean) => void;
-}> = ({ type, text, showAlert, setShowAlert }) => (
+}> = ({ id, type, text, showAlert, setShowAlert }) => (
   <Collapse in={showAlert} style={{ margin: "auto" }}>
     <Alert
+      id={id}
+      data-alert-type={type}
       action={
         <IconButton
           aria-label="close"

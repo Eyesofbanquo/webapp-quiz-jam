@@ -30,7 +30,8 @@
     "test:pact": "CI=true react-scripts test --runInBand --testMatch \"**/**.pact.ts\"",
     "storybook": "start-storybook -p 6006 -s public --no-dll",
     "build-storybook": "build-storybook -s public --no-dll",
-    "chromatic": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN"
+    "chromatic": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN --ci",
+    "chromatic-cli": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN -d ./storybook-static --exit-zero-on-changes --ci"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {

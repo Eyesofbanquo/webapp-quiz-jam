@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useMakeRequest } from "../../networking/network";
 import { Category } from "../../models/category";
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { DeleteItem } from "../../views/DeleteItem";
+import { DeleteItem } from "../DeleteItem";
 import { deleteRequest } from "../../networking/deleteItem.helper";
+import { EmptyContent } from "../EmptyContent";
 
 interface CategoryRequest {
   success: boolean;
@@ -21,6 +22,10 @@ export const CategoryList: React.FC = () => {
   useEffect(() => {
     setCategories(request?.data ?? []);
   }, [request]);
+
+  if (categories.length === 0) {
+    return <EmptyContent itemType="categories" />;
+  }
 
   if (selectedCategory) {
     return (
@@ -50,8 +55,8 @@ export const CategoryList: React.FC = () => {
       <Grid item>
         <Typography variant="h4">Categories</Typography>
       </Grid>
-      {categories?.map((category) => (
-        <Grid item key={category.id}>
+      {categories?.map((category, index) => (
+        <Grid item key={category.id} data-row={`category-row-${index}`}>
           <Paper
             style={{ margin: 8, width: 500, padding: 16 }}
             onClick={() => {
