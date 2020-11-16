@@ -28,7 +28,7 @@ export const TextField: React.FC<TextFieldProps> = ({
       <Field
         id={id}
         style={{ width: "100%" }}
-        required
+        required={required}
         label={label}
         value={text}
         error={errorCondition}
