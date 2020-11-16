@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMakeRequest } from "../../networking/network";
 import { Category } from "../../models/category";
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { DeleteItem } from "../../views/DeleteItem";
+import { DeleteItem } from "../DeleteItem";
 import { deleteRequest } from "../../networking/deleteItem.helper";
 
 interface CategoryRequest {
