@@ -2,6 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { v4 as uuidv4 } from "uuid";
 import pool from "../../database/pool";
+import { decodeJWTMiddleware } from "../../middleware/jwt-middleware";
 import {
   createCategory,
   deleteCategory,
@@ -43,6 +44,15 @@ export class CategoryRouter {
           response.send({ success: false, error: err });
         });
     });
+
+    this.router.get(
+      "/categories/auth",
+      decodeJWTMiddleware,
+      (request, response) => {
+        console.log(request.body);
+        response.send({ success: true, data: { message: "This works!" } });
+      }
+    );
   }
 
   post() {
