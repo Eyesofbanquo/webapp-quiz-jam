@@ -9,14 +9,11 @@ import {
   createQuestionType,
   dropQuestionTypeTable,
 } from "../api/question-type/queries";
-import * as dotenv from "dotenv";
 import {
   createCategory,
   createCategoriesTable,
   dropCategoryTable,
 } from "../api/category/queries";
-
-dotenv.config();
 
 const DATABASE = "qizzo";
 
