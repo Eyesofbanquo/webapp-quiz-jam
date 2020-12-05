@@ -14,12 +14,10 @@ export class APIController {
     this.api.use(bodyParser.json());
 
     const categoryRouter = new CategoryRouter();
-    this.api.use("/", categoryRouter.router);
 
-    this.api.use("/", questionsRouter);
-
-    this.api.use("/", questionTypesRouter);
-
-    this.api.use("/", difficultyRouter);
+    this.api.use(categoryRouter.router);
+    this.api.use(questionsRouter);
+    this.api.use(questionTypesRouter);
+    this.api.use(difficultyRouter);
   }
 }

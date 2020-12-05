@@ -14,7 +14,6 @@ const baseport = {
 const provider = Provider("category");
 describe("Pact with Qizzo API", () => {
   beforeAll((done) => {
-    console.log("a");
     provider.setup().then(() => {
       done();
     });
