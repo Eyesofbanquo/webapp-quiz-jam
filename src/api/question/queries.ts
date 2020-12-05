@@ -10,6 +10,7 @@ export const QUESTION_TABLE_PACT = "questions_pact";
 export const QUESTION_TABLE_CYPRESS = "questions_cypress";
 
 export const getQuestionTable = () => {
+  console.log(process.env.NODE_ENV);
   switch (process.env.NODE_ENV) {
     case "test":
       return QUESTION_TABLE_TEST;

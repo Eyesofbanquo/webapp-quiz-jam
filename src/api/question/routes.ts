@@ -29,6 +29,7 @@ questionsRouter.get("/questions", (request, response) => {
 });
 
 questionsRouter.post("/questions", async (request, response) => {
+  console.log(process.env.NODE_ENV, "POSTING");
   if (request.body.categoryId.length === 0) {
     response.statusCode = 200;
     response.send({ success: false, error: "Please provide a category" });
