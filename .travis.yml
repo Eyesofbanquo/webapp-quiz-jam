@@ -69,7 +69,7 @@ jobs:
         app:
           staging: serene-wave-13524-staging
         api_key:
-          secure: fxK4JxIBgohhVx7iDCwtbdmb0WMp9vwVDPncq4BtVBYU88Ga/GXHpFfjh+P1CvwwqAeL8dh5pvcFfyOdC9f1C5eQKGoAdaRY0AE5mLtgssas2d0tC1q6L67smgH4mBDGZ7r870fSRWVfEGpxwykhQF5OO48f6C6GV0AnOATH8L3Yw07Bu5ZTN9gJ8bF9lJdeYHAFScB+3jbBZMiE+qgSLYHj450duTKcIuO7ibhdaHdYMNXktSVEUd3zaEuN9jVi6Z9MfXRc6PgMZnhBFdLr6dz8zREx2dovr+42Ku5/kYgyA3/RVm4ZujnX3UilbfDQcc2dRU4bSjy4K0X9Hi+p4c7FUKnP0S99wjd6IkEtlLSeEUbDSmSBzyrOwAaNImRlBozhpGC9HnT7vSfk3uQ/ZssBaOlo24HiM+1MRqN5fg+67mQvR+bA0H0MQmiTtv9bv/TeEQgopXQ0iZOnkSPXhdRWoBweAh5PlAtR9QVlv5vCvG72NyPOymgRH7ln+g5NtgrQMdp1b+BatqjpqnlwkKoxy0UDUxpZBSD3BK1vxD7t7b9NpHlHf4fDZAnVv/eX3Y3WFsZJwLF0k4binpb0ZuxnQL2y9FaBjqfRFwETT6beBjPvlVXV+lUqqDSFEVqWdi+BKUPPzT+kjRUmzv/y/NNBU3JgoypmQIh9D+gxjbY=
+          secure: "fxK4JxIBgohhVx7iDCwtbdmb0WMp9vwVDPncq4BtVBYU88Ga/GXHpFfjh+P1CvwwqAeL8dh5pvcFfyOdC9f1C5eQKGoAdaRY0AE5mLtgssas2d0tC1q6L67smgH4mBDGZ7r870fSRWVfEGpxwykhQF5OO48f6C6GV0AnOATH8L3Yw07Bu5ZTN9gJ8bF9lJdeYHAFScB+3jbBZMiE+qgSLYHj450duTKcIuO7ibhdaHdYMNXktSVEUd3zaEuN9jVi6Z9MfXRc6PgMZnhBFdLr6dz8zREx2dovr+42Ku5/kYgyA3/RVm4ZujnX3UilbfDQcc2dRU4bSjy4K0X9Hi+p4c7FUKnP0S99wjd6IkEtlLSeEUbDSmSBzyrOwAaNImRlBozhpGC9HnT7vSfk3uQ/ZssBaOlo24HiM+1MRqN5fg+67mQvR+bA0H0MQmiTtv9bv/TeEQgopXQ0iZOnkSPXhdRWoBweAh5PlAtR9QVlv5vCvG72NyPOymgRH7ln+g5NtgrQMdp1b+BatqjpqnlwkKoxy0UDUxpZBSD3BK1vxD7t7b9NpHlHf4fDZAnVv/eX3Y3WFsZJwLF0k4binpb0ZuxnQL2y9FaBjqfRFwETT6beBjPvlVXV+lUqqDSFEVqWdi+BKUPPzT+kjRUmzv/y/NNBU3JgoypmQIh9D+gxjbY="
       if: branch = staging
     - stage: Deploy to Master
       script: skip
@@ -77,7 +77,7 @@ jobs:
         provider: heroku
         app: serene-wave-13524
         api_key:
-          secure: fxK4JxIBgohhVx7iDCwtbdmb0WMp9vwVDPncq4BtVBYU88Ga/GXHpFfjh+P1CvwwqAeL8dh5pvcFfyOdC9f1C5eQKGoAdaRY0AE5mLtgssas2d0tC1q6L67smgH4mBDGZ7r870fSRWVfEGpxwykhQF5OO48f6C6GV0AnOATH8L3Yw07Bu5ZTN9gJ8bF9lJdeYHAFScB+3jbBZMiE+qgSLYHj450duTKcIuO7ibhdaHdYMNXktSVEUd3zaEuN9jVi6Z9MfXRc6PgMZnhBFdLr6dz8zREx2dovr+42Ku5/kYgyA3/RVm4ZujnX3UilbfDQcc2dRU4bSjy4K0X9Hi+p4c7FUKnP0S99wjd6IkEtlLSeEUbDSmSBzyrOwAaNImRlBozhpGC9HnT7vSfk3uQ/ZssBaOlo24HiM+1MRqN5fg+67mQvR+bA0H0MQmiTtv9bv/TeEQgopXQ0iZOnkSPXhdRWoBweAh5PlAtR9QVlv5vCvG72NyPOymgRH7ln+g5NtgrQMdp1b+BatqjpqnlwkKoxy0UDUxpZBSD3BK1vxD7t7b9NpHlHf4fDZAnVv/eX3Y3WFsZJwLF0k4binpb0ZuxnQL2y9FaBjqfRFwETT6beBjPvlVXV+lUqqDSFEVqWdi+BKUPPzT+kjRUmzv/y/NNBU3JgoypmQIh9D+gxjbY=
+          secure: "fxK4JxIBgohhVx7iDCwtbdmb0WMp9vwVDPncq4BtVBYU88Ga/GXHpFfjh+P1CvwwqAeL8dh5pvcFfyOdC9f1C5eQKGoAdaRY0AE5mLtgssas2d0tC1q6L67smgH4mBDGZ7r870fSRWVfEGpxwykhQF5OO48f6C6GV0AnOATH8L3Yw07Bu5ZTN9gJ8bF9lJdeYHAFScB+3jbBZMiE+qgSLYHj450duTKcIuO7ibhdaHdYMNXktSVEUd3zaEuN9jVi6Z9MfXRc6PgMZnhBFdLr6dz8zREx2dovr+42Ku5/kYgyA3/RVm4ZujnX3UilbfDQcc2dRU4bSjy4K0X9Hi+p4c7FUKnP0S99wjd6IkEtlLSeEUbDSmSBzyrOwAaNImRlBozhpGC9HnT7vSfk3uQ/ZssBaOlo24HiM+1MRqN5fg+67mQvR+bA0H0MQmiTtv9bv/TeEQgopXQ0iZOnkSPXhdRWoBweAh5PlAtR9QVlv5vCvG72NyPOymgRH7ln+g5NtgrQMdp1b+BatqjpqnlwkKoxy0UDUxpZBSD3BK1vxD7t7b9NpHlHf4fDZAnVv/eX3Y3WFsZJwLF0k4binpb0ZuxnQL2y9FaBjqfRFwETT6beBjPvlVXV+lUqqDSFEVqWdi+BKUPPzT+kjRUmzv/y/NNBU3JgoypmQIh9D+gxjbY="
       if: branch = master
   exclude:
     - stage: staging
