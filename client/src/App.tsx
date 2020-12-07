@@ -1,12 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import "./App.css";
+
 import { QuizForm } from "./screens/multiple-choice/MultipleChoiceForm";
 import { Nav } from "./views";
+
 import { CategoryList } from "./screens/category/CategoryList";
 import { CategoryForm } from "./screens/category/CategoryForm";
 import { CreatorForm } from "./screens/creator-mode/CreatorForm";
 import { QuestionList } from "./screens/questions/QuestionsList";
+// dotenv.config();
 
 const App = () => {
   return (
