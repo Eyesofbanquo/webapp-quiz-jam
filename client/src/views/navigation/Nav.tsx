@@ -19,6 +19,13 @@ export const Nav = () => (
         <Typography variant="h6">About</Typography>
       </Link>
       <Link
+        id={"login-nav-item"}
+        style={{ textDecoration: "none", padding: 16, color: "white" }}
+        to="/login"
+      >
+        <Typography variant="h6">Login</Typography>
+      </Link>
+      <Link
         id={"creator-mode-nav-item"}
         style={{ textDecoration: "none", padding: 16, color: "white" }}
         to="/creator"

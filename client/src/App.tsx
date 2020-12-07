@@ -8,7 +8,7 @@ import { CategoryList } from "./screens/category/CategoryList";
 import { CategoryForm } from "./screens/category/CategoryForm";
 import { CreatorForm } from "./screens/creator-mode/CreatorForm";
 import { QuestionList } from "./screens/questions/QuestionsList";
-// dotenv.config();
+import { LoginScreen } from "./screens/login/LoginScreen";
 
 const App = () => {
   return (
@@ -17,6 +17,9 @@ const App = () => {
       <Switch>
         <Route exact path="/">
           <div>Qizzo</div>
+        </Route>
+        <Route exact path="/login">
+          <LoginScreen />
         </Route>
         <Route exact path="/about">
           <h1>About page</h1>
