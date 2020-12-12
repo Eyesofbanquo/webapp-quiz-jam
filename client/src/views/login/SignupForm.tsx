@@ -3,7 +3,7 @@ import { TextField, Snackbar, Grid, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { CenteredGrid } from "../../need/a-container/CenteredGrid";
 
-export const LoginForm = () => {
+export const SignupForm = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   return (
@@ -19,7 +19,7 @@ export const LoginForm = () => {
       <Grid item xs={6}>
         <TextField
           required
-          id={"login-username-textfield"}
+          id={"signup-username-textfield"}
           helperText={"Input username"}
           label={"username"}
           variant="outlined"
@@ -32,7 +32,7 @@ export const LoginForm = () => {
       <Grid item xs={6}>
         <TextField
           required
-          id={"login-password-textfield"}
+          id={"signup-password-textfield"}
           helperText={"Input password"}
           label={"password"}
           variant="outlined"
@@ -45,11 +45,11 @@ export const LoginForm = () => {
       </Grid>
       <Grid item xs={6}>
         <Button
-          id={"login-signin-button"}
+          id={"login-signup-button"}
           variant="outlined"
           onClick={() => {}}
         >
-          Sign in
+          Sign Up
         </Button>
       </Grid>
     </Grid>

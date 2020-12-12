@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Container, Grid, Typography, Button } from "@material-ui/core";
 import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
+import { AuthForm } from "../../views/login/AuthForm";
+import { SignupForm } from "../../views/login/SignupForm";
 import { LoginForm } from "../../views/login/LoginForm";
 
 export const LoginScreen = () => {
@@ -9,13 +11,13 @@ export const LoginScreen = () => {
     <Container>
       <Switch>
         <Route exact path={`${match.path}`}>
-          <LoginForm url={match.url} />
+          <AuthForm url={match.url} />
         </Route>
         <Route path={`${match.path}/auth`}>
-          <div>The page for the login buttons and tools</div>
+          <LoginForm />
         </Route>
         <Route path={`${match.path}/signup`}>
-          <div>The page for the signup buttons and tools</div>
+          <SignupForm />
         </Route>
       </Switch>
     </Container>
