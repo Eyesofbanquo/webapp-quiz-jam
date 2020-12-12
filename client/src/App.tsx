@@ -18,7 +18,7 @@ const App = () => {
         <Route exact path="/">
           <div>Qizzo</div>
         </Route>
-        <Route exact path="/login">
+        <Route path="/login">
           <LoginScreen />
         </Route>
         <Route exact path="/about">
