@@ -22,7 +22,6 @@ import pool, {
 } from "../../src/database/pool";
 import { v4 as uuidv4 } from "uuid";
 import { createQuestion } from "../../src/api/question/queries";
-import { Question } from "../../src/api/question/schema";
 import { createCategory } from "api/category/queries";
 const dotenvPlugin = require("cypress-dotenv");
 

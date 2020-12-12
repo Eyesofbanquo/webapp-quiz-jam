@@ -15,7 +15,7 @@ export const AuthForm = (props: { url: string }) => {
           <Link to={`${props.url}/auth`}>
             <Button
               style={{ marginTop: 16 }}
-              id={"login-screen-signup-button"}
+              id={"login-screen-login-button"}
               variant="contained"
               color="primary"
             >
@@ -26,7 +26,7 @@ export const AuthForm = (props: { url: string }) => {
           <Link to={`${props.url}/signup`}>
             <Button
               style={{ marginTop: 16 }}
-              id={"login-screen-login-button"}
+              id={"login-screen-signup-button"}
               variant="contained"
               color="primary"
             >
