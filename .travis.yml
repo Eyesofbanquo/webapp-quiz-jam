@@ -56,7 +56,7 @@ jobs:
         npm: true
         directories:
           - /home/travis/.cache
-      if: (branch = staging AND type = pull_request)
+      if: type = pull_request
     - stage: staging
       name: "Deploy to staging"
       script: skip

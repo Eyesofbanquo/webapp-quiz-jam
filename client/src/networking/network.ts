@@ -82,8 +82,6 @@ export const makeRequest = ({
     options = optionsWithHeaders;
   }
 
-  console.log(uri, options);
-
   var request = axios(uri, options);
 
   return {
@@ -99,6 +97,7 @@ export function useMakeRequest<T>({
   service = "quiz",
 }: RequestOptions) {
   const [request, setRequest] = useState<T>();
+
   useEffect(() => {
     makeRequest({
       endpoint: endpoint,
