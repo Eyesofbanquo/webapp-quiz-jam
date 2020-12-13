@@ -22,6 +22,10 @@ const baseUri = (service: Microservice) => {
     uri = process.env.REACT_APP_AUTH_SERVICE_URI ?? `/error`;
   }
 
+  if (service === "auth" && process.env.PACT) {
+    uri = "";
+  }
+
   if (uri === undefined) {
     return "/error";
   }
@@ -82,6 +86,7 @@ export const makeRequest = ({
     options = optionsWithHeaders;
   }
 
+  console.log(base, port);
   var request = axios(uri, options);
 
   return {

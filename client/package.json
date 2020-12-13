@@ -28,7 +28,7 @@
     "e2e": "NODE_ENV=test react-scripts start && npm test",
     "eject": "react-scripts eject",
     "config": "ts-jest config:init",
-    "test:pact": "CI=true react-scripts test --runInBand --testMatch \"**/**.pact.ts\"",
+    "test:pact": "PACT=true CI=true react-scripts test --runInBand --testMatch \"**/**.pact.ts\"",
     "storybook": "start-storybook -p 6006 -s public --no-dll",
     "build-storybook": "build-storybook -s public --no-dll",
     "chromatic": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN --ci",
