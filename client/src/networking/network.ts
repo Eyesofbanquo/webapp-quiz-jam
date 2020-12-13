@@ -8,7 +8,7 @@ type QuizServiceEndpoints =
   | "questions"
   | "difficulty";
 
-type AuthServiceEndpoints = "users" | "login" | "token" | "logout";
+type AuthServiceEndpoints = "users" | "login" | "token" | "logout" | "register";
 
 type Microservice = "quiz" | "auth";
 
