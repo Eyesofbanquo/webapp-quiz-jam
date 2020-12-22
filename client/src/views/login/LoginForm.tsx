@@ -1,11 +1,65 @@
 import React, { useState } from "react";
-import { TextField, Snackbar, Grid, Button } from "@material-ui/core";
+import {
+  TextField,
+  Snackbar,
+  Grid,
+  Button,
+  CircularProgress,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { CenteredGrid } from "../../need/a-container/CenteredGrid";
+import { Redirect } from "react-router-dom";
+import { makeRequest } from "../../networking/network";
+
+const LoginButton: React.FC<{
+  onClick: () => void;
+  loading: boolean;
+  loginSuccess: boolean | undefined;
+}> = (props) => {
+  return (
+    <Grid
+      container
+      direction="column"
+      item
+      justify="center"
+      alignItems="center"
+      spacing={1}
+    >
+      {props.loading && (
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      )}
+      {props.loading === false && props.loginSuccess === false && (
+        <Alert severity="error">Error registering. Please try again!</Alert>
+      )}
+      <Grid item>
+        <Button
+          id={"login-signup-button"}
+          variant="outlined"
+          onClick={() => {
+            props.onClick();
+          }}
+        >
+          Sign In
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
 
 export const LoginForm = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loginSuccess, setLoginSuccess] = useState<boolean | undefined>(
+    undefined
+  );
+
+  if (loginSuccess) {
+    return <Redirect to="/creator" />;
+  }
+
   return (
     <Grid
       direction="column"
@@ -44,13 +98,40 @@ export const LoginForm = () => {
         />
       </Grid>
       <Grid item xs={6}>
-        <Button
-          id={"login-signin-button"}
-          variant="outlined"
-          onClick={() => {}}
-        >
-          Sign in
-        </Button>
+        <LoginButton
+          loading={loading}
+          loginSuccess={loginSuccess}
+          onClick={() => {
+            setLoading(true);
+            makeRequest({
+              endpoint: "login",
+              data: { username: username, password: password },
+              service: "auth",
+              method: "post",
+            })
+              .onReceive.then((response) => {
+                console.log(response);
+                setLoading(false);
+                if (response.data.success) {
+                  localStorage.setItem(
+                    "accessToken",
+                    response.data.data.accessToken
+                  );
+                  localStorage.setItem(
+                    "refreshToken",
+                    response.data.data.refreshToken
+                  );
+                  setLoginSuccess(true);
+                } else {
+                  setLoginSuccess(false);
+                }
+              })
+              .catch((error) => {
+                setLoading(false);
+                setLoginSuccess(false);
+              });
+          }}
+        />
       </Grid>
     </Grid>
   );

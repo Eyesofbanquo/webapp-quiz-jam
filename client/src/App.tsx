@@ -21,6 +21,7 @@ const App = () => {
         <Route path="/login">
           <LoginScreen />
         </Route>
+        <Route path="/logout"></Route>
         <Route exact path="/about">
           <h1>About page</h1>
         </Route>
