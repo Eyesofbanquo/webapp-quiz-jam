@@ -8,7 +8,7 @@ type QuizServiceEndpoints =
   | "questions"
   | "difficulty";
 
-type AuthServiceEndpoints = "users" | "login" | "token" | "logout";
+type AuthServiceEndpoints = "users" | "login" | "token" | "logout" | "register";
 
 type Microservice = "quiz" | "auth";
 
@@ -20,6 +20,10 @@ const baseUri = (service: Microservice) => {
 
   if (service === "auth") {
     uri = process.env.REACT_APP_AUTH_SERVICE_URI ?? `/error`;
+  }
+
+  if (service === "auth" && process.env.PACT) {
+    uri = "";
   }
 
   if (uri === undefined) {
@@ -82,6 +86,7 @@ export const makeRequest = ({
     options = optionsWithHeaders;
   }
 
+  console.log(base, port);
   var request = axios(uri, options);
 
   return {

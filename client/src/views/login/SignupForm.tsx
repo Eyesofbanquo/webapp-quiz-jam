@@ -1,11 +1,64 @@
 import React, { useState } from "react";
-import { TextField, Snackbar, Grid, Button } from "@material-ui/core";
+import {
+  TextField,
+  Snackbar,
+  Grid,
+  Button,
+  CircularProgress,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { CenteredGrid } from "../../need/a-container/CenteredGrid";
+import { Redirect } from "react-router-dom";
+import { makeRequest, useMakeRequest } from "../../networking/network";
+
+const SignUpButton: React.FC<{
+  onClick: () => void;
+  loading: boolean;
+  registerSuccess: boolean | undefined;
+}> = (props) => {
+  return (
+    <Grid
+      container
+      direction="column"
+      item
+      justify="center"
+      alignItems="center"
+      spacing={1}
+    >
+      {props.loading && (
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      )}
+      {props.loading === false && props.registerSuccess === false && (
+        <Alert severity="error">Error registering. Please try again!</Alert>
+      )}
+      <Grid item>
+        <Button
+          id={"login-signup-button"}
+          variant="outlined"
+          onClick={() => {
+            props.onClick();
+          }}
+        >
+          Sign Up
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
 
 export const SignupForm = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [registerSuccess, setRegisterSuccess] = useState<boolean | undefined>(
+    undefined
+  );
+
+  if (registerSuccess) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <Grid
       direction="column"
@@ -43,15 +96,31 @@ export const SignupForm = () => {
           }}
         />
       </Grid>
-      <Grid item xs={6}>
-        <Button
-          id={"login-signup-button"}
-          variant="outlined"
-          onClick={() => {}}
-        >
-          Sign Up
-        </Button>
-      </Grid>
+      <SignUpButton
+        loading={loading}
+        registerSuccess={registerSuccess}
+        onClick={() => {
+          setLoading(true);
+          makeRequest({
+            endpoint: "register",
+            data: { username: username, password: password },
+            service: "auth",
+            method: "post",
+          })
+            .onReceive.then((response) => {
+              setLoading(false);
+              if (response.data.success) {
+                setRegisterSuccess(true);
+              } else {
+                setRegisterSuccess(false);
+              }
+            })
+            .catch((error) => {
+              setLoading(false);
+              setRegisterSuccess(false);
+            });
+        }}
+      />
     </Grid>
   );
 };
