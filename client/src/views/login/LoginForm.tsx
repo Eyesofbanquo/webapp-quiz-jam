@@ -12,6 +12,7 @@ import { Redirect } from "react-router-dom";
 import { makeRequest } from "../../networking/network";
 
 const LoginButton: React.FC<{
+  id: string;
   onClick: () => void;
   loading: boolean;
   loginSuccess: boolean | undefined;
@@ -35,7 +36,7 @@ const LoginButton: React.FC<{
       )}
       <Grid item>
         <Button
-          id={"login-signup-button"}
+          id={props.id}
           variant="outlined"
           onClick={() => {
             props.onClick();
@@ -99,6 +100,7 @@ export const LoginForm = () => {
       </Grid>
       <Grid item xs={6}>
         <LoginButton
+          id={"login-auth-login-button"}
           loading={loading}
           loginSuccess={loginSuccess}
           onClick={() => {
@@ -111,6 +113,10 @@ export const LoginForm = () => {
             })
               .onReceive.then((response) => {
                 console.log(response);
+                console.log(
+                  process.env.NODE_ENV,
+                  process.env.REACT_APP_AUTH_SERVICE_URI
+                );
                 setLoading(false);
                 if (response.data.success) {
                   localStorage.setItem(

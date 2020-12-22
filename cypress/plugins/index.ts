@@ -72,7 +72,10 @@ module.exports = (on, config) => {
       return null;
     },
   });
+
   config = dotenvPlugin(config);
+  config.env.REACT_APP_AUTH_SERVICE_URI =
+    "https://warm-meadow-59872.herokuapp.com/login";
 
   return config;
 };
