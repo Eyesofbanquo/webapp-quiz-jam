@@ -33,14 +33,16 @@ export const createQuestionTable = () =>
   question_type_uid UUID REFERENCES ${getQuestionTypeTable()}(id),
   deleted BOOLEAN NOT NULL,
   difficulty TEXT NOT NULL,
+  created_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  user_id UUID NOT NULL,
   UNIQUE(name)
   )`;
 
 export const createQuestion = (props: Question) => {
   return pool.query(
     `INSERT INTO ${getQuestionTable()} 
-  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty)
-   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty, user_id)
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     ON CONFLICT (name) DO NOTHING
      RETURNING *`,
     [
@@ -53,6 +55,7 @@ export const createQuestion = (props: Question) => {
       props.question_type_uid,
       props.deleted,
       props.difficulty,
+      props.user_id,
     ]
   );
 };

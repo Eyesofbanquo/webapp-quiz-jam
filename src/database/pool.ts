@@ -87,6 +87,7 @@ const createDefaultValues = async () => {
     name: "League of Legends",
     in_review: true,
     deleted: false,
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch((err) => console.log(err));
   await createQuestionType({
     id: seedQuestionTypeUUID,

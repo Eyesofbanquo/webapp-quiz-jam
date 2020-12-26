@@ -1,5 +1,6 @@
 import { Done } from "@material-ui/icons";
 import { Pact, Matchers } from "@pact-foundation/pact";
+import { somethingLike } from "@pact-foundation/pact/dsl/matchers";
 const { eachLike, like } = require("@pact-foundation/pact").Matchers;
 
 import * as path from "path";
@@ -49,6 +50,9 @@ describe("Question pacts", () => {
               question_type_uid: Matchers.somethingLike("0"),
               in_review: true,
               deleted: false,
+              user: somethingLike({
+                user_id: somethingLike("6ce02d16-2fb5-4b22-a3ae-f618f198c9c9"),
+              }),
             }),
           },
         },
@@ -84,6 +88,7 @@ describe("Question pacts", () => {
               incorrectAnswers: ["Two", "Three", "Four"],
               categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
               questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
             },
             headers: {
               "Content-Type": "application/json",
@@ -121,6 +126,7 @@ describe("Question pacts", () => {
             incorrectAnswers: ["Two", "Three", "Four"],
             categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
             questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+            user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
           },
         }).onReceive.then((result) => {
           expect(result.status).toEqual(201);
@@ -146,6 +152,7 @@ describe("Question pacts", () => {
                 incorrectAnswers: ["Two", "Three", "Four"],
                 categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
                 questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+                user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
               },
               headers: {
                 "Content-Type": "application/json",
@@ -174,6 +181,7 @@ describe("Question pacts", () => {
               incorrectAnswers: ["Two", "Three", "Four"],
               categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
               questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
             },
           }).onReceive.then((result) => {
             expect(result.data.success).toBe(false);
@@ -198,6 +206,7 @@ describe("Question pacts", () => {
                 incorrectAnswers: ["Two", "Three", "Four"],
                 categoryId: "",
                 questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+                user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
               },
               headers: {
                 "Content-Type": "application/json",
@@ -226,6 +235,7 @@ describe("Question pacts", () => {
               incorrectAnswers: ["Two", "Three", "Four"],
               categoryId: "",
               questionTypeId: "d5266e6f-d053-4090-9c53-df5fee72322b",
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
             },
           }).onReceive.then((result) => {
             expect(result.data.success).toBe(false);
@@ -250,6 +260,7 @@ describe("Question pacts", () => {
                 incorrectAnswers: ["Two", "Three", "Four"],
                 categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
                 questionTypeId: "",
+                user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
               },
               headers: {
                 "Content-Type": "application/json",
@@ -278,6 +289,7 @@ describe("Question pacts", () => {
               incorrectAnswers: ["Two", "Three", "Four"],
               categoryId: "54bb3cc4-e940-47bd-ba8b-f49e518333e1",
               questionTypeId: "",
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
             },
           }).onReceive.then((result) => {
             expect(result.data.success).toBe(false);

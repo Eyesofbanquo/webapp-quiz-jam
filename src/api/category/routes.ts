@@ -57,7 +57,7 @@ export class CategoryRouter {
 
   post() {
     this.router.post("/categories", (request, response) => {
-      const receivedBody = request.body as { name: string };
+      const receivedBody = request.body as { name: string; user_id: string };
       /* Check that the item doesn't already exist first */
       let query = `INSERT INTO`;
       if (process.env.NODE_ENV === "test") {
@@ -74,6 +74,7 @@ export class CategoryRouter {
         name: receivedBody.name,
         in_review: true,
         deleted: false,
+        user_id: receivedBody.user_id,
       })
         .then((res) => {
           if (res.rows.length === 0) {

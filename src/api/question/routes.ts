@@ -51,6 +51,7 @@ questionsRouter.post("/questions", async (request, response) => {
     question_type_uid: request.body.questionTypeId,
     deleted: false,
     difficulty: "normal",
+    user_id: request.body.user_id,
   })
     .then((result) => {
       if (result.rows.length === 0) {

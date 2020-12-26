@@ -34,6 +34,7 @@ describe("Category", () => {
         name: "Nightmare",
         in_review: false,
         deleted: false,
+        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       }).catch((err) => {
         console.log("called");
         console.log(err);
@@ -72,7 +73,7 @@ describe("Category", () => {
         chai
           .request(controller.app)
           .post("/api/categories")
-          .send({ name: "Ha" })
+          .send({ name: "Ha", user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9" })
           .then((response) => {
             // Assert
 
@@ -95,13 +96,14 @@ describe("Category", () => {
           name: "Ha",
           in_review: true,
           deleted: false,
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch((err) => console.log(err));
         const controller = new AppController();
         // Act:
         chai
           .request(controller.app)
           .post("/api/categories")
-          .send({ name: "Ha" })
+          .send({ name: "Ha", user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9" })
           .then((response) => {
             // Assert
             expect(response.body.success).to.eql(false);
@@ -127,6 +129,7 @@ describe("Category", () => {
           name: "Him",
           in_review: true,
           deleted: false,
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch((err) => {
           expect(err).to.eql(null);
         });

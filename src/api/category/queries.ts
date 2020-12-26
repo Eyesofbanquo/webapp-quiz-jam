@@ -26,17 +26,19 @@ export const createCategoriesTable = () =>
   name TEXT NOT NULL,
   in_review BOOLEAN NOT NULL,
   deleted BOOLEAN NOT NULL,
+  created_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  user_id UUID NOT NULL,
   UNIQUE(name)
   )`;
 
 export const createCategory = (props: Category) => {
   return pool.query(
     `INSERT INTO ${getCategoryTable()} 
-  (id, name, in_review, deleted)
-  VALUES ($1, $2, $3, $4)
+  (id, name, in_review, deleted, user_id)
+  VALUES ($1, $2, $3, $4, $5)
     ON CONFLICT (name) DO NOTHING
      RETURNING *`,
-    [props.id, props.name, props.in_review, props.deleted]
+    [props.id, props.name, props.in_review, props.deleted, props.user_id]
   );
 };
 

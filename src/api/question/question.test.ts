@@ -36,6 +36,7 @@ describe("Question Tests", () => {
       name: "Ha",
       in_review: true,
       deleted: false,
+      user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
     }).catch((err) => console.log(err));
 
     await createQuestionType({
@@ -78,6 +79,7 @@ describe("Question Tests", () => {
         question_type_uid: questionTypeUUID,
         deleted: false,
         difficulty: "normal",
+        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       }).catch((err) => {
         expect(err).to.eql(null);
         done();
@@ -109,6 +111,7 @@ describe("Question Tests", () => {
         incorrectAnswers: ["2", "3", "4"],
         categoryId: categoryUUID,
         questionTypeId: questionTypeUUID,
+        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       };
 
       chai
@@ -135,6 +138,7 @@ describe("Question Tests", () => {
         incorrectAnswers: ["2", "3", "4"],
         categoryId: categoryUUID,
         questionTypeId: questionTypeUUID,
+        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       };
 
       beforeEach(async () => {
@@ -148,6 +152,7 @@ describe("Question Tests", () => {
           question_type_uid: questionTypeUUID,
           deleted: false,
           difficulty: "normal",
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch((err) => {
           console.log(err);
         });
@@ -197,6 +202,7 @@ describe("Question Tests", () => {
           question_type_uid: questionTypeUUID,
           deleted: false,
           difficulty: "normal",
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch();
       });
 

@@ -42,6 +42,9 @@ describe("Pact with Qizzo API", () => {
               name: "Night",
               in_review: Matchers.like(false),
               deleted: false,
+              user: {
+                user_id: Matchers.like("6ce02d16-2fb5-4b22-a3ae-f618f198c9c9"),
+              },
             }),
           },
           status: 200,
@@ -78,6 +81,7 @@ describe("Pact with Qizzo API", () => {
           method: "POST",
           body: {
             name: "New Nightmare",
+            user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
           },
           headers: {
             "Content-Type": "application/json",
@@ -124,6 +128,7 @@ describe("Pact with Qizzo API", () => {
           method: "POST",
           body: {
             name: "Random",
+            user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
           },
           headers: {
             "Content-Type": "application/json",
