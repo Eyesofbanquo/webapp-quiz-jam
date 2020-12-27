@@ -50,7 +50,7 @@ describe("Pact with Avon API", () => {
             body: {
               success: Matchers.like(false),
             },
-            status: 422,
+            status: 200,
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
@@ -71,7 +71,7 @@ describe("Pact with Avon API", () => {
           },
         })
           .onReceive.then((response) => {
-            expect(response.status).toBe(422);
+            expect(response.status).toBe(200);
           })
           .catch((err) => console.log(err));
       });
@@ -94,7 +94,7 @@ describe("Pact with Avon API", () => {
             body: {
               success: Matchers.like(true),
             },
-            status: 422,
+            status: 200,
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",

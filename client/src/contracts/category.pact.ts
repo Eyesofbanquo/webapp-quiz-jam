@@ -42,9 +42,9 @@ describe("Pact with Qizzo API", () => {
               name: "Night",
               in_review: Matchers.like(false),
               deleted: false,
-              user: {
+              user: Matchers.like({
                 user_id: Matchers.like("6ce02d16-2fb5-4b22-a3ae-f618f198c9c9"),
-              },
+              }),
             }),
           },
           status: 200,
@@ -109,7 +109,10 @@ describe("Pact with Qizzo API", () => {
         port: "4000",
         endpoint: "categories",
         method: "post",
-        data: { name: "New Nightmare" },
+        data: {
+          name: "New Nightmare",
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
+        },
       }).onReceive.then((response) => {
         const success = response.status;
         expect(success).toEqual(201);
@@ -151,7 +154,10 @@ describe("Pact with Qizzo API", () => {
         port: "4000",
         endpoint: "categories",
         method: "post",
-        data: { name: "Random" },
+        data: {
+          name: "Random",
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
+        },
       }).onReceive.then((response) => {
         const success = response.status;
         expect(success).toEqual(200);

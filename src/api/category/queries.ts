@@ -43,7 +43,21 @@ export const createCategory = (props: Category) => {
 };
 
 export const getCategories = () => {
-  return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
+  //return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
+  return `
+  WITH data AS (
+    SELECT * FROM ${getCategoryTable()}
+  ), category_data AS (
+    SELECT id, name, in_review, deleted, created_date FROM data
+  ), user_info AS (
+    SELECT id as category_id, user_id FROM data
+  ), jsonData AS (
+    SELECT c.*, row_to_json(ui) as User
+    FROM category_data c
+    INNER JOIN user_info ui
+    ON c.id = ui.category_id
+  )
+  SELECT * FROM jsonData WHERE deleted = false;`;
 };
 
 export const deleteCategory = () => {

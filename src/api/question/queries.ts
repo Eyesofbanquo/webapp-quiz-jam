@@ -61,7 +61,20 @@ export const createQuestion = (props: Question) => {
 };
 
 export const getQuestions = () => {
-  return `SELECT * FROM ${getQuestionTable()} WHERE deleted = false`;
+  return `
+  WITH data AS (
+    SELECT * FROM ${getQuestionTable()}
+  ), question_data AS (
+    SELECT id, name, in_review, deleted, created_date, correct_answers, incorrect_answers, category_uid, question_type_uid, difficulty FROM data
+  ), user_info AS (
+    SELECT id as question_id, user_id FROM data
+  ), jsonData AS (
+    SELECT q.*, row_to_json(ui) as User
+    FROM question_data q
+    INNER JOIN user_info ui
+    ON q.id = ui.question_id
+  )
+  SELECT * FROM jsonData WHERE deleted = false;`;
 };
 
 export const deleteQuestion = () => {

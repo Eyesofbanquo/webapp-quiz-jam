@@ -27,6 +27,7 @@ export class CategoryRouter {
 
   get() {
     this.router.get("/categories", (request, response) => {
+      console.log("called");
       let query = `SELECT * FROM`;
       if (process.env.NODE_ENV === "test") {
         query = query + ` ${getCategoryTable()}`;
