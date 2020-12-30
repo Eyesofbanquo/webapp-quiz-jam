@@ -1,4 +1,5 @@
 import { Pact, Matchers } from "@pact-foundation/pact";
+import { somethingLike } from "@pact-foundation/pact/dsl/matchers";
 const { eachLike, like } = require("@pact-foundation/pact").Matchers;
 
 import { makeRequest } from "../networking/network";
@@ -27,32 +28,33 @@ describe("Pact with Qizzo API", () => {
 
   describe("Getting all categories", () => {
     beforeEach(async () => {
-      await provider.addInteraction({
-        state: "there are categories",
-        uponReceiving: "a request for categories",
-        withRequest: {
-          path: "/api/categories",
-          method: "GET",
-        },
-        willRespondWith: {
-          body: {
-            success: Matchers.like(true),
-            data: Matchers.eachLike({
-              id: "1",
-              name: "Night",
-              in_review: Matchers.like(false),
-              deleted: false,
-              user: Matchers.like({
-                user_id: Matchers.like("6ce02d16-2fb5-4b22-a3ae-f618f198c9c9"),
+      await provider
+        .addInteraction({
+          state: "there are categories",
+          uponReceiving: "a request for categories",
+          withRequest: {
+            path: "/api/categories",
+            method: "GET",
+          },
+          willRespondWith: {
+            body: {
+              success: somethingLike(true),
+              data: eachLike({
+                id: "1",
+                name: "Nights",
+                in_review: somethingLike(false),
+                deleted: false,
+                user: somethingLike({
+                  user_id: somethingLike(
+                    "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9"
+                  ),
+                }),
               }),
-            }),
+            },
+            status: 200,
           },
-          status: 200,
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-          },
-        },
-      });
+        })
+        .catch();
     });
 
     it("will receive the list of category objects", async () => {
@@ -65,42 +67,48 @@ describe("Pact with Qizzo API", () => {
         .onReceive.then((response) => {
           const name = response.data.data[0].name;
           expect(response.status).toEqual(200);
-          expect(name).toEqual("Night");
+          expect(name).toEqual("Nights");
+          expect(response.data.data[0].user.user_id).not.toBeUndefined();
         })
-        .catch((err) => console.log(err));
+        .catch();
     });
   });
 
   describe("POST: On Success", () => {
     beforeEach(async () => {
-      await provider.addInteraction({
-        state: "there are categories",
-        uponReceiving: "a request to create a new category",
-        withRequest: {
-          path: "/api/categories",
-          method: "POST",
-          body: {
-            name: "New Nightmare",
-            user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        },
-        willRespondWith: {
-          status: 201,
-          body: {
-            success: true,
-            data: {
-              id: Matchers.like("1"),
+      await provider
+        .addInteraction({
+          state: "there are categories",
+          uponReceiving: "a request to create a new category",
+          withRequest: {
+            path: "/api/categories",
+            method: "POST",
+            body: {
               name: "New Nightmare",
-              in_review: true,
-              deleted: false,
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
+            },
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
             },
           },
-        },
-      });
+          willRespondWith: {
+            status: 201,
+            body: {
+              success: true,
+              data: {
+                id: Matchers.like("1"),
+                name: "New Nightmare",
+                in_review: true,
+                deleted: false,
+                user: somethingLike({
+                  user_id: somethingLike("uuid"),
+                }),
+              },
+            },
+          },
+        })
+        .catch();
     });
 
     it("should create a new category", async () => {
@@ -113,39 +121,44 @@ describe("Pact with Qizzo API", () => {
           name: "New Nightmare",
           user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         },
-      }).onReceive.then((response) => {
-        const success = response.status;
-        expect(success).toEqual(201);
-        expect(response.data.data.name).toBe("New Nightmare");
-      });
+      })
+        .onReceive.then((response) => {
+          const success = response.status;
+          expect(success).toEqual(201);
+          expect(response.data.data.name).toBe("New Nightmare");
+          expect(response.data.data.user.user_id).not.toBeUndefined();
+        })
+        .catch();
     });
   });
 
   describe("POST: On Failure: Category Exists", () => {
     beforeEach(async () => {
-      await provider.addInteraction({
-        state: "there are categories",
-        uponReceiving: "a request to create a category that already exists",
-        withRequest: {
-          path: "/api/categories",
-          method: "POST",
-          body: {
-            name: "Random",
-            user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
+      await provider
+        .addInteraction({
+          state: "there are categories",
+          uponReceiving: "a request to create a category that already exists",
+          withRequest: {
+            path: "/api/categories",
+            method: "POST",
+            body: {
+              name: "Random",
+              user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
+            },
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
           },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
+          willRespondWith: {
+            status: 200,
+            body: {
+              success: false,
+              data: null,
+            },
           },
-        },
-        willRespondWith: {
-          status: 200,
-          body: {
-            success: false,
-            data: null,
-          },
-        },
-      });
+        })
+        .catch();
     });
 
     it("Should not create a new category", async () => {
@@ -158,12 +171,14 @@ describe("Pact with Qizzo API", () => {
           name: "Random",
           user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         },
-      }).onReceive.then((response) => {
-        const success = response.status;
-        expect(success).toEqual(200);
-        expect(response.data.success).toEqual(false);
-        expect(response.data.data).toEqual(null);
-      });
+      })
+        .onReceive.then((response) => {
+          const success = response.status;
+          expect(success).toEqual(200);
+          expect(response.data.success).toEqual(false);
+          expect(response.data.data).toEqual(null);
+        })
+        .catch();
     });
   });
 
@@ -172,26 +187,28 @@ describe("Pact with Qizzo API", () => {
       const uuid = "97dcb062-ffea-4885-baf3-a04ede5b0037";
 
       beforeEach(async () => {
-        await provider.addInteraction({
-          state: "category with 97dcb062-ffea-4885-baf3-a04ede5b0037 exists",
-          uponReceiving: "a request to delete a category",
-          withRequest: {
-            path: "/api/categories/97dcb062-ffea-4885-baf3-a04ede5b0037",
-            method: "DELETE",
-          },
-          willRespondWith: {
-            status: 200,
-            body: {
-              success: true,
-              data: {
-                id: "97dcb062-ffea-4885-baf3-a04ede5b0037",
-                name: Matchers.somethingLike("aye"),
-                in_review: Matchers.somethingLike(true),
-                deleted: true,
+        await provider
+          .addInteraction({
+            state: "category with 97dcb062-ffea-4885-baf3-a04ede5b0037 exists",
+            uponReceiving: "a request to delete a category",
+            withRequest: {
+              path: "/api/categories/97dcb062-ffea-4885-baf3-a04ede5b0037",
+              method: "DELETE",
+            },
+            willRespondWith: {
+              status: 200,
+              body: {
+                success: true,
+                data: {
+                  id: "97dcb062-ffea-4885-baf3-a04ede5b0037",
+                  name: Matchers.somethingLike("aye"),
+                  in_review: Matchers.somethingLike(true),
+                  deleted: true,
+                },
               },
             },
-          },
-        });
+          })
+          .catch();
       });
 
       it("Should delete a category", async () => {
@@ -201,15 +218,17 @@ describe("Pact with Qizzo API", () => {
           endpoint: "categories",
           method: "delete",
           data: { id: "97dcb062-ffea-4885-baf3-a04ede5b0037" },
-        }).onReceive.then((response) => {
-          const status = response.status;
-          expect(status).toEqual(200);
-          expect(response.data.success).toEqual(true);
-          expect(response.data.data.id).toEqual(
-            "97dcb062-ffea-4885-baf3-a04ede5b0037"
-          );
-          expect(response.data.data.deleted).toEqual(true);
-        });
+        })
+          .onReceive.then((response) => {
+            const status = response.status;
+            expect(status).toEqual(200);
+            expect(response.data.success).toEqual(true);
+            expect(response.data.data.id).toEqual(
+              "97dcb062-ffea-4885-baf3-a04ede5b0037"
+            );
+            expect(response.data.data.deleted).toEqual(true);
+          })
+          .catch();
       });
     });
   });

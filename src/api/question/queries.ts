@@ -40,11 +40,21 @@ export const createQuestionTable = () =>
 
 export const createQuestion = (props: Question) => {
   return pool.query(
-    `INSERT INTO ${getQuestionTable()} 
-  (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty, user_id)
-   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `WITH inserted AS (
+    INSERT INTO ${getQuestionTable()}
+    (id, name, in_review, correct_answers, incorrect_answers, category_uid, question_type_uid, deleted, difficulty, user_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     ON CONFLICT (name) DO NOTHING
-     RETURNING *`,
+    RETURNING *
+  ), user_info AS (
+    SELECT user_id FROM inserted
+  ), jsonData AS (
+    SELECT i.id, i.name, i.in_review, i.correct_answers, i.incorrect_answers, i.category_uid, i.question_type_uid, i.deleted, i.difficulty, row_to_json(ui) as User
+    FROM inserted i
+    INNER JOIN user_info ui
+    ON i.user_id = ui.user_id
+  )
+  SELECT * FROM jsonData WHERE deleted = false;`,
     [
       props.id,
       props.name,

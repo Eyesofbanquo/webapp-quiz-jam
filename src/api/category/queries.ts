@@ -33,11 +33,21 @@ export const createCategoriesTable = () =>
 
 export const createCategory = (props: Category) => {
   return pool.query(
-    `INSERT INTO ${getCategoryTable()} 
-  (id, name, in_review, deleted, user_id)
-  VALUES ($1, $2, $3, $4, $5)
-    ON CONFLICT (name) DO NOTHING
-     RETURNING *`,
+    `WITH inserted AS (
+      INSERT INTO ${getCategoryTable()}
+      (id, name, in_review, deleted, user_id)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (name) DO NOTHING
+      RETURNING *
+    ), user_info AS (
+      SELECT user_id FROM inserted
+    ), jsonData AS (
+      SELECT i.id, i.name, i.in_review, i.deleted, i.created_date, row_to_json(ui) as User
+      FROM inserted i
+      INNER JOIN user_info ui
+      ON i.user_id = ui.user_id
+    )
+    SELECT * FROM jsonData WHERE deleted = false;`,
     [props.id, props.name, props.in_review, props.deleted, props.user_id]
   );
 };

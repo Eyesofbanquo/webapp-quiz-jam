@@ -55,13 +55,15 @@ describe("Difficulty Pact Test", () => {
           port: "4000",
           method: "get",
           endpoint: "difficulty",
-        }).onReceive.then((result) => {
-          expect(result.status).toEqual(200);
-          expect(result.data.success).toEqual(true);
-          expect(result.data.data).toContain("easy");
-          expect(result.data.data).toContain("normal");
-          expect(result.data.data).toContain("hard");
-        });
+        })
+          .onReceive.then((result) => {
+            expect(result.status).toEqual(200);
+            expect(result.data.success).toEqual(true);
+            expect(result.data.data).toContain("easy");
+            expect(result.data.data).toContain("normal");
+            expect(result.data.data).toContain("hard");
+          })
+          .catch();
       });
     });
   });
