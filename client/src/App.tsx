@@ -86,8 +86,12 @@ interface AuthContextObjectProps {
 // };
 
 const App = () => {
-  const [refreshToken, setRefreshToken] = useState<string>("");
-  const [accessToken, setAccessToken] = useState<string>("");
+  const [refreshToken, setRefreshToken] = useState<string | null>(
+    localStorage.getItem("refreshToken")
+  );
+  const [accessToken, setAccessToken] = useState<string | null>(
+    localStorage.getItem("accessToken")
+  );
   const authObject = useMemo(() => {
     return {
       tokens: { accessToken: accessToken, refreshToken: refreshToken },
@@ -101,7 +105,6 @@ const App = () => {
       },
     };
   }, [refreshToken, accessToken]);
-
   return (
     <AuthContext.Provider value={authObject}>
       <AppContent />

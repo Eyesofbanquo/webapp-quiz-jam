@@ -8,9 +8,8 @@ import AuthContext from "../../need/a-context/AuthContext";
 
 export const LoginScreen = () => {
   let match = useRouteMatch();
-  const useAuthContext = useContext(AuthContext);
-  console.log(useAuthContext?.updateToken("refresh", "hehe"));
-  console.log(useAuthContext?.tokens.refreshToken);
+  const authContext = useContext(AuthContext);
+  console.log(authContext?.tokens.accessToken);
   return (
     <Container>
       <Switch>
