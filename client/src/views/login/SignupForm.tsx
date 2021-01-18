@@ -109,6 +109,7 @@ export const SignupForm = () => {
           })
             .onReceive.then((response) => {
               setLoading(false);
+              console.log(response);
               if (response.data.success) {
                 setRegisterSuccess(true);
               } else {

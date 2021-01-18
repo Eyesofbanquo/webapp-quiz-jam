@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   TextField,
   Snackbar,
@@ -10,6 +10,7 @@ import { Alert } from "@material-ui/lab";
 import { CenteredGrid } from "../../need/a-container/CenteredGrid";
 import { Redirect } from "react-router-dom";
 import { makeRequest } from "../../networking/network";
+import AuthContext from "../../need/a-context/AuthContext";
 
 const LoginButton: React.FC<{
   id: string;
@@ -56,6 +57,8 @@ export const LoginForm = () => {
   const [loginSuccess, setLoginSuccess] = useState<boolean | undefined>(
     undefined
   );
+
+  const authContext = useContext(AuthContext);
 
   if (loginSuccess) {
     return <Redirect to="/creator" />;
@@ -125,6 +128,14 @@ export const LoginForm = () => {
                   );
                   localStorage.setItem(
                     "refreshToken",
+                    response.data.data.refreshToken
+                  );
+                  authContext?.updateToken(
+                    "access",
+                    response.data.data.accessToken
+                  );
+                  authContext?.updateToken(
+                    "refresh",
                     response.data.data.refreshToken
                   );
                   setLoginSuccess(true);

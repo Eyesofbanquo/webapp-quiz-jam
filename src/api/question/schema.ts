@@ -8,4 +8,5 @@ export interface Question {
   question_type_uid: string;
   deleted: boolean;
   difficulty: string;
+  user_id: string;
 }

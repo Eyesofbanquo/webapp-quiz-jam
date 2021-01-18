@@ -5,6 +5,7 @@ import { CategoryRouter } from "./api/category/routes";
 import { questionsRouter } from "./api/question/routes";
 import { questionTypesRouter } from "./api/question-type/routes";
 import { difficultyRouter } from "./api/difficulty/routes";
+import { decodeJWTMiddleware } from "middleware/jwt-middleware";
 
 export class APIController {
   api: express.Router;

@@ -9,8 +9,21 @@ export const decodeJWTMiddleware = (
   response: Response,
   next: NextFunction
 ) => {
+  let foundToken = "";
   const token = request.headers.authorization?.split(" ")[1];
-  jwt.verify(token, secret_hash, (error, user) => {
+
+  if (token === undefined) {
+    foundToken = request.body.user_id;
+  } else {
+    foundToken = token;
+  }
+
+  if (foundToken === undefined) {
+    return response
+      .status(200)
+      .send({ success: false, error: "Please provide an access token" });
+  }
+  jwt.verify(foundToken, secret_hash, (error, user) => {
     if (error) {
       return response
         .status(200)

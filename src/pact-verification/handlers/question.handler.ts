@@ -24,6 +24,7 @@ export const questionsExist = async () => {
     name: "Category",
     in_review: true,
     deleted: false,
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
 
   const typeId = uuidv4();
@@ -44,6 +45,7 @@ export const questionsExist = async () => {
     question_type_uid: typeId,
     deleted: false,
     difficulty: "normal",
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
   return Promise.resolve("Question added to database");
 };
@@ -58,6 +60,7 @@ export const questionsWithNewCategoryAndType = async () => {
     name: "Category2",
     in_review: true,
     deleted: false,
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
@@ -81,6 +84,7 @@ export const questionABCExists = async () => {
     name: "Category2",
     in_review: true,
     deleted: false,
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
@@ -101,6 +105,7 @@ export const questionABCExists = async () => {
     question_type_uid: typeId,
     deleted: false,
     difficulty: "normal",
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
   return Promise.resolve("Question added to database");
 };
@@ -115,6 +120,7 @@ export const deleteQuestionHandler = async () => {
     name: "Category2",
     in_review: true,
     deleted: false,
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
 
   const typeId = "d5266e6f-d053-4090-9c53-df5fee72322b";
@@ -136,6 +142,7 @@ export const deleteQuestionHandler = async () => {
     question_type_uid: typeId,
     deleted: false,
     difficulty: "normal",
+    user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
   }).catch();
   return Promise.resolve("Question added to database");
 };

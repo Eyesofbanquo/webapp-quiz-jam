@@ -6,17 +6,17 @@ type PactName =
   | "question"
   | "question-type"
   | "difficulty"
-  | "register";
+  | "register"
+  | "category2";
 
 export const provider = (name: PactName) =>
   new Pact({
     cors: true,
     port: 4000,
     log: path.resolve(process.cwd(), "logs", "pact.log"),
-    logLevel: "debug",
-    dir: path.resolve(process.cwd(), "../webappjam-pacts"),
+    logLevel: "error",
+    dir: path.resolve(process.cwd(), "../webappjam-pacts2"),
     spec: 2,
-    pactfileWriteMode: "update",
     consumer: `QizzoConsumer-${name}`,
     provider: `QizzoProvider`,
     host: "127.0.0.1",
