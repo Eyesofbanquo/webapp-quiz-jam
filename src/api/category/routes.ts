@@ -27,7 +27,6 @@ export class CategoryRouter {
 
   get() {
     this.router.get("/categories", (request, response) => {
-      console.log("called");
       let query = `SELECT * FROM`;
       if (process.env.NODE_ENV === "test") {
         query = query + ` ${getCategoryTable()}`;
@@ -57,39 +56,43 @@ export class CategoryRouter {
   }
 
   post() {
-    this.router.post("/categories", (request, response) => {
-      const receivedBody = request.body as { name: string; user_id: string };
-      /* Check that the item doesn't already exist first */
-      let query = `INSERT INTO`;
-      if (process.env.NODE_ENV === "test") {
-        query = query + ` ${CategoryRouter.TEST_TABLE}`;
-      } else {
-        query = query + ` ${CategoryRouter.TABLE}`;
-      }
-      query =
-        query +
-        ` (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
+    this.router.post(
+      "/categories",
+      decodeJWTMiddleware,
+      (request, response) => {
+        const receivedBody = request.body as { name: string; user: any };
+        /* Check that the item doesn't already exist first */
+        let query = `INSERT INTO`;
+        if (process.env.NODE_ENV === "test") {
+          query = query + ` ${CategoryRouter.TEST_TABLE}`;
+        } else {
+          query = query + ` ${CategoryRouter.TABLE}`;
+        }
+        query =
+          query +
+          ` (id, name, inReview) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING RETURNING *`;
 
-      createCategory({
-        id: uuidv4(),
-        name: receivedBody.name,
-        in_review: true,
-        deleted: false,
-        user_id: receivedBody.user_id,
-      })
-        .then((res) => {
-          if (res.rows.length === 0) {
-            response.statusCode = 200;
-            response.send({ success: false, data: null });
-            return;
-          }
-          response.statusCode = 201;
-          response.send({ success: true, data: res.rows[0] });
+        createCategory({
+          id: uuidv4(),
+          name: receivedBody.name,
+          in_review: true,
+          deleted: false,
+          user_id: receivedBody.user.id,
         })
-        .catch((err) => {
-          response.send({ success: false, error: err });
-        });
-    });
+          .then((res) => {
+            if (res.rows.length === 0) {
+              response.statusCode = 200;
+              response.send({ success: false, data: null });
+              return;
+            }
+            response.statusCode = 201;
+            response.send({ success: true, data: res.rows[0] });
+          })
+          .catch((err) => {
+            response.send({ success: false, error: err });
+          });
+      }
+    );
   }
 
   delete() {

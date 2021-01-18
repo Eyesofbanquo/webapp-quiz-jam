@@ -111,12 +111,15 @@ describe("Question Tests", () => {
         incorrectAnswers: ["2", "3", "4"],
         categoryId: categoryUUID,
         questionTypeId: questionTypeUUID,
-        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       };
 
       chai
         .request(controller.app)
         .post("/api/questions")
+        .set(
+          "Authorization",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+        )
         .send(question)
         .then((response) => {
           expect(response.status).to.eql(201);
@@ -138,7 +141,6 @@ describe("Question Tests", () => {
         incorrectAnswers: ["2", "3", "4"],
         categoryId: categoryUUID,
         questionTypeId: questionTypeUUID,
-        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       };
 
       beforeEach(async () => {
@@ -164,6 +166,10 @@ describe("Question Tests", () => {
         chai
           .request(controller.app)
           .post("/api/questions")
+          .set(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+          )
           .send(question)
           .then((response) => {
             expect(response.status).to.eql(200);

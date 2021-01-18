@@ -73,7 +73,11 @@ describe("Category", () => {
         chai
           .request(controller.app)
           .post("/api/categories")
-          .send({ name: "Ha", user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9" })
+          .set(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+          )
+          .send({ name: "Ha" })
           .then((response) => {
             // Assert
 
@@ -103,7 +107,11 @@ describe("Category", () => {
         chai
           .request(controller.app)
           .post("/api/categories")
-          .send({ name: "Ha", user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9" })
+          .set(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+          )
+          .send({ name: "Ha" })
           .then((response) => {
             // Assert
             expect(response.body.success).to.eql(false);

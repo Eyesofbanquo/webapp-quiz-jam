@@ -68,23 +68,6 @@ interface AuthContextObjectProps {
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// const makeAuthContextObject = (props: AuthContextObjectProps) => {
-//   const { accessToken, refreshToken, setAccessToken, setRefreshToken } = props;
-//   const authObject = useMemo(() => {
-//     return {
-//       tokens: { accessToken: accessToken, refreshToken: refreshToken },
-//       updateToken: (update: "refresh" | "access", token: string) => {
-//         if (update === "refresh") {
-//           setRefreshToken(token);
-//         }
-//         if (update === "access") {
-//           setAccessToken(token);
-//         }
-//       },
-//     };
-//   }, [refreshToken, accessToken]);
-// };
-
 const App = () => {
   const [refreshToken, setRefreshToken] = useState<string | null>(
     localStorage.getItem("refreshToken")
