@@ -55,10 +55,12 @@ describe("Question Type pacts", () => {
         port: "4000",
         endpoint: "question-types",
         method: "get",
-      }).onReceive.then((result) => {
-        expect(result.status).toEqual(200);
-        expect(result.data.data.length).toBeGreaterThanOrEqual(1);
-      });
+      })
+        .onReceive.then((result) => {
+          expect(result.status).toEqual(200);
+          expect(result.data.data.length).toBeGreaterThanOrEqual(1);
+        })
+        .catch();
     });
   });
 

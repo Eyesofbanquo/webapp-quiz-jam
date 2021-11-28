@@ -86,7 +86,6 @@ export const makeRequest = ({
     options = optionsWithHeaders;
   }
 
-  console.log(base, port);
   var request = axios(uri, options);
 
   return {

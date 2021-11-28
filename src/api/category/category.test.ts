@@ -34,6 +34,7 @@ describe("Category", () => {
         name: "Nightmare",
         in_review: false,
         deleted: false,
+        user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
       }).catch((err) => {
         console.log("called");
         console.log(err);
@@ -72,6 +73,10 @@ describe("Category", () => {
         chai
           .request(controller.app)
           .post("/api/categories")
+          .set(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+          )
           .send({ name: "Ha" })
           .then((response) => {
             // Assert
@@ -95,12 +100,17 @@ describe("Category", () => {
           name: "Ha",
           in_review: true,
           deleted: false,
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch((err) => console.log(err));
         const controller = new AppController();
         // Act:
         chai
           .request(controller.app)
           .post("/api/categories")
+          .set(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6ImY4NGY1OWY5LTQ5MzktNGYyOC05YjhhLTg5NzA0MjkwZWMwYyIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjA2NjAzODY4fQ.A22qjPc7bPsd4TSLLfF81lrNSwGCb5LI_JUZDdYniaA"
+          )
           .send({ name: "Ha" })
           .then((response) => {
             // Assert
@@ -127,6 +137,7 @@ describe("Category", () => {
           name: "Him",
           in_review: true,
           deleted: false,
+          user_id: "6ce02d16-2fb5-4b22-a3ae-f618f198c9c9",
         }).catch((err) => {
           expect(err).to.eql(null);
         });

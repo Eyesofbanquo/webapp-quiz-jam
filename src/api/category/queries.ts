@@ -26,22 +26,48 @@ export const createCategoriesTable = () =>
   name TEXT NOT NULL,
   in_review BOOLEAN NOT NULL,
   deleted BOOLEAN NOT NULL,
+  created_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  user_id UUID NOT NULL,
   UNIQUE(name)
   )`;
 
 export const createCategory = (props: Category) => {
   return pool.query(
-    `INSERT INTO ${getCategoryTable()} 
-  (id, name, in_review, deleted)
-  VALUES ($1, $2, $3, $4)
-    ON CONFLICT (name) DO NOTHING
-     RETURNING *`,
-    [props.id, props.name, props.in_review, props.deleted]
+    `WITH inserted AS (
+      INSERT INTO ${getCategoryTable()}
+      (id, name, in_review, deleted, user_id)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (name) DO NOTHING
+      RETURNING *
+    ), user_info AS (
+      SELECT user_id FROM inserted
+    ), jsonData AS (
+      SELECT i.id, i.name, i.in_review, i.deleted, i.created_date, row_to_json(ui) as User
+      FROM inserted i
+      INNER JOIN user_info ui
+      ON i.user_id = ui.user_id
+    )
+    SELECT * FROM jsonData WHERE deleted = false;`,
+    [props.id, props.name, props.in_review, props.deleted, props.user_id]
   );
 };
 
 export const getCategories = () => {
-  return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
+  //return `SELECT * FROM ${getCategoryTable()} WHERE deleted = false`;
+  return `
+  WITH data AS (
+    SELECT * FROM ${getCategoryTable()}
+  ), category_data AS (
+    SELECT id, name, in_review, deleted, created_date FROM data
+  ), user_info AS (
+    SELECT id as category_id, user_id FROM data
+  ), jsonData AS (
+    SELECT c.*, row_to_json(ui) as User
+    FROM category_data c
+    INNER JOIN user_info ui
+    ON c.id = ui.category_id
+  )
+  SELECT * FROM jsonData WHERE deleted = false;`;
 };
 
 export const deleteCategory = () => {

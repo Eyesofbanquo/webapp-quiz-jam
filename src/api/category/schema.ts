@@ -8,4 +8,5 @@ export interface Category {
   id: string;
   in_review: boolean;
   deleted: boolean;
+  user_id: string;
 }
